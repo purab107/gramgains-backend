@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { FoodController } from './food.controller';
+const { Router } = require('express');
+const FoodController = require('./food.controller');
 
 const router = Router();
 
@@ -7,4 +7,4 @@ router.get('/search', FoodController.search);
 router.get('/:id', FoodController.getById);
 router.post('/', FoodController.create);
 
-export default router;
+module.exports = router;

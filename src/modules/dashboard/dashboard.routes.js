@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import { DashboardController } from './dashboard.controller';
+const { Router } = require('express');
+const DashboardController = require('./dashboard.controller');
 
 const router = Router();
 
 router.get('/summary', DashboardController.getSummary);
 router.get('/heatmap', DashboardController.getHeatmap);
 
-export default router;
+module.exports = router;

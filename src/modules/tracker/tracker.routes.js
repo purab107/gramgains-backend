@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { TrackerController } from './tracker.controller';
+const { Router } = require('express');
+const TrackerController = require('./tracker.controller');
 
 const router = Router();
 
@@ -8,4 +8,4 @@ router.post('/log', TrackerController.logMeal);
 router.put('/log/:id', TrackerController.updateLog);
 router.delete('/log/:id', TrackerController.deleteLog);
 
-export default router;
+module.exports = router;
