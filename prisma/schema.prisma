@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Profile & TDEE / Goal Settings
+model UserProfile {
+  id              String   @id @default("default-user")
+  name            String   @default("Athlete")
+  age             Int      @default(25)
+  gender          String   @default("MALE") // "MALE" | "FEMALE"
+  heightCm        Float    @default(175)
+  weightKg        Float    @default(70)
+  activityLevel   String   @default("MODERATE") // "SEDENTARY", "LIGHT", "MODERATE", "VERY_ACTIVE", "EXTRA_ACTIVE"
+  goal            String   @default("MAINTAIN") // "WEIGHT_LOSS", "MAINTAIN", "BULK"
+  bmr             Float    @default(1650)
+  tdee            Float    @default(2200)
+  targetCalories  Float    @default(2200)
+  targetProtein   Float    @default(140)
+  targetCarbs     Float    @default(250)
+  targetFat       Float    @default(65)
+  targetFiber     Float    @default(30)
+  updatedAt       DateTime @updatedAt
+}
+
+// Food Database (IFCT 2017 & INDB)
+model Food {
+  id            String          @id @default(uuid())
+  name          String
+  aliases       String[]        @default([])
+  category      String
+  servingUnit   String          @default("g")
+  servingWeight Float           @default(100)
+  calories      Float
+  protein       Float
+  carbohydrates Float
+  fat           Float
+  fiber         Float           @default(0)
+  source        String          // "IFCT 2017" | "INDB"
+  layer         Int             // 1 = Basic Ingredient, 2 = Prepared Recipe
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  mealLogs      MealLog[]
+  savedItems    SavedMealItem[]
+}
+
+// Daily Logged Meals
+model MealLog {
+  id            String   @id @default(uuid())
+  date          String   // "YYYY-MM-DD"
+  mealType      String   // "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK"
+  foodId        String
+  food          Food     @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  servings      Float    @default(1)
+  weightGrams   Float
+  calories      Float
+  protein       Float
+  carbohydrates Float
+  fat           Float
+  fiber         Float
+  createdAt     DateTime @default(now())
+}
+
+// Custom Saved Meals
+model SavedMeal {
+  id            String          @id @default(uuid())
+  name          String
+  description   String?
+  totalCalories Float           @default(0)
+  totalProtein  Float           @default(0)
+  totalCarbs    Float           @default(0)
+  totalFat      Float           @default(0)
+  totalFiber    Float           @default(0)
+  items         SavedMealItem[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model SavedMealItem {
+  id          String    @id @default(uuid())
+  savedMealId String
+  savedMeal   SavedMeal @relation(fields: [savedMealId], references: [id], onDelete: Cascade)
+  foodId      String
+  food        Food      @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  weightGrams Float     @default(100)
+  calories    Float
+  protein     Float
+  carbs       Float
+  fat         Float
+  fiber       Float
+}
