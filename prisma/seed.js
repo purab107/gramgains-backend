@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const fs = require('fs');
 const path = require('path');
+const { importINDB } = require('./indb-import');
 
 const prisma = new PrismaClient();
 
@@ -102,10 +103,14 @@ async function main() {
   for (const food of layer2Foods) {
     await prisma.food.create({ data: { ...food, source: 'INDB', layer: 2 } });
   }
+  console.log(`✅ Seeded ${layer2Foods.length} hand-coded INDB dishes (legacy).`);
+
+  // Layer 2 — INDB 2024 (Anuvaad dataset, 1,014 items)
+  console.log('\n📥 Starting INDB 2024 import...');
+  await importINDB();
 
   const total = await prisma.food.count();
-  console.log(`✅ Seeded ${layer2Foods.length} INDB dishes.`);
-  console.log(`🎉 Total foods in database: ${total}`);
+  console.log(`\n🎉 Total foods in database: ${total}`);
 }
 
 main()
