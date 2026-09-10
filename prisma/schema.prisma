@@ -27,12 +27,16 @@ model UserProfile {
   updatedAt       DateTime @updatedAt
 }
 
-// Food Database (IFCT 2017 & INDB)
+// Food Database (IFCT 2017, INDB & OpenFoodFacts)
 model Food {
   id            String          @id @default(uuid())
   name          String
   aliases       String[]        @default([])
   category      String
+  brand         String?
+  brandOwner    String?
+  genericName   String?
+  barcode       String?
   servingUnit   String          @default("g")
   servingWeight Float           @default(100)
   calories      Float
@@ -40,12 +44,18 @@ model Food {
   carbohydrates Float
   fat           Float
   fiber         Float           @default(0)
-  source        String          // "IFCT 2017" | "INDB"
-  layer         Int             // 1 = Basic Ingredient, 2 = Prepared Recipe
+  source        String          // "IFCT 2017" | "INDB" | "OpenFoodFacts"
+  layer         Int             // 1 = Basic Ingredient, 2 = Prepared Recipe, 3 = Packaged / Branded
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   mealLogs      MealLog[]
   savedItems    SavedMealItem[]
+
+  @@index([name])
+  @@index([brand])
+  @@index([barcode])
+  @@index([category])
+  @@index([layer])
 }
 
 // Daily Logged Meals

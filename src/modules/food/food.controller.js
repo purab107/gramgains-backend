@@ -2,10 +2,20 @@ const FoodService = require('./food.service');
 
 async function search(req, res) {
   try {
-    const { q, layer, category } = req.query;
+    const { q, layer, category, limit, page, barcode } = req.query;
     const parsedLayer = layer ? parseInt(layer, 10) : undefined;
-    const foods = await FoodService.searchFoods(q, parsedLayer, category);
-    return res.json({ success: true, count: foods.length, data: foods });
+    const parsedLimit = limit ? parseInt(limit, 10) : 50;
+    const parsedPage = page ? parseInt(page, 10) : 1;
+
+    const result = await FoodService.searchFoods(q, parsedLayer, category, parsedLimit, parsedPage, barcode);
+    return res.json({
+      success: true,
+      count: result.foods.length,
+      total: result.total,
+      page: result.page,
+      limit: result.limit,
+      data: result.foods,
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Error fetching food data', error: error.message });
   }
@@ -21,14 +31,31 @@ async function getById(req, res) {
   }
 }
 
+async function getByBarcode(req, res) {
+  try {
+    const { barcode } = req.params;
+    const food = await FoodService.getFoodByBarcode(barcode);
+    if (!food) return res.status(404).json({ success: false, message: 'Food item with specified barcode not found' });
+    return res.json({ success: true, data: food });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error fetching food by barcode', error: error.message });
+  }
+}
+
 async function create(req, res) {
   try {
-    const { name, aliases, category, servingUnit, servingWeight, calories, protein, carbohydrates, fat, fiber, source, layer } = req.body;
+    const { name, aliases, category, brand, brandOwner, genericName, barcode, servingUnit, servingWeight, calories, protein, carbohydrates, fat, fiber, source, layer } = req.body;
     if (!name || !category || calories === undefined || !source || !layer) {
       return res.status(400).json({ success: false, message: 'Missing required fields (name, category, calories, source, layer)' });
     }
     const food = await FoodService.createFood({
-      name, aliases, category,
+      name,
+      aliases,
+      category,
+      brand: brand || null,
+      brandOwner: brandOwner || null,
+      genericName: genericName || null,
+      barcode: barcode || null,
       servingUnit: servingUnit || 'g',
       servingWeight: Number(servingWeight) || 100,
       calories: Number(calories),
@@ -45,4 +72,4 @@ async function create(req, res) {
   }
 }
 
-module.exports = { search, getById, create };
+module.exports = { search, getById, getByBarcode, create };

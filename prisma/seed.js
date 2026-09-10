@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const fs = require('fs');
 const path = require('path');
 const { importINDB } = require('./indb-import');
+const { importOpenFoodFacts } = require('./openfoodfacts-import');
 
 const prisma = new PrismaClient();
 
@@ -108,6 +109,10 @@ async function main() {
   // Layer 2 — INDB 2024 (Anuvaad dataset, 1,014 items)
   console.log('\n📥 Starting INDB 2024 import...');
   await importINDB();
+
+  // Layer 3 — OpenFoodFacts Curated Dataset (13,020 branded & packaged items)
+  console.log('\n📥 Starting OpenFoodFacts import...');
+  await importOpenFoodFacts();
 
   const total = await prisma.food.count();
   console.log(`\n🎉 Total foods in database: ${total}`);

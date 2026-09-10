@@ -8,7 +8,8 @@
     "start": "node src/server.js",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
-    "prisma:seed": "node prisma/seed.js"
+    "prisma:seed": "node prisma/seed.js",
+    "import:off": "node prisma/openfoodfacts-import.js"
   },
   "dependencies": {
     "@prisma/client": "^5.10.0",
