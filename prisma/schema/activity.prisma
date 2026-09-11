@@ -1,0 +1,31 @@
+enum ActivitySource {
+  MANUAL
+  EXTERNAL_SYNC
+}
+
+model ActivityLog {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  source          ActivitySource @default(MANUAL)
+  label           String
+  date            DateTime       @db.Date
+  caloriesBurned  Float
+  durationMinutes Int?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, date])
+}
+
+model WaterLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amountMl  Int
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
+
+  @@index([userId, date])
+}

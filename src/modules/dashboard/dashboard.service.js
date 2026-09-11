@@ -1,28 +1,34 @@
 const { prisma } = require('../../config/db');
-const { getProfile } = require('../profile/profile.service');
+const { getProfile, DEFAULT_USER_ID } = require('../profile/profile.service');
+const { parseDateInput, formatDateOutput } = require('../tracker/tracker.service');
 
-async function getSummary(date) {
-  const profile = await getProfile();
+async function getSummary(date, userId = DEFAULT_USER_ID) {
+  const profile = await getProfile(userId);
+  const parsedDate = parseDateInput(date);
+  const dateStr = formatDateOutput(parsedDate);
 
   const logs = await prisma.mealLog.findMany({
-    where: { date },
+    where: {
+      userId,
+      date: parsedDate,
+    },
     include: { food: true },
   });
 
   let consumedCalories = 0, consumedProtein = 0, consumedCarbs = 0, consumedFat = 0, consumedFiber = 0;
 
   for (const log of logs) {
-    consumedCalories += log.calories;
-    consumedProtein += log.protein;
-    consumedCarbs += log.carbohydrates;
-    consumedFat += log.fat;
-    consumedFiber += log.fiber;
+    consumedCalories += log.calories || 0;
+    consumedProtein += log.protein || 0;
+    consumedCarbs += log.carbohydrates || 0;
+    consumedFat += log.fat || 0;
+    consumedFiber += log.fiber || 0;
   }
 
   const r = (n) => Math.round(n * 10) / 10;
 
   return {
-    date,
+    date: dateStr,
     calories: {
       target: profile.targetCalories,
       consumed: r(consumedCalories),
@@ -41,30 +47,42 @@ async function getSummary(date) {
   };
 }
 
-async function getHeatmap(daysCount = 90) {
-  const profile = await getProfile();
+async function getHeatmap(daysCount = 90, userId = DEFAULT_USER_ID) {
+  const profile = await getProfile(userId);
   const today = new Date();
+  today.setHours(23, 59, 59, 999);
+
   const startDate = new Date();
   startDate.setDate(today.getDate() - (daysCount - 1));
-  const startDateStr = startDate.toISOString().split('T')[0];
+  startDate.setHours(0, 0, 0, 0);
 
   const logs = await prisma.mealLog.findMany({
-    where: { date: { gte: startDateStr } },
+    where: {
+      userId,
+      date: {
+        gte: startDate,
+        lte: today,
+      },
+    },
     select: { date: true, calories: true },
   });
 
   const dateMap = new Map();
   for (const log of logs) {
-    const entry = dateMap.get(log.date) || { count: 0, totalCalories: 0 };
+    const dStr = formatDateOutput(log.date);
+    const entry = dateMap.get(dStr) || { count: 0, totalCalories: 0 };
     entry.count += 1;
     entry.totalCalories += log.calories;
-    dateMap.set(log.date, entry);
+    dateMap.set(dStr, entry);
   }
 
   const heatmap = [];
   const curr = new Date(startDate);
-  while (curr <= today) {
-    const dateStr = curr.toISOString().split('T')[0];
+  const endIter = new Date(today);
+  endIter.setHours(0, 0, 0, 0);
+
+  while (curr <= endIter) {
+    const dateStr = formatDateOutput(curr);
     const entry = dateMap.get(dateStr) || { count: 0, totalCalories: 0 };
     const ratio = entry.totalCalories / profile.targetCalories;
     let level = 0;

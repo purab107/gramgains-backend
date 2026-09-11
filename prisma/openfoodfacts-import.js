@@ -62,10 +62,12 @@ async function importOpenFoodFacts() {
     crlfDelay: Infinity,
   });
 
+  const crypto = require('crypto');
   let header = null;
   let headerMap = {};
   const batchSize = 1000;
-  let batch = [];
+  let foodBatch = [];
+  let servingBatch = [];
   let totalProcessed = 0;
   let totalInserted = 0;
   const startTime = Date.now();
@@ -99,8 +101,10 @@ async function importOpenFoodFacts() {
     const fiber = Math.max(0, parseFloat(cols[headerMap['fiber']]) || 0);
 
     const aliases = buildAliases(name, brand, genericName);
+    const foodId = crypto.randomUUID();
 
-    batch.push({
+    foodBatch.push({
+      id: foodId,
       name,
       aliases,
       category,
@@ -108,33 +112,48 @@ async function importOpenFoodFacts() {
       brandOwner,
       genericName,
       barcode,
-      servingUnit,
-      servingWeight,
       calories: Math.round(calories * 10) / 10,
       protein: Math.round(protein * 10) / 10,
       carbohydrates: Math.round(carbohydrates * 10) / 10,
       fat: Math.round(fat * 10) / 10,
       fiber: Math.round(fiber * 10) / 10,
-      source: 'OpenFoodFacts',
+      source: 'OPEN_FOOD_FACTS',
       layer: 3,
+    });
+
+    servingBatch.push({
+      id: crypto.randomUUID(),
+      foodId,
+      unitLabel: servingUnit,
+      weightGrams: servingWeight,
+      isDefault: true,
     });
 
     totalProcessed++;
 
-    if (batch.length >= batchSize) {
+    if (foodBatch.length >= batchSize) {
       const res = await prisma.food.createMany({
-        data: batch,
+        data: foodBatch,
+        skipDuplicates: true,
+      });
+      await prisma.foodServing.createMany({
+        data: servingBatch,
         skipDuplicates: true,
       });
       totalInserted += res.count;
       process.stdout.write(`  ⏳ Processed: ${totalProcessed} | Inserted: ${totalInserted}\r`);
-      batch = [];
+      foodBatch = [];
+      servingBatch = [];
     }
   }
 
-  if (batch.length > 0) {
+  if (foodBatch.length > 0) {
     const res = await prisma.food.createMany({
-      data: batch,
+      data: foodBatch,
+      skipDuplicates: true,
+    });
+    await prisma.foodServing.createMany({
+      data: servingBatch,
       skipDuplicates: true,
     });
     totalInserted += res.count;

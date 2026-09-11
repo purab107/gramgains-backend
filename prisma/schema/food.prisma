@@ -1,0 +1,58 @@
+enum FoodSource {
+  IFCT_2017
+  INDB
+  OPEN_FOOD_FACTS
+  USER_CREATED
+}
+
+model Food {
+  id          String   @id @default(cuid())
+  name        String
+  aliases     String[] @default([])
+  category    String
+  brand       String?
+  brandOwner  String?
+  genericName String?
+  barcode     String?  @unique
+
+  calories      Float
+  protein       Float
+  carbohydrates Float
+  fat           Float
+  fiber         Float @default(0)
+
+  source FoodSource
+  layer  Int
+
+  createdByUserId String?
+  createdByUser   User?   @relation("FoodCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  deletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  servings    FoodServing[]
+  mealLogs    MealLog[]
+  savedItems  SavedMealItem[]
+  favoritedBy FavoriteFood[]
+
+  @@index([name])
+  @@index([brand])
+  @@index([category])
+  @@index([layer])
+  @@index([deletedAt])
+  @@index([createdByUserId])
+}
+
+model FoodServing {
+  id     String @id @default(cuid())
+  foodId String
+  food   Food   @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  unitLabel   String
+  weightGrams Float
+  isDefault   Boolean @default(false)
+
+  @@index([foodId])
+}

@@ -1,0 +1,400 @@
+Good instinct — this also maps cleanly onto how Prisma actually supports multi-file schemas now (the `prismaSchemaFolder` preview feature lets you split `schema.prisma` into a folder of `.prisma` files that get merged automatically, models can still reference each other across files). Here's the same schema, organized that way.
+
+## Setup for multi-file schema
+
+```prisma
+// prisma.config.ts or schema.prisma generator block
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+```
+Then structure your folder as:
+```
+prisma/
+  schema/
+    schema.prisma       // generator + datasource only
+    auth.prisma
+    profile.prisma
+    food.prisma
+    meal.prisma
+    activity.prisma
+    social.prisma
+```
+
+---
+
+### `schema.prisma`
+```prisma
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+```
+
+---
+
+### `auth.prisma`
+```prisma
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  deletedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+
+  profile       UserProfile?
+  goalHistory   GoalHistory[]
+  weightLogs    WeightLog[]
+  mealLogs      MealLog[]
+  savedMeals    SavedMeal[]
+  activityLogs  ActivityLog[]
+  waterLogs     WaterLog[]
+  favoriteFoods FavoriteFood[]
+  createdFoods  Food[]         @relation("FoodCreator")
+
+  @@index([deletedAt])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerId            String
+  accountId             String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  @@index([identifier])
+  @@map("verification")
+}
+```
+
+---
+
+### `profile.prisma`
+```prisma
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  LIGHT
+  MODERATE
+  VERY_ACTIVE
+  EXTRA_ACTIVE
+}
+
+enum Goal {
+  WEIGHT_LOSS
+  MAINTAIN
+  BULK
+}
+
+model UserProfile {
+  id             String        @id @default(cuid())
+  userId         String        @unique
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  age            Int
+  gender         Gender
+  heightCm       Float
+  activityLevel  ActivityLevel @default(MODERATE)
+  goal           Goal          @default(MAINTAIN)
+  timezone       String        @default("UTC")
+
+  bmr            Float
+  tdee           Float
+  targetCalories Float
+  targetProtein  Float
+  targetCarbs    Float
+  targetFat      Float
+  targetFiber    Float
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model GoalHistory {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  goal           Goal
+  targetCalories Float
+  targetProtein  Float
+  targetCarbs    Float
+  targetFat      Float
+  targetFiber    Float
+
+  effectiveFrom  DateTime  @db.Date
+  effectiveTo    DateTime? @db.Date
+
+  createdAt      DateTime  @default(now())
+
+  @@index([userId, effectiveFrom])
+}
+
+model WeightLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weightKg  Float
+  date      DateTime @db.Date
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+```
+
+---
+
+### `food.prisma`
+```prisma
+enum FoodSource {
+  IFCT_2017
+  INDB
+  OPEN_FOOD_FACTS
+  USER_CREATED
+}
+
+model Food {
+  id              String          @id @default(cuid())
+  name            String
+  aliases         String[]        @default([])
+  category        String
+  brand           String?
+  brandOwner      String?
+  genericName     String?
+  barcode         String?         @unique
+
+  calories        Float
+  protein         Float
+  carbohydrates   Float
+  fat             Float
+  fiber           Float           @default(0)
+
+  source          FoodSource
+  layer           Int
+
+  createdByUserId String?
+  createdByUser   User?           @relation("FoodCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  deletedAt       DateTime?
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  servings        FoodServing[]
+  mealLogs        MealLog[]
+  savedItems      SavedMealItem[]
+  favoritedBy     FavoriteFood[]
+
+  @@index([name])
+  @@index([brand])
+  @@index([category])
+  @@index([layer])
+  @@index([deletedAt])
+  @@index([createdByUserId])
+}
+
+model FoodServing {
+  id          String  @id @default(cuid())
+  foodId      String
+  food        Food    @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  unitLabel   String
+  weightGrams Float
+  isDefault   Boolean @default(false)
+
+  @@index([foodId])
+}
+```
+
+---
+
+### `meal.prisma`
+```prisma
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+model MealLog {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date          DateTime @db.Date
+  mealType      MealType
+
+  foodId        String
+  food          Food     @relation(fields: [foodId], references: [id], onDelete: Restrict)
+
+  servings      Float    @default(1)
+  weightGrams   Float
+
+  calories      Float
+  protein       Float
+  carbohydrates Float
+  fat           Float
+  fiber         Float
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId, date])
+  @@index([foodId])
+}
+
+model SavedMeal {
+  id            String          @id @default(cuid())
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name          String
+  description   String?
+
+  totalCalories Float           @default(0)
+  totalProtein  Float           @default(0)
+  totalCarbs    Float           @default(0)
+  totalFat      Float           @default(0)
+  totalFiber    Float           @default(0)
+
+  items         SavedMealItem[]
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([userId])
+}
+
+model SavedMealItem {
+  id            String    @id @default(cuid())
+  savedMealId   String
+  savedMeal     SavedMeal @relation(fields: [savedMealId], references: [id], onDelete: Cascade)
+
+  foodId        String
+  food          Food      @relation(fields: [foodId], references: [id], onDelete: Restrict)
+
+  weightGrams   Float     @default(100)
+  calories      Float
+  protein       Float
+  carbohydrates Float
+  fat           Float
+  fiber         Float
+
+  @@index([savedMealId])
+  @@index([foodId])
+}
+```
+
+---
+
+### `activity.prisma`
+```prisma
+enum ActivitySource {
+  MANUAL
+  EXTERNAL_SYNC
+}
+
+model ActivityLog {
+  id              String         @id @default(cuid())
+  userId          String
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  source          ActivitySource @default(MANUAL)
+  label           String
+  date            DateTime       @db.Date
+  caloriesBurned  Float
+  durationMinutes Int?
+
+  createdAt       DateTime       @default(now())
+
+  @@index([userId, date])
+}
+
+model WaterLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amountMl  Int
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
+
+  @@index([userId, date])
+}
+```
+
+---
+
+### `social.prisma`
+```prisma
+model FavoriteFood {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  foodId    String
+  food      Food     @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, foodId])
+  @@index([userId])
+}
+```
+
+---
+
+**One caveat worth knowing**: `prismaSchemaFolder` is still a preview feature (was added around Prisma 5.15, stabilizing over time) — check the current Prisma version you're on before relying on it, since preview feature behavior can shift between releases. If you'd rather not depend on a preview feature at all, the fallback is identical file layout, just concatenated back into one `schema.prisma` at build time via a simple script — the module boundaries in your head and in your codebase stay the same either way, Prisma just doesn't enforce the split natively.

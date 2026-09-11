@@ -1,0 +1,74 @@
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+model MealLog {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date     DateTime @db.Date
+  mealType MealType
+
+  foodId String
+  food   Food   @relation(fields: [foodId], references: [id], onDelete: Restrict)
+
+  servings    Float @default(1)
+  weightGrams Float
+
+  calories      Float
+  protein       Float
+  carbohydrates Float
+  fat           Float
+  fiber         Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@index([foodId])
+}
+
+model SavedMeal {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name        String
+  description String?
+
+  totalCalories Float @default(0)
+  totalProtein  Float @default(0)
+  totalCarbs    Float @default(0)
+  totalFat      Float @default(0)
+  totalFiber    Float @default(0)
+
+  items SavedMealItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model SavedMealItem {
+  id          String    @id @default(cuid())
+  savedMealId String
+  savedMeal   SavedMeal @relation(fields: [savedMealId], references: [id], onDelete: Cascade)
+
+  foodId String
+  food   Food   @relation(fields: [foodId], references: [id], onDelete: Restrict)
+
+  weightGrams   Float @default(100)
+  calories      Float
+  protein       Float
+  carbohydrates Float
+  fat           Float
+  fiber         Float
+
+  @@index([savedMealId])
+  @@index([foodId])
+}

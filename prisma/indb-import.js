@@ -263,15 +263,22 @@ async function importINDB() {
         name:          foodName,
         aliases,
         category,
-        servingUnit,
-        servingWeight,
         calories,
         protein,
         carbohydrates,
         fat,
         fiber,
-        source,
-        layer: 2,
+        source:        'INDB',
+        layer:         2,
+        servings: {
+          create: [
+            {
+              unitLabel: servingUnit || 'g',
+              weightGrams: servingWeight || 100,
+              isDefault: true,
+            },
+          ],
+        },
       },
     });
 
