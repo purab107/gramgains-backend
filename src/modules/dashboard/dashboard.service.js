@@ -47,21 +47,70 @@ async function getSummary(date, userId = DEFAULT_USER_ID) {
   };
 }
 
+// Helper to get YYYY-MM-DD date string in Indian Standard Time (Asia/Kolkata)
+function getISTDateString(d = new Date()) {
+  const dateObj = new Date(d);
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(dateObj);
+}
+
+// Helper to add N days to a YYYY-MM-DD date string
+function addDaysIST(dateStr, days) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const dateObj = new Date(Date.UTC(y, m - 1, d));
+  dateObj.setUTCDate(dateObj.getUTCDate() + days);
+  return dateObj.toISOString().split('T')[0];
+}
+
+// Helper to calculate days between two YYYY-MM-DD date strings (inclusive)
+function getDaysBetweenIST(startDateStr, endDateStr) {
+  const [sY, sM, sD] = startDateStr.split('-').map(Number);
+  const [eY, eM, eD] = endDateStr.split('-').map(Number);
+  const startObj = new Date(Date.UTC(sY, sM - 1, sD));
+  const endObj = new Date(Date.UTC(eY, eM - 1, eD));
+  const diffTime = endObj.getTime() - startObj.getTime();
+  return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+}
+
 async function getHeatmap(daysCount = 90, userId = DEFAULT_USER_ID) {
   const profile = await getProfile(userId);
-  const today = new Date();
-  today.setHours(23, 59, 59, 999);
 
-  const startDate = new Date();
-  startDate.setDate(today.getDate() - (daysCount - 1));
-  startDate.setHours(0, 0, 0, 0);
+  // Today in IST
+  const todayISTStr = getISTDateString(new Date());
+
+  // Account creation date in IST
+  const userRow = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { createdAt: true },
+  });
+  const accountCreatedISTStr = userRow?.createdAt
+    ? getISTDateString(userRow.createdAt)
+    : todayISTStr;
+
+  // Account age in days (inclusive, e.g. created today -> 1 day)
+  const accountAgeDays = Math.max(1, getDaysBetweenIST(accountCreatedISTStr, todayISTStr));
+
+  // Determine starting date for Pill 1:
+  // If accountAgeDays <= daysCount: Pill 1 starts on accountCreatedISTStr
+  // If accountAgeDays > daysCount: Pill 1 starts on todayISTStr - (daysCount - 1)
+  let startDateStr;
+  if (accountAgeDays <= daysCount) {
+    startDateStr = accountCreatedISTStr;
+  } else {
+    startDateStr = addDaysIST(todayISTStr, -(daysCount - 1));
+  }
+
+  // Query logs from startDateStr up to todayISTStr
+  const [sY, sM, sD] = startDateStr.split('-').map(Number);
+  const [tY, tM, tD] = todayISTStr.split('-').map(Number);
+  const queryStartDate = new Date(Date.UTC(sY, sM - 1, sD, 0, 0, 0, 0));
+  const queryEndDate = new Date(Date.UTC(tY, tM - 1, tD, 23, 59, 59, 999));
 
   const logs = await prisma.mealLog.findMany({
     where: {
       userId,
       date: {
-        gte: startDate,
-        lte: today,
+        gte: queryStartDate,
+        lte: queryEndDate,
       },
     },
     select: { date: true, calories: true },
@@ -69,34 +118,54 @@ async function getHeatmap(daysCount = 90, userId = DEFAULT_USER_ID) {
 
   const dateMap = new Map();
   for (const log of logs) {
-    const dStr = formatDateOutput(log.date);
+    const dStr = getISTDateString(log.date);
     const entry = dateMap.get(dStr) || { count: 0, totalCalories: 0 };
     entry.count += 1;
     entry.totalCalories += log.calories;
     dateMap.set(dStr, entry);
   }
 
+  // Build exactly daysCount pills
   const heatmap = [];
-  const curr = new Date(startDate);
-  const endIter = new Date(today);
-  endIter.setHours(0, 0, 0, 0);
+  for (let i = 0; i < daysCount; i++) {
+    const currDateStr = addDaysIST(startDateStr, i);
+    const isFuture = currDateStr > todayISTStr;
 
-  while (curr <= endIter) {
-    const dateStr = formatDateOutput(curr);
-    const entry = dateMap.get(dateStr) || { count: 0, totalCalories: 0 };
-    const ratio = entry.totalCalories / profile.targetCalories;
-    let level = 0;
-    if (entry.count > 0) {
-      if (ratio >= 0.9) level = 4;
-      else if (ratio >= 0.6) level = 3;
-      else if (ratio >= 0.3) level = 2;
-      else level = 1;
+    if (isFuture) {
+      heatmap.push({
+        date: currDateStr,
+        count: 0,
+        totalCalories: 0,
+        level: 0,
+        isFuture: true,
+      });
+    } else {
+      const entry = dateMap.get(currDateStr) || { count: 0, totalCalories: 0 };
+      const ratio = profile.targetCalories > 0 ? entry.totalCalories / profile.targetCalories : 0;
+      let level = 0;
+      if (entry.count > 0) {
+        if (ratio >= 0.9) level = 4;
+        else if (ratio >= 0.6) level = 3;
+        else if (ratio >= 0.3) level = 2;
+        else level = 1;
+      }
+      heatmap.push({
+        date: currDateStr,
+        count: entry.count,
+        totalCalories: Math.round(entry.totalCalories),
+        level,
+        isFuture: false,
+      });
     }
-    heatmap.push({ date: dateStr, count: entry.count, totalCalories: Math.round(entry.totalCalories), level });
-    curr.setDate(curr.getDate() + 1);
   }
 
-  return { daysCount, targetCalories: profile.targetCalories, heatmap };
+  return {
+    daysCount,
+    targetCalories: profile.targetCalories,
+    accountCreatedAt: accountCreatedISTStr,
+    accountAgeDays,
+    heatmap,
+  };
 }
 
 module.exports = { getSummary, getHeatmap };
