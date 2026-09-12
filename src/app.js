@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const { toNodeHandler } = require('better-auth/node');
 const { auth } = require('./config/auth');
-const { optionalAuth } = require('./middlewares/auth');
+const { requireAuth } = require('./middlewares/auth');
 
 const foodRoutes       = require('./modules/food/food.routes');
 const trackerRoutes    = require('./modules/tracker/tracker.routes');
@@ -46,9 +46,9 @@ app.get('/api/health', (req, res) => {
 
 // Domain routes with auth support
 app.use('/api/food',        foodRoutes);
-app.use('/api/tracker',     optionalAuth, trackerRoutes);
-app.use('/api/dashboard',   optionalAuth, dashboardRoutes);
-app.use('/api/profile',     optionalAuth, profileRoutes);
-app.use('/api/saved-meals', optionalAuth, savedMealsRoutes);
+app.use('/api/tracker',     requireAuth, trackerRoutes);
+app.use('/api/dashboard',   requireAuth, dashboardRoutes);
+app.use('/api/profile',     requireAuth, profileRoutes);
+app.use('/api/saved-meals', requireAuth, savedMealsRoutes);
 
 module.exports = app;

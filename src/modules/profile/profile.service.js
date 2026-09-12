@@ -87,8 +87,8 @@ async function ensureDefaultUser() {
 }
 
 async function getProfile(userId = DEFAULT_USER_ID) {
-  await ensureDefaultUser();
-
+  // Note: For authenticated users, the user row is created by better-auth on signup.
+  // We only need to ensure the profile row exists (upsert below handles that).
   let profile = await prisma.userProfile.findUnique({
     where: { userId },
     include: { user: true },
