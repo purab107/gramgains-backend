@@ -65,4 +65,44 @@ async function deleteLog(req, res) {
   }
 }
 
-module.exports = { getDaily, logMeal, updateLog, deleteLog };
+async function getWater(req, res) {
+  try {
+    const date = req.query.date || new Date().toISOString().split('T')[0];
+    const data = await TrackerService.getDailyWaterLogs(date, req.userId);
+    return res.json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error fetching water logs', error: error.message });
+  }
+}
+
+async function logWater(req, res) {
+  try {
+    const { date, amountMl } = req.body;
+    if (!date || !amountMl) {
+      return res.status(400).json({ success: false, message: 'Missing required fields (date, amountMl)' });
+    }
+    const log = await TrackerService.logWater({ date, amountMl }, req.userId);
+    return res.status(201).json({ success: true, message: 'Water logged successfully', data: log });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error logging water', error: error.message });
+  }
+}
+
+async function deleteWater(req, res) {
+  try {
+    await TrackerService.deleteWaterLog(req.params.id, req.userId);
+    return res.json({ success: true, message: 'Water log deleted successfully' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error deleting water log', error: error.message });
+  }
+}
+
+module.exports = {
+  getDaily,
+  logMeal,
+  updateLog,
+  deleteLog,
+  getWater,
+  logWater,
+  deleteWater,
+};

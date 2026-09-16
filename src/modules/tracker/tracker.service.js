@@ -61,6 +61,8 @@ async function getDailyLogs(date, userId = DEFAULT_USER_ID) {
     { calories: 0, protein: 0, carbohydrates: 0, fat: 0, fiber: 0 }
   );
 
+  const waterData = await getDailyWaterLogs(date, userId);
+
   return {
     date: dateStr,
     summary: {
@@ -71,7 +73,59 @@ async function getDailyLogs(date, userId = DEFAULT_USER_ID) {
       fiber: Math.round(summary.fiber * 10) / 10,
     },
     logs: formattedLogs,
+    water: waterData,
   };
+}
+
+async function getDailyWaterLogs(date, userId = DEFAULT_USER_ID) {
+  const parsedDate = parseDateInput(date);
+  const dateStr = formatDateOutput(parsedDate);
+
+  const logs = await prisma.waterLog.findMany({
+    where: {
+      userId,
+      date: parsedDate,
+    },
+    orderBy: { createdAt: 'asc' },
+  });
+
+  const totalMl = logs.reduce((acc, log) => acc + (log.amountMl || 0), 0);
+
+  return {
+    date: dateStr,
+    totalMl,
+    logs: logs.map((log) => ({
+      ...log,
+      date: dateStr,
+    })),
+  };
+}
+
+async function logWater({ date, amountMl }, userId = DEFAULT_USER_ID) {
+  const parsedDate = parseDateInput(date);
+  const ml = parseInt(amountMl, 10);
+  if (!ml || isNaN(ml) || ml <= 0) {
+    throw new Error('Valid water amount in ml is required');
+  }
+
+  const created = await prisma.waterLog.create({
+    data: {
+      userId,
+      date: parsedDate,
+      amountMl: ml,
+    },
+  });
+
+  return {
+    ...created,
+    date: formatDateOutput(created.date),
+  };
+}
+
+async function deleteWaterLog(id, userId = DEFAULT_USER_ID) {
+  return await prisma.waterLog.delete({
+    where: { id },
+  });
 }
 
 async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams }, userId = DEFAULT_USER_ID) {
@@ -174,4 +228,14 @@ async function deleteLog(id, userId = DEFAULT_USER_ID) {
   });
 }
 
-module.exports = { getDailyLogs, logMeal, updateLog, deleteLog, parseDateInput, formatDateOutput };
+module.exports = {
+  getDailyLogs,
+  getDailyWaterLogs,
+  logWater,
+  deleteWaterLog,
+  logMeal,
+  updateLog,
+  deleteLog,
+  parseDateInput,
+  formatDateOutput,
+};
