@@ -1,6 +1,6 @@
 const { prisma } = require('../../config/db');
 const { getProfile, DEFAULT_USER_ID } = require('../profile/profile.service');
-const { parseDateInput, formatDateOutput } = require('../tracker/tracker.service');
+const { parseDateInput, formatDateOutput, getDailyWaterLogs } = require('../tracker/tracker.service');
 
 async function getSummary(date, userId = DEFAULT_USER_ID) {
   const profile = await getProfile(userId);
@@ -25,6 +25,10 @@ async function getSummary(date, userId = DEFAULT_USER_ID) {
     consumedFiber += log.fiber || 0;
   }
 
+  const waterData = await getDailyWaterLogs(date, userId);
+  const targetWater = profile?.targetWater || 2500;
+  const consumedWater = waterData?.totalMl || 0;
+
   const r = (n) => Math.round(n * 10) / 10;
 
   return {
@@ -42,6 +46,14 @@ async function getSummary(date, userId = DEFAULT_USER_ID) {
       carbohydrates: { consumed: r(consumedCarbs),   target: profile.targetCarbs,    unit: 'g' },
       fat:           { consumed: r(consumedFat),     target: profile.targetFat,      unit: 'g' },
       fiber:         { consumed: r(consumedFiber),   target: profile.targetFiber,    unit: 'g' },
+    },
+    water: {
+      consumed: consumedWater,
+      target: targetWater,
+      unit: 'ml',
+      percentageDone: targetWater > 0
+        ? Math.min(100, Math.round((consumedWater / targetWater) * 100))
+        : 0,
     },
     totalMealsLogged: logs.length,
   };
