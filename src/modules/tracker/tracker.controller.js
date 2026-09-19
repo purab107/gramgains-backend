@@ -97,6 +97,16 @@ async function deleteWater(req, res) {
   }
 }
 
+async function getRecentFoods(req, res) {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit, 10) : 30;
+    const data = await TrackerService.getRecentFoods(req.userId, limit);
+    return res.json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error fetching recent foods', error: error.message });
+  }
+}
+
 module.exports = {
   getDaily,
   logMeal,
@@ -105,4 +115,6 @@ module.exports = {
   getWater,
   logWater,
   deleteWater,
+  getRecentFoods,
 };
+

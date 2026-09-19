@@ -228,6 +228,28 @@ async function deleteLog(id, userId = DEFAULT_USER_ID) {
   });
 }
 
+async function getRecentFoods(userId = DEFAULT_USER_ID, limit = 30) {
+  const logs = await prisma.mealLog.findMany({
+    where: { userId },
+    distinct: ['foodId'],
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+    include: {
+      food: {
+        include: { servings: true },
+      },
+    },
+  });
+
+  return logs.map((log) => ({
+    ...log.food,
+    servingUnit: log.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g',
+    servingWeight: getServingWeight(log.food),
+    lastLoggedAt: log.createdAt,
+    lastMealType: log.mealType,
+  }));
+}
+
 module.exports = {
   getDailyLogs,
   getDailyWaterLogs,
@@ -236,6 +258,8 @@ module.exports = {
   logMeal,
   updateLog,
   deleteLog,
+  getRecentFoods,
   parseDateInput,
   formatDateOutput,
 };
+
