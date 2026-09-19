@@ -14,7 +14,7 @@ async function getDaily(req, res) {
 
 async function logMeal(req, res) {
   try {
-    const { date, mealType, foodId, servings, customWeightGrams } = req.body;
+    const { date, mealType, foodId, servings, customWeightGrams, unitLabel } = req.body;
     if (!date || !mealType || !foodId) {
       return res.status(400).json({ success: false, message: 'Missing required fields (date, mealType, foodId)' });
     }
@@ -26,8 +26,9 @@ async function logMeal(req, res) {
         date,
         mealType,
         foodId,
-        servings: servings ? Number(servings) : 1,
-        customWeightGrams: customWeightGrams ? Number(customWeightGrams) : undefined,
+        servings: servings !== undefined && servings !== null ? Number(servings) : 1,
+        customWeightGrams: customWeightGrams !== undefined && customWeightGrams !== null ? Number(customWeightGrams) : undefined,
+        unitLabel: unitLabel ? String(unitLabel) : undefined,
       },
       req.userId
     );
@@ -40,13 +41,14 @@ async function logMeal(req, res) {
 async function updateLog(req, res) {
   try {
     const { id } = req.params;
-    const { servings, customWeightGrams, mealType } = req.body;
+    const { servings, customWeightGrams, mealType, unitLabel } = req.body;
     const updated = await TrackerService.updateLog(
       id,
       {
-        servings: servings ? Number(servings) : undefined,
-        customWeightGrams: customWeightGrams ? Number(customWeightGrams) : undefined,
+        servings: servings !== undefined && servings !== null ? Number(servings) : undefined,
+        customWeightGrams: customWeightGrams !== undefined && customWeightGrams !== null ? Number(customWeightGrams) : undefined,
         mealType,
+        unitLabel: unitLabel !== undefined ? String(unitLabel) : undefined,
       },
       req.userId
     );

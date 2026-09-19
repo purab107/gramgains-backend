@@ -44,6 +44,7 @@ async function getDailyLogs(date, userId = DEFAULT_USER_ID) {
     date: dateStr,
     food: {
       ...log.food,
+      servings: log.food.servings || [],
       servingUnit: log.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g',
       servingWeight: getServingWeight(log.food),
     },
@@ -128,7 +129,7 @@ async function deleteWaterLog(id, userId = DEFAULT_USER_ID) {
   });
 }
 
-async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams }, userId = DEFAULT_USER_ID) {
+async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams, unitLabel }, userId = DEFAULT_USER_ID) {
   const food = await prisma.food.findUnique({
     where: { id: foodId },
     include: { servings: true },
@@ -137,8 +138,12 @@ async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams
 
   const servingWeight = getServingWeight(food);
   const numServings = parseFloat(servings) || 1;
-  const computedWeight = customWeightGrams ? parseFloat(customWeightGrams) : servingWeight * numServings;
-  const multiplier = computedWeight / servingWeight;
+  const computedWeight = customWeightGrams !== undefined && customWeightGrams !== null && !isNaN(parseFloat(customWeightGrams))
+    ? parseFloat(customWeightGrams)
+    : servingWeight * numServings;
+
+  // Scientific standard: food.calories & nutrients are per 100g
+  const multiplier = computedWeight / 100;
 
   const parsedDate = parseDateInput(date);
   const validMealType = String(mealType || 'BREAKFAST').toUpperCase();
@@ -151,6 +156,7 @@ async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams
       foodId,
       servings: numServings,
       weightGrams: computedWeight,
+      unitLabel: unitLabel || null,
       calories: Math.round(food.calories * multiplier * 10) / 10,
       protein: Math.round(food.protein * multiplier * 10) / 10,
       carbohydrates: Math.round(food.carbohydrates * multiplier * 10) / 10,
@@ -169,13 +175,14 @@ async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams
     date: formatDateOutput(created.date),
     food: {
       ...created.food,
+      servings: created.food.servings || [],
       servingUnit: created.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g',
       servingWeight: getServingWeight(created.food),
     },
   };
 }
 
-async function updateLog(id, { servings, customWeightGrams, mealType }, userId = DEFAULT_USER_ID) {
+async function updateLog(id, { servings, customWeightGrams, mealType, unitLabel }, userId = DEFAULT_USER_ID) {
   const existing = await prisma.mealLog.findFirst({
     where: { id, userId },
     include: {
@@ -188,22 +195,31 @@ async function updateLog(id, { servings, customWeightGrams, mealType }, userId =
 
   const food = existing.food;
   const servingWeight = getServingWeight(food);
-  const newServings = servings !== undefined ? parseFloat(servings) : existing.servings;
-  const computedWeight = customWeightGrams !== undefined ? parseFloat(customWeightGrams) : servingWeight * newServings;
-  const multiplier = computedWeight / servingWeight;
+  const newServings = servings !== undefined && servings !== null ? parseFloat(servings) : existing.servings;
+  const computedWeight = customWeightGrams !== undefined && customWeightGrams !== null && !isNaN(parseFloat(customWeightGrams))
+    ? parseFloat(customWeightGrams)
+    : servingWeight * newServings;
+
+  // Scientific standard: food.calories & nutrients are per 100g
+  const multiplier = computedWeight / 100;
+
+  const updateData = {
+    mealType: mealType ? String(mealType).toUpperCase() : existing.mealType,
+    servings: newServings,
+    weightGrams: computedWeight,
+    calories: Math.round(food.calories * multiplier * 10) / 10,
+    protein: Math.round(food.protein * multiplier * 10) / 10,
+    carbohydrates: Math.round(food.carbohydrates * multiplier * 10) / 10,
+    fat: Math.round(food.fat * multiplier * 10) / 10,
+    fiber: Math.round(food.fiber * multiplier * 10) / 10,
+  };
+  if (unitLabel !== undefined) {
+    updateData.unitLabel = unitLabel || null;
+  }
 
   const updated = await prisma.mealLog.update({
     where: { id },
-    data: {
-      mealType: mealType ? String(mealType).toUpperCase() : existing.mealType,
-      servings: newServings,
-      weightGrams: computedWeight,
-      calories: Math.round(food.calories * multiplier * 10) / 10,
-      protein: Math.round(food.protein * multiplier * 10) / 10,
-      carbohydrates: Math.round(food.carbohydrates * multiplier * 10) / 10,
-      fat: Math.round(food.fat * multiplier * 10) / 10,
-      fiber: Math.round(food.fiber * multiplier * 10) / 10,
-    },
+    data: updateData,
     include: {
       food: {
         include: { servings: true },
@@ -216,6 +232,7 @@ async function updateLog(id, { servings, customWeightGrams, mealType }, userId =
     date: formatDateOutput(updated.date),
     food: {
       ...updated.food,
+      servings: updated.food.servings || [],
       servingUnit: updated.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g',
       servingWeight: getServingWeight(updated.food),
     },

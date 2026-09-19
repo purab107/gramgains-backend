@@ -50,7 +50,7 @@ async function buildItems(items) {
     if (!food) throw new Error(`Food with ID ${item.foodId} not found`);
 
     const servingWeight = getServingWeight(food);
-    const m = parseFloat(item.weightGrams || 100) / servingWeight;
+    const m = parseFloat(item.weightGrams || 100) / 100;
     const r = (n) => Math.round(n * m * 10) / 10;
 
     const calories = r(food.calories);
@@ -183,7 +183,8 @@ async function logToTracker(savedMealId, date, mealType, userId = DEFAULT_USER_I
 
   for (const item of savedMeal.items) {
     const servingWeight = getServingWeight(item.food);
-    const servingsCount = item.weightGrams / servingWeight;
+    const servingsCount = Math.round((item.weightGrams / servingWeight) * 10) / 10;
+    const defaultUnit = item.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g';
 
     const log = await prisma.mealLog.create({
       data: {
@@ -193,6 +194,7 @@ async function logToTracker(savedMealId, date, mealType, userId = DEFAULT_USER_I
         foodId: item.foodId,
         servings: servingsCount,
         weightGrams: item.weightGrams,
+        unitLabel: defaultUnit,
         calories: item.calories,
         protein: item.protein,
         carbohydrates: item.carbohydrates,

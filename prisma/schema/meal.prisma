@@ -18,6 +18,7 @@ model MealLog {
 
   servings    Float @default(1)
   weightGrams Float
+  unitLabel   String?
 
   calories      Float
   protein       Float

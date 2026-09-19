@@ -5,6 +5,7 @@ function formatFoodWithServings(food) {
   const defaultServing = food.servings?.find((s) => s.isDefault) || food.servings?.[0];
   return {
     ...food,
+    servings: food.servings || [],
     servingUnit: defaultServing?.unitLabel || 'g',
     servingWeight: defaultServing?.weightGrams || 100,
   };
