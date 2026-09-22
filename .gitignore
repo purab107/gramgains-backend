@@ -27,3 +27,8 @@ Thumbs.db
 
 # TypeScript cache
 *.tsbuildinfo
+
+# Generated QA Audit reports
+food-audit-report.json
+food-audit-report.csv
+food-audit-summary.md
