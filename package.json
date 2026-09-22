@@ -12,7 +12,9 @@
     "import:off": "node prisma/openfoodfacts-import.js",
     "audit:food": "node --experimental-strip-types scripts/audit-food-database.ts",
     "audit:food:strict": "node --experimental-strip-types scripts/audit-food-database.ts --strict",
-    "test:audit": "node --experimental-strip-types --test test/audit.test.ts"
+    "test:audit": "node --experimental-strip-types --test test/audit.test.ts",
+    "test:search": "node --test test/food-search.test.js",
+    "benchmark:search": "node scripts/benchmark-search.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
