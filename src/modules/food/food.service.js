@@ -174,22 +174,21 @@ async function searchFoods(query, layer, category, limit = 50, page = 1, barcode
     whereClause.category = { contains: category.trim(), mode: 'insensitive' };
   }
 
-  const [foods, total] = await Promise.all([
-    prisma.food.findMany({
-      where: whereClause,
-      include: { servings: true },
-      orderBy: [{ layer: 'asc' }, { name: 'asc' }],
-      take,
-      skip,
-    }),
-    prisma.food.count({ where: whereClause }),
-  ]);
+  // Browse mode: skip COUNT(*) (expensive on 14k+ rows); frontend only uses the list.
+  const browseTake = Math.min(50, take);
+  const foods = await prisma.food.findMany({
+    where: whereClause,
+    include: { servings: true },
+    orderBy: [{ layer: 'asc' }, { name: 'asc' }],
+    take: browseTake,
+    skip,
+  });
 
   return {
     foods: foods.map(formatFoodWithServings),
-    total,
+    total: null, // not computed in browse mode to avoid full-table COUNT
     page: currentPage,
-    limit: take,
+    limit: browseTake,
   };
 }
 
