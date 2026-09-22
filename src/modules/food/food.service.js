@@ -1,5 +1,5 @@
 const { prisma } = require('../../config/db');
-const { normalizeText, tokenize, scoreFood } = require('./food-search.engine');
+const { normalizeText, tokenize, evaluateFood, scoreFood } = require('./food-search.engine');
 
 function formatFoodWithServings(food) {
   if (!food) return null;
@@ -108,21 +108,34 @@ async function searchFoods(query, layer, category, limit = 50, page = 1, barcode
 
     const candidates = await prisma.$queryRawUnsafe(candidateSql, ...params);
 
-    // Score all candidates deterministically in Node.js
-    const scored = candidates.map((food) => ({
-      food,
-      score: scoreFood(food, trimmedQuery, tokens, normalizedQuery),
-    }));
+    // Score and partition candidates into Tier 1 (Core AND Match) and Tier 2 (Partial Fallback)
+    const tier1 = [];
+    const tier2 = [];
+
+    for (const food of candidates) {
+      const evaluation = evaluateFood(food, trimmedQuery, tokens, normalizedQuery);
+      if (evaluation.isFullMatch) {
+        tier1.push({ food, ...evaluation });
+      } else {
+        tier2.push({ food, ...evaluation });
+      }
+    }
 
     // Rank primarily by relevance score DESC, then layer ASC, then name ASC
-    scored.sort((a, b) => {
+    const rankComparator = (a, b) => {
       if (b.score !== a.score) return b.score - a.score;
       if (a.food.layer !== b.food.layer) return a.food.layer - b.food.layer;
       return a.food.name.localeCompare(b.food.name);
-    });
+    };
 
-    const total = scored.length;
-    const pageCandidates = scored.slice(skip, skip + take);
+    tier1.sort(rankComparator);
+    tier2.sort(rankComparator);
+
+    // Tier 1 records are prioritized first; Tier 2 records serve strictly as fallback
+    const rankedCandidates = [...tier1, ...tier2];
+
+    const total = rankedCandidates.length;
+    const pageCandidates = rankedCandidates.slice(skip, skip + take);
 
     // Fetch full food rows with servings for the sliced page only
     const pageIds = pageCandidates.map((p) => p.food.id);

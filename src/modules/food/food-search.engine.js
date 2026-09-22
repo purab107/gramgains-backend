@@ -36,43 +36,38 @@ function tokenize(text) {
 }
 
 /**
- * Scores a food record against a normalized query and its tokens.
- *
- * Scoring Hierarchy:
- * 1. Exact full-name match: +15,000 points (highest boost)
- * 2. Exact alias match (including regional Indian-language names like "H. Kela" -> "kela"): +10,000 points
- * 3. Full-phrase match / prefix in name:
- *    - Name starts with query: +4,000 points
- *    - Name contains full query phrase: +2,000 points
- * 4. Query term completeness (satisfaction across any field):
- *    - All query tokens satisfied by the same record: +5,000 points
- *    - Partial token coverage: (satisfied / total) * 2,000 points
- * 5. Name token matches:
- *    - Exact token match in name: +1,500 points per token
- *    - Prefix token match in name: +750 points per token
- *    - Substring in name (weak match): +100 points
- * 6. Alias matches:
- *    - Alias starts with query: +2,500 points
- *    - Full query phrase inside alias: +1,200 points
- *    - Exact token in alias: +800 points
- *    - Prefix token in alias: +400 points
- * 7. Brand matches:
- *    - Exact brand match to full query: +4,000 points
- *    - Full query phrase in brand: +2,000 points
- *    - Exact token in brand: +800 points
- *    - Prefix token in brand: +400 points
- * 8. GenericName matches:
- *    - Exact genericName match to full query: +3,000 points
- *    - Full query phrase in genericName: +1,500 points
- *    - Exact token in genericName: +600 points
- *    - Prefix token in genericName: +300 points
- * 9. Dynamic simple/generic food adjustments (no hardcoded word lists):
- *    - Layer adjustments: Layer 1 (raw whole foods) +1,500, Layer 2 (standard recipes) +500, Layer 3 (packaged) +0
- *    - Name token coverage ratio: (matchedNameTokens / totalNameTokens) * 1,000
- *    - Unmatched name token penalty: -80 per extra unmatched word in name to favor direct concise matches
+ * Checks if candidate word matches query token exactly or via basic plural stem (s/es).
  */
-function scoreFood(food, rawQuery, queryTokens, normalizedQuery) {
-  if (!food) return 0;
+function isExactOrStemMatch(word, qToken) {
+  if (!word || !qToken) return false;
+  if (word === qToken) return true;
+  if (word === qToken + 's' || word + 's' === qToken) return true;
+  if (word === qToken + 'es' || word + 'es' === qToken) return true;
+  return false;
+}
+
+/**
+ * Evaluates a food candidate against the query and returns detailed match metrics.
+ *
+ * Returned object:
+ * {
+ *   score: number,
+ *   isFullMatch: boolean,
+ *   satisfiedTokensCount: number,
+ *   brandConstraintMatched: boolean,
+ *   productConstraintMatched: boolean,
+ * }
+ */
+function evaluateFood(food, rawQuery, queryTokens, normalizedQuery) {
+  if (!food) {
+    return {
+      score: 0,
+      isFullMatch: false,
+      satisfiedTokensCount: 0,
+      brandConstraintMatched: false,
+      productConstraintMatched: false,
+    };
+  }
 
   const normName = normalizeText(food.name);
   const normBrand = normalizeText(food.brand);
@@ -82,21 +77,31 @@ function scoreFood(food, rawQuery, queryTokens, normalizedQuery) {
   const nameTokens = tokenize(food.name);
   const brandTokens = tokenize(food.brand);
   const genericTokens = tokenize(food.genericName);
-  const aliasTokensList = rawNormAliases.map(tokenize);
+  const aliasTokensList = rawNormAliases.map((a) => tokenize(stripLangPrefix(a)));
   const allAliasTokens = [].concat(...aliasTokensList);
 
   let score = 0;
   let satisfiedTokensCount = 0;
   let matchedNameTokensCount = 0;
   let exactAliasMatched = false;
+  let brandConstraintMatched = false;
+  let productConstraintMatched = false;
 
   // 1. Exact full-name match (Strongest boost)
   if (normName === normalizedQuery) {
     score += 15000;
-  } else if (normName.startsWith(normalizedQuery + ' ') || normName.startsWith(normalizedQuery)) {
+  } else if (normName.startsWith(normalizedQuery + ' ')) {
     score += 4000;
+  } else if (
+    normName.includes(' ' + normalizedQuery + ' ') ||
+    normName.endsWith(' ' + normalizedQuery)
+  ) {
+    score += 2500;
+  } else if (normName.startsWith(normalizedQuery)) {
+    // Sub-word prefix collision (e.g. "rotini" for "roti") gets minimal boost
+    score += 200;
   } else if (normName.includes(normalizedQuery)) {
-    score += 2000;
+    score += 100;
   }
 
   // 2. Full query phrase matches in aliases (including Indian-language prefix stripping: "H. Kela" -> "kela")
@@ -106,23 +111,38 @@ function scoreFood(food, rawQuery, queryTokens, normalizedQuery) {
       score += 10000;
       exactAliasMatched = true;
       break;
-    } else if (alias.startsWith(normalizedQuery + ' ') || strippedAlias.startsWith(normalizedQuery + ' ')) {
+    } else if (
+      alias.startsWith(normalizedQuery + ' ') ||
+      strippedAlias.startsWith(normalizedQuery + ' ')
+    ) {
       score += 2500;
       break;
-    } else if (alias.includes(normalizedQuery) || strippedAlias.includes(normalizedQuery)) {
+    } else if (
+      alias.includes(normalizedQuery) ||
+      strippedAlias.includes(normalizedQuery)
+    ) {
       score += 1200;
       break;
     }
   }
 
-  // 3. Brand full phrase match
+  // 3. Brand full phrase / multi-word brand match
   if (normBrand) {
     if (normBrand === normalizedQuery) {
-      score += 4000;
-    } else if (normBrand.startsWith(normalizedQuery + ' ') || normBrand.startsWith(normalizedQuery)) {
+      score += 5000;
+      brandConstraintMatched = true;
+    } else if (
+      normBrand.startsWith(normalizedQuery + ' ') ||
+      normalizedQuery.startsWith(normBrand + ' ')
+    ) {
+      score += 3000;
+      brandConstraintMatched = true;
+    } else if (
+      normBrand.includes(normalizedQuery) ||
+      normalizedQuery.includes(normBrand)
+    ) {
       score += 2000;
-    } else if (normBrand.includes(normalizedQuery)) {
-      score += 1000;
+      brandConstraintMatched = true;
     }
   }
 
@@ -130,7 +150,7 @@ function scoreFood(food, rawQuery, queryTokens, normalizedQuery) {
   if (normGeneric) {
     if (normGeneric === normalizedQuery) {
       score += 3000;
-    } else if (normGeneric.startsWith(normalizedQuery + ' ') || normGeneric.startsWith(normalizedQuery)) {
+    } else if (normGeneric.startsWith(normalizedQuery + ' ')) {
       score += 1500;
     } else if (normGeneric.includes(normalizedQuery)) {
       score += 800;
@@ -146,80 +166,94 @@ function scoreFood(food, rawQuery, queryTokens, normalizedQuery) {
     // Check name tokens (exact > prefix)
     let matchedInName = false;
     for (const nToken of nameTokens) {
-      if (nToken === qToken) {
-        score += 1500;
+      if (isExactOrStemMatch(nToken, qToken)) {
+        score += 2000;
         tokenSatisfied = true;
         matchedInName = true;
+        productConstraintMatched = true;
         matchedNameTokensCount += 1.0;
-        break;
-      } else if (nToken.startsWith(qToken)) {
-        score += 750;
-        tokenSatisfied = true;
-        matchedInName = true;
-        matchedNameTokensCount += 0.75;
         break;
       }
     }
-    // Weak internal substring match in name (does not count as satisfied token)
-    if (!matchedInName && normName.includes(qToken)) {
-      score += 100;
+
+    if (!matchedInName) {
+      for (const nToken of nameTokens) {
+        // Prefix match only if token is at least 3 chars
+        if (qToken.length >= 3 && nToken.startsWith(qToken)) {
+          score += 250;
+          matchedInName = true;
+          matchedNameTokensCount += 0.25;
+          break;
+        }
+      }
     }
 
     // Check brand tokens (exact > prefix)
     let matchedInBrand = false;
     for (const bToken of brandTokens) {
-      if (bToken === qToken) {
-        score += 800;
+      if (isExactOrStemMatch(bToken, qToken)) {
+        score += 1200;
         tokenSatisfied = true;
         matchedInBrand = true;
-        break;
-      } else if (bToken.startsWith(qToken)) {
-        score += 400;
-        tokenSatisfied = true;
-        matchedInBrand = true;
+        brandConstraintMatched = true;
         break;
       }
     }
-    if (!matchedInBrand && normBrand && normBrand.includes(qToken)) {
-      score += 80;
+
+    if (!matchedInBrand) {
+      for (const bToken of brandTokens) {
+        if (qToken.length >= 3 && bToken.startsWith(qToken)) {
+          score += 150;
+          matchedInBrand = true;
+          brandConstraintMatched = true;
+          break;
+        }
+      }
     }
 
     // Check genericName tokens (exact > prefix)
     let matchedInGeneric = false;
     for (const gToken of genericTokens) {
-      if (gToken === qToken) {
-        score += 600;
+      if (isExactOrStemMatch(gToken, qToken)) {
+        // Full score if this token wasn't already satisfied in name, modest corroboration if already matched
+        score += matchedInName ? 100 : 1000;
         tokenSatisfied = true;
         matchedInGeneric = true;
-        break;
-      } else if (gToken.startsWith(qToken)) {
-        score += 300;
-        tokenSatisfied = true;
-        matchedInGeneric = true;
+        productConstraintMatched = true;
         break;
       }
     }
-    if (!matchedInGeneric && normGeneric && normGeneric.includes(qToken)) {
-      score += 60;
+
+    if (!matchedInGeneric && !matchedInName) {
+      for (const gToken of genericTokens) {
+        if (qToken.length >= 3 && gToken.startsWith(qToken)) {
+          score += 100;
+          matchedInGeneric = true;
+          break;
+        }
+      }
     }
 
     // Check alias tokens (exact > prefix)
     let matchedInAlias = false;
     for (const aToken of allAliasTokens) {
-      if (aToken === qToken) {
-        score += 800;
+      if (isExactOrStemMatch(aToken, qToken)) {
+        score += matchedInName ? 100 : 1200;
         tokenSatisfied = true;
         matchedInAlias = true;
-        break;
-      } else if (aToken.startsWith(qToken)) {
-        score += 400;
-        tokenSatisfied = true;
-        matchedInAlias = true;
+        productConstraintMatched = true;
         break;
       }
     }
-    if (!matchedInAlias && rawNormAliases.some(a => a.includes(qToken))) {
-      score += 60;
+
+    if (!matchedInAlias && !matchedInName) {
+      for (const aToken of allAliasTokens) {
+        if (qToken.length >= 3 && aToken.startsWith(qToken)) {
+          score += 100;
+          matchedInAlias = true;
+          break;
+        }
+      }
     }
 
     if (tokenSatisfied || exactAliasMatched) {
@@ -227,22 +261,40 @@ function scoreFood(food, rawQuery, queryTokens, normalizedQuery) {
     }
   }
 
-  // 6. Token satisfaction boost (substantial boost when all query tokens are satisfied)
-  if (totalQueryTokens > 0) {
-    const coverageRatio = satisfiedTokensCount / totalQueryTokens;
-    if (coverageRatio >= 1 || exactAliasMatched) {
+  // 6. Multi-token intent & core completeness
+  const isFullMatch =
+    totalQueryTokens > 0
+      ? satisfiedTokensCount === totalQueryTokens ||
+        exactAliasMatched ||
+        normName === normalizedQuery
+      : false;
+
+  if (isFullMatch) {
+    score += 5000;
+
+    // Structured Intent Boost: Brand constraint + Product constraint both satisfied
+    if (brandConstraintMatched && productConstraintMatched) {
       score += 5000;
-    } else {
-      score += Math.round(coverageRatio * 2000);
+    }
+  } else {
+    // Partial Match (Tier 2 fallback)
+    if (totalQueryTokens > 0) {
+      score += Math.round((satisfiedTokensCount / totalQueryTokens) * 1000);
+    }
+    // Brand Affinity Boost in Tier 2 fallback:
+    // If user specified brand+food (e.g. "amul milk"), brand items ("Amul Cheese")
+    // rank above generic partial items ("Almond Dairy Milk") in fallback
+    if (brandConstraintMatched) {
+      score += 3500;
     }
   }
 
-  // 7. Generic / Simple Food Identity vs Compound Adjustments (Dynamic, without hardcoded lists)
+  // 7. Generic / Simple Food Identity vs Compound Adjustments
   // Layer hierarchy: Layer 1 (raw agricultural ingredients) > Layer 2 (prepared recipes) > Layer 3 (branded products)
   if (food.layer === 1) {
-    score += 1500;
+    score += 2500;
   } else if (food.layer === 2) {
-    score += 500;
+    score += 800;
   }
 
   // Name conciseness & coverage:
@@ -256,12 +308,27 @@ function scoreFood(food, rawQuery, queryTokens, normalizedQuery) {
     score -= unmatchedTokens * 80;
   }
 
-  return score;
+  return {
+    score,
+    isFullMatch,
+    satisfiedTokensCount,
+    brandConstraintMatched,
+    productConstraintMatched,
+  };
+}
+
+/**
+ * Convenience wrapper returning numeric score for backward compatibility.
+ */
+function scoreFood(food, rawQuery, queryTokens, normalizedQuery) {
+  return evaluateFood(food, rawQuery, queryTokens, normalizedQuery).score;
 }
 
 module.exports = {
   normalizeText,
   stripLangPrefix,
   tokenize,
+  isExactOrStemMatch,
+  evaluateFood,
   scoreFood,
 };
