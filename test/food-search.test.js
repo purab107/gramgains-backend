@@ -140,4 +140,63 @@ describe('Food Search Engine Tests', () => {
       assert.ok(!page1Ids.has(food.id), `Duplicate food ID ${food.id} across page 1 and page 2`);
     }
   });
+
+  it('11. Regression: "amul milk" strictly prioritizes items satisfying ALL tokens (AND semantics) over single-token matches', async () => {
+    const res = await FoodService.searchFoods('amul milk', undefined, undefined, 5);
+    assert.ok(res.foods.length >= 3, 'Should have multiple Amul Milk results');
+
+    // Every item in the top 3 must satisfy BOTH "amul" and "milk"
+    for (const food of res.foods.slice(0, 3)) {
+      const text = `${food.name} ${food.brand || ''}`.toLowerCase();
+      assert.ok(text.includes('amul'), `Food "${food.name}" should match "amul"`);
+      assert.ok(text.includes('milk'), `Food "${food.name}" should match "milk"`);
+    }
+
+    // "Amul Taaza Milk" should outrank "High Protein Milk"
+    const taazaIdx = res.foods.findIndex(f => f.name === 'Amul Taaza Milk');
+    const highProteinIdx = res.foods.findIndex(f => f.name.includes('High Protein Milk'));
+    assert.ok(taazaIdx !== -1, 'Amul Taaza Milk must be in results');
+    if (highProteinIdx !== -1) {
+      assert.ok(taazaIdx < highProteinIdx, 'Amul Taaza Milk must rank higher than High Protein Milk');
+    }
+  });
+
+  it('12. Regression: Fallback ordering for "amul milk" prioritizes Brand constraint ("Amul Cheese") over non-brand partials ("Almond Dairy Milk")', async () => {
+    const res = await FoodService.searchFoods('amul milk', undefined, undefined, 50);
+    const amulCheeseIdx = res.foods.findIndex(f => f.name.toLowerCase().includes('amul cheese') || (f.brand?.toLowerCase() === 'amul' && f.name.toLowerCase().includes('cheese')));
+    const nonAmulMilkIdx = res.foods.findIndex(f => f.brand?.toLowerCase() !== 'amul' && !f.name.toLowerCase().includes('amul') && f.name.toLowerCase().includes('milk'));
+
+    if (amulCheeseIdx !== -1 && nonAmulMilkIdx !== -1) {
+      assert.ok(
+        amulCheeseIdx < nonAmulMilkIdx,
+        `Expected Amul Cheese (idx ${amulCheeseIdx}) to rank before non-Amul milk (idx ${nonAmulMilkIdx}) in fallback`
+      );
+    }
+  });
+
+  it('13. Regression: "roti" prioritizes Indian flatbreads and does NOT return "Rotini" pasta in top 5', async () => {
+    const res = await FoodService.searchFoods('roti', undefined, undefined, 5);
+    assert.ok(res.foods.length > 0, 'Should return results for "roti"');
+
+    // None of the top 5 results should be pasta / rotini
+    for (const food of res.foods) {
+      assert.ok(
+        !food.name.toLowerCase().startsWith('rotini'),
+        `Top 5 result "${food.name}" should NOT be Rotini pasta for query "roti"`
+      );
+    }
+
+    // Top result should be an actual roti / chapati flatbread
+    const topName = res.foods[0].name.toLowerCase();
+    assert.ok(topName.includes('roti') || topName.includes('chapati'), `Top match "${res.foods[0].name}" should be a roti or chapati`);
+  });
+
+  it('14. Multi-word brand: "mother dairy milk" recognizes Mother Dairy brand and returns milk products as top match', async () => {
+    const res = await FoodService.searchFoods('mother dairy milk', undefined, undefined, 5);
+    assert.ok(res.foods.length > 0, 'Should return results for "mother dairy milk"');
+
+    const topMatch = res.foods[0];
+    assert.equal(topMatch.brand, 'Mother Dairy', 'Top match brand must be "Mother Dairy"');
+    assert.ok(topMatch.name.toLowerCase().includes('milk'), 'Top match name must include "milk"');
+  });
 });
