@@ -1,115 +1,205 @@
-const { prisma } = require('../src/config/db');
-const FoodService = require('../src/modules/food/food.service');
+const { prisma } = require('d:/Projects/gramgains/gramgains-backend/src/config/db');
+const FoodService = require('d:/Projects/gramgains/gramgains-backend/src/modules/food/food.service');
+const { scoreFood, tokenize, normalizeText } = require('d:/Projects/gramgains/gramgains-backend/src/modules/food/food-search.engine');
 
-// Baseline (Old) search logic for direct comparison
-async function baselineSearch(query, layer, category, limit = 50, page = 1) {
-  const whereClause = { deletedAt: null };
-  if (query && query.trim() !== '') {
-    const trimmed = query.trim();
-    whereClause.OR = [
-      { name: { contains: trimmed, mode: 'insensitive' } },
-      { brand: { contains: trimmed, mode: 'insensitive' } },
-      { genericName: { contains: trimmed, mode: 'insensitive' } },
-      { category: { contains: trimmed, mode: 'insensitive' } },
-      { aliases: { hasSome: [trimmed] } },
-      { barcode: { equals: trimmed } },
-    ];
-  }
-  if (layer && [1, 2, 3].includes(layer)) {
-    whereClause.layer = layer;
-  }
-  if (category && category.trim() !== '' && category.toUpperCase() !== 'ALL') {
-    whereClause.category = { contains: category.trim(), mode: 'insensitive' };
-  }
-  const take = Math.min(100, Math.max(1, parseInt(limit, 10) || 50));
-  const skip = ((parseInt(page, 10) || 1) - 1) * take;
+const QUERIES = [
+  // (1) Generic single-ingredient foods
+  { q: 'milk',          cat: 'generic' },
+  { q: 'dahi',          cat: 'generic' },
+  { q: 'curd',          cat: 'generic' },
+  { q: 'atta',          cat: 'generic' },
+  { q: 'wheat flour',   cat: 'generic' },
+  { q: 'roti',          cat: 'generic' },
+  { q: 'chapati',       cat: 'generic' },
+  { q: 'rice',          cat: 'generic' },
+  { q: 'basmati rice',  cat: 'multi' },
+  { q: 'dal',           cat: 'generic' },
+  { q: 'toor dal',      cat: 'multi' },
+  { q: 'paneer',        cat: 'generic' },
+  { q: 'banana',        cat: 'generic' },
+  { q: 'potato',        cat: 'generic' },
 
-  const [foods, total] = await Promise.all([
-    prisma.food.findMany({
-      where: whereClause,
-      include: { servings: true },
-      orderBy: [{ layer: 'asc' }, { name: 'asc' }],
-      take,
-      skip,
-    }),
-    prisma.food.count({ where: whereClause }),
-  ]);
+  // (2) Multi-token food queries
+  { q: 'banana cake',   cat: 'multi' },
+  { q: 'oat milk',      cat: 'multi' },
+  { q: 'peanut butter', cat: 'multi' },
 
-  return { foods, total };
-}
+  // (3) Indian-language / alias queries
+  { q: 'kela',          cat: 'alias' },
+  { q: 'aloo',          cat: 'alias' },
+  { q: 'chawal',        cat: 'alias' },
+
+  // (4) Brand-only queries
+  { q: 'amul',          cat: 'brand' },
+  { q: 'saffola',       cat: 'brand' },
+  { q: 'maggi',         cat: 'brand' },
+  { q: 'parle',         cat: 'brand' },
+
+  // (5) Brand + food queries
+  { q: 'amul milk',          cat: 'brand+food' },
+  { q: 'amul paneer',        cat: 'brand+food' },
+  { q: 'saffola oats',       cat: 'brand+food' },
+  { q: 'aashirvaad atta',    cat: 'brand+food' },
+  { q: 'britannia biscuits', cat: 'brand+food' },
+  { q: 'india gate rice',    cat: 'brand+food' },
+  { q: 'haldiram bhujia',    cat: 'brand+food' },
+  { q: 'mother dairy milk',  cat: 'brand+food' },
+
+  // (6) Brand / product ambiguity queries
+  { q: 'nestle milk',     cat: 'ambiguity' },
+  { q: 'nestle coffee',   cat: 'ambiguity' },
+  { q: 'britannia milk',  cat: 'ambiguity' },
+];
 
 async function runBenchmark() {
-  console.log('========================================================================');
-  console.log('       GRAMGAINS FOOD SEARCH BENCHMARK: BASELINE vs NEW RELEVANCE        ');
-  console.log('========================================================================\n');
+  const allResults = [];
+  const latencies = [];
 
-  const testQueries = [
-    { q: 'amul milk', desc: 'Multi-token cross-field query (brand + name)' },
-    { q: 'amul', desc: 'Brand-dominant query with brand-only foods' },
-    { q: 'banana', desc: 'Generic ingredient query vs compound products' },
-    { q: 'banana cake', desc: 'Specific composite recipe query' },
-    { q: 'taaza milk', desc: 'Product descriptor + category token' },
-    { q: 'kela', desc: 'Indian-language regional alias search' },
-    { q: 'oat milk', desc: 'Multi-word compound beverage' },
-  ];
+  for (const { q, cat } of QUERIES) {
+    // Warm up
+    await FoodService.searchFoods(q, undefined, undefined, 5);
 
-  const results = [];
-
-  for (const { q, desc } of testQueries) {
-    // Warmup
-    await baselineSearch(q);
-    await FoodService.searchFoods(q);
-
-    // Measure Baseline (3 iterations)
-    const baseTimes = [];
-    let baseRes;
-    for (let i = 0; i < 3; i++) {
+    // Timed run (average of 2)
+    const times = [];
+    let result;
+    for (let i = 0; i < 2; i++) {
       const t0 = performance.now();
-      baseRes = await baselineSearch(q);
-      baseTimes.push(performance.now() - t0);
+      result = await FoodService.searchFoods(q, undefined, undefined, 5);
+      times.push(performance.now() - t0);
     }
-    const avgBase = (baseTimes.reduce((a, b) => a + b, 0) / baseTimes.length).toFixed(2);
+    const avgLatency = times.reduce((a, b) => a + b, 0) / times.length;
+    latencies.push(avgLatency);
 
-    // Measure New Implementation (3 iterations)
-    const newTimes = [];
-    let newRes;
-    for (let i = 0; i < 3; i++) {
-      const t0 = performance.now();
-      newRes = await FoodService.searchFoods(q);
-      newTimes.push(performance.now() - t0);
-    }
-    const avgNew = (newTimes.reduce((a, b) => a + b, 0) / newTimes.length).toFixed(2);
-
-    results.push({
-      query: q,
-      desc,
-      baseCount: baseRes.total,
-      baseTop: baseRes.foods[0] ? `${baseRes.foods[0].name} (${baseRes.foods[0].brand || 'no brand'})` : 'NONE',
-      baseLatency: `${avgBase}ms`,
-      newCount: newRes.total,
-      newTop: newRes.foods[0] ? `${newRes.foods[0].name} (${newRes.foods[0].brand || 'no brand'})` : 'NONE',
-      newLatency: `${avgNew}ms`,
-    });
+    allResults.push({ q, cat, result, latency: avgLatency });
   }
 
-  console.table(results.map(r => ({
-    'Query': r.query,
-    'Base Count': r.baseCount,
-    'Base Top Match': r.baseTop.slice(0, 30),
-    'Base Latency': r.baseLatency,
-    'New Count': r.newCount,
-    'New Top Match': r.newTop.slice(0, 30),
-    'New Latency': r.newLatency,
-  })));
-
-  console.log('\nDetailed Breakdown:');
-  for (const r of results) {
-    console.log(`\nQuery: "${r.query}" (${r.desc})`);
-    console.log(`  - Baseline: ${r.baseCount} matches | Avg Latency: ${r.baseLatency} | Top: ${r.baseTop}`);
-    console.log(`  - New Engine: ${r.newCount} matches | Avg Latency: ${r.newLatency} | Top: ${r.newTop}`);
-  }
+  return { allResults, latencies };
 }
 
-runBenchmark()
+function classify(q, food) {
+  if (!food) return 'Irrelevant';
+  const qLow = q.toLowerCase();
+  const nameLow = food.name.toLowerCase();
+  const brandLow = (food.brand || '').toLowerCase();
+  const aliasStr = (food.aliases || []).join(' ').toLowerCase();
+  const genericLow = (food.genericName || '').toLowerCase();
+  const allText = nameLow + ' ' + brandLow + ' ' + aliasStr + ' ' + genericLow;
+
+  const tokens = qLow.split(' ').filter(Boolean);
+  const exactName = nameLow === qLow;
+  const allTokensInRecord = tokens.every(t => allText.includes(t));
+  const majorityTokensInRecord = tokens.filter(t => allText.includes(t)).length >= Math.ceil(tokens.length * 0.5);
+
+  if (exactName) return 'Highly Relevant';
+  if (allTokensInRecord) return 'Highly Relevant';
+  if (majorityTokensInRecord) return 'Relevant';
+
+  const anyToken = tokens.some(t => allText.includes(t));
+  if (anyToken) return 'Weakly Relevant';
+  return 'Irrelevant';
+}
+
+async function main() {
+  const { allResults, latencies } = await runBenchmark();
+
+  // === REPORT ===
+  console.log('\n');
+  console.log('══════════════════════════════════════════════════════════════════════════════════════');
+  console.log('  GRAMGAINS FOOD SEARCH ENGINE — 34-QUERY RELEVANCE BENCHMARK REPORT');
+  console.log('══════════════════════════════════════════════════════════════════════════════════════\n');
+
+  let top1Correct = 0;
+  let top1Wrong = [];
+  let queriesWithExcessWeak = [];
+  const totalQueries = allResults.length;
+
+  for (const { q, cat, result, latency } of allResults) {
+    const foods = result.foods;
+    const total = result.total;
+
+    const topRelevance = foods.length > 0 ? classify(q, foods[0]) : 'Irrelevant';
+    if (topRelevance === 'Highly Relevant' || topRelevance === 'Relevant') {
+      top1Correct++;
+    } else {
+      top1Wrong.push({ q, cat, top: foods[0]?.name || 'NONE', topBrand: foods[0]?.brand || 'None' });
+    }
+
+    const top5Ratings = foods.map(f => classify(q, f));
+    const weakCount = top5Ratings.filter(r => r === 'Weakly Relevant' || r === 'Irrelevant').length;
+    if (weakCount >= 3) {
+      queriesWithExcessWeak.push({ q, weakCount });
+    }
+
+    console.log(`─────────────────────────────────────────────────────────────────`);
+    console.log(`Query: "${q}"  [${cat}]  |  Candidates: ${total}  |  Latency: ${latency.toFixed(1)}ms`);
+    console.log(`─────────────────────────────────────────────────────────────────`);
+    if (foods.length === 0) {
+      console.log('  [NO RESULTS]');
+    } else {
+      foods.forEach((f, idx) => {
+        const rel = classify(q, f);
+        const relIcon = rel === 'Highly Relevant' ? '✅' : rel === 'Relevant' ? '🟡' : rel === 'Weakly Relevant' ? '🟠' : '❌';
+        console.log(`  ${idx + 1}. ${relIcon} [L${f.layer}] "${f.name}"  |  Brand: ${f.brand || 'None'}  |  ${rel}`);
+      });
+    }
+    console.log('');
+  }
+
+  // === STATISTICS ===
+  const sortedLat = [...latencies].sort((a, b) => a - b);
+  const medianLat = sortedLat[Math.floor(sortedLat.length / 2)].toFixed(1);
+  const p95Lat = sortedLat[Math.floor(sortedLat.length * 0.95)].toFixed(1);
+  const minLat = sortedLat[0].toFixed(1);
+  const maxLat = sortedLat[sortedLat.length - 1].toFixed(1);
+  const avgLat = (latencies.reduce((a, b) => a + b, 0) / latencies.length).toFixed(1);
+
+  const candidateCounts = allResults.map(r => r.result.total);
+  const sortedCounts = [...candidateCounts].sort((a, b) => a - b);
+  const medianCount = sortedCounts[Math.floor(sortedCounts.length / 2)];
+  const maxCount = sortedCounts[sortedCounts.length - 1];
+  const minCount = sortedCounts[0];
+  const avgCount = (candidateCounts.reduce((a, b) => a + b, 0) / candidateCounts.length).toFixed(0);
+
+  const top1Pct = ((top1Correct / totalQueries) * 100).toFixed(1);
+
+  console.log('══════════════════════════════════════════════════════════════════════════════════════');
+  console.log('  BENCHMARK SUMMARY STATISTICS');
+  console.log('══════════════════════════════════════════════════════════════════════════════════════\n');
+
+  console.log(`📊 Total Queries Benchmarked  : ${totalQueries}`);
+  console.log(`✅ Top-1 Accuracy             : ${top1Correct}/${totalQueries} (${top1Pct}%)`);
+  console.log(`   (Highly Relevant or Relevant as rank #1 result)`);
+  console.log('');
+
+  if (top1Wrong.length > 0) {
+    console.log(`⚠️  Queries with wrong Top-1   : ${top1Wrong.length}`);
+    top1Wrong.forEach(r => {
+      console.log(`   • "${r.q}" [${r.cat}] → Got: "${r.top}" (Brand: ${r.topBrand})`);
+    });
+    console.log('');
+  }
+
+  if (queriesWithExcessWeak.length > 0) {
+    console.log(`🟠 Queries with ≥3/5 weak/irrelevant results:`);
+    queriesWithExcessWeak.forEach(r => console.log(`   • "${r.q}" — ${r.weakCount}/5 weak matches`));
+    console.log('');
+  }
+
+  console.log(`⏱️  Latency Statistics`);
+  console.log(`   Min   : ${minLat}ms`);
+  console.log(`   Median: ${medianLat}ms`);
+  console.log(`   Avg   : ${avgLat}ms`);
+  console.log(`   p95   : ${p95Lat}ms`);
+  console.log(`   Max   : ${maxLat}ms`);
+  console.log('');
+  console.log(`📦 Candidate-Count Statistics (matches before pagination)`);
+  console.log(`   Min   : ${minCount}`);
+  console.log(`   Median: ${medianCount}`);
+  console.log(`   Avg   : ${avgCount}`);
+  console.log(`   Max   : ${maxCount}`);
+  console.log('');
+}
+
+main()
   .catch(console.error)
   .finally(() => prisma.$disconnect());
