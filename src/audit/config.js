@@ -1,6 +1,11 @@
-import type { AuditConfig } from './types.ts';
+/**
+ * Configuration and constants for the GramGains Food Database QA Audit Tool.
+ */
 
-export const DEFAULT_AUDIT_CONFIG: AuditConfig = {
+/**
+ * @type {import('./types').AuditConfig}
+ */
+const DEFAULT_AUDIT_CONFIG = {
   calorieRelThreshold: 0.20, // 20% relative discrepancy warning
   calorieAbsThreshold: 25, // 25 kcal absolute discrepancy warning
   calorieRelErrorThreshold: 0.50, // 50% relative discrepancy error
@@ -19,8 +24,9 @@ export const DEFAULT_AUDIT_CONFIG: AuditConfig = {
 /**
  * Common Indian staple food stems that exhibit huge nutritional differences between raw and cooked states.
  * If a food contains these base words but lacks preparation state tokens, it creates high risk of 2x-3x logging errors.
+ * @type {Array<{stem: string, vernacular: string, cookedDensityKcal: number, rawDensityKcal: number}>}
  */
-export const STAPLE_RAW_VS_COOKED_STEMS = [
+const STAPLE_RAW_VS_COOKED_STEMS = [
   { stem: 'rice', vernacular: 'chawal', cookedDensityKcal: 130, rawDensityKcal: 350 },
   { stem: 'dal', vernacular: 'daal', cookedDensityKcal: 100, rawDensityKcal: 340 },
   { stem: 'lentil', vernacular: 'dal', cookedDensityKcal: 110, rawDensityKcal: 340 },
@@ -40,8 +46,9 @@ export const STAPLE_RAW_VS_COOKED_STEMS = [
 
 /**
  * Tokens that indicate the preparation state of a food.
+ * @type {string[]}
  */
-export const PREPARATION_STATE_TOKENS = [
+const PREPARATION_STATE_TOKENS = [
   'raw',
   'dry',
   'uncooked',
@@ -63,8 +70,9 @@ export const PREPARATION_STATE_TOKENS = [
 
 /**
  * Generic unqualified food names that are overly ambiguous for users to reliably pick.
+ * @type {Set<string>}
  */
-export const GENERIC_AMBIGUOUS_NAMES = new Set([
+const GENERIC_AMBIGUOUS_NAMES = new Set([
   'rice',
   'dal',
   'daal',
@@ -100,8 +108,9 @@ export const GENERIC_AMBIGUOUS_NAMES = new Set([
 
 /**
  * Mapping of generic items that ideally should have common Hindi/Indian aliases.
+ * @type {Object.<string, string[]>}
  */
-export const INDIAN_VERNACULAR_DICTIONARY: Record<string, string[]> = {
+const INDIAN_VERNACULAR_DICTIONARY = {
   spinach: ['palak'],
   curd: ['dahi', 'yogurt'],
   yogurt: ['dahi'],
@@ -143,8 +152,9 @@ export const INDIAN_VERNACULAR_DICTIONARY: Record<string, string[]> = {
 
 /**
  * Categories expected to have specific household units in real-world Indian diet tracking.
+ * @type {Object.<string, string[]>}
  */
-export const HOUSEHOLD_UNIT_CATEGORY_MAP: Record<string, string[]> = {
+const HOUSEHOLD_UNIT_CATEGORY_MAP = {
   'Prepared Breads': ['piece', 'roti', 'paratha', 'naan', 'puri', 'phulka'],
   Breads: ['piece', 'slice', 'roti'],
   'South Indian Breakfast': ['piece', 'idli', 'dosa', 'vada', 'plate'],
@@ -161,8 +171,9 @@ export const HOUSEHOLD_UNIT_CATEGORY_MAP: Record<string, string[]> = {
 
 /**
  * Plausible weight ranges (in grams/ml) for common serving unit labels.
+ * @type {Object.<string, {min: number, max: number}>}
  */
-export const SERVING_UNIT_PLAUSIBLE_RANGES: Record<string, { min: number; max: number }> = {
+const SERVING_UNIT_PLAUSIBLE_RANGES = {
   g: { min: 0.1, max: 2000 },
   gram: { min: 0.1, max: 2000 },
   grams: { min: 0.1, max: 2000 },
@@ -187,4 +198,14 @@ export const SERVING_UNIT_PLAUSIBLE_RANGES: Record<string, { min: number; max: n
   scoop: { min: 10, max: 100 },
   plate: { min: 100, max: 800 },
   serving: { min: 10, max: 800 },
+};
+
+module.exports = {
+  DEFAULT_AUDIT_CONFIG,
+  STAPLE_RAW_VS_COOKED_STEMS,
+  PREPARATION_STATE_TOKENS,
+  GENERIC_AMBIGUOUS_NAMES,
+  INDIAN_VERNACULAR_DICTIONARY,
+  HOUSEHOLD_UNIT_CATEGORY_MAP,
+  SERVING_UNIT_PLAUSIBLE_RANGES,
 };
