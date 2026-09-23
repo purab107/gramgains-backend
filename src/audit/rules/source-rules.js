@@ -1,10 +1,10 @@
-import type { FoodRecord, AuditIssue } from '../types.ts';
-
 /**
  * Audits FoodSource, layer combinations, and branded metadata completeness.
+ * @param {import('../types').FoodRecord} food - The food record to audit
+ * @returns {import('../types').AuditIssue[]} Array of audit issues found
  */
-export function auditSourceRules(food: FoodRecord): AuditIssue[] {
-  const issues: AuditIssue[] = [];
+function auditSourceRules(food) {
+  const issues = [];
 
   // 1. Soft-deleted record check
   if (food.deletedAt) {
@@ -27,7 +27,7 @@ export function auditSourceRules(food: FoodRecord): AuditIssue[] {
   }
 
   // 2. Source vs Layer mapping validation
-  const EXPECTED_LAYER_MAP: Record<string, number> = {
+  const EXPECTED_LAYER_MAP = {
     IFCT_2017: 1,
     INDB: 2,
     OPEN_FOOD_FACTS: 3,
@@ -66,6 +66,7 @@ export function auditSourceRules(food: FoodRecord): AuditIssue[] {
         source: food.source,
         layer: food.layer,
         category: food.category,
+        brand: food.brand,
         severity: 'WARNING',
         issueCategory: 'METADATA_SOURCE',
         issueCode: 'WARN_BRANDED_LACKS_MANUFACTURER',
@@ -79,3 +80,5 @@ export function auditSourceRules(food: FoodRecord): AuditIssue[] {
 
   return issues;
 }
+
+module.exports = { auditSourceRules };

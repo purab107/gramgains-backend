@@ -1,34 +1,56 @@
-import fs from 'fs';
-import readline from 'readline';
-import type { FoodRecord, AuditIssue } from '../types.ts';
+const fs = require('fs');
+const readline = require('readline');
 
 /**
  * Local Reference Dataset Adapter for OpenFoodFacts CSV.
  * Reads the curated import CSV and indexes by barcode for validation.
  * Strictly read-only, never modifies data.
+ * @class
  */
-export class OffReferenceAdapter {
-  private barcodeMap = new Map<string, { calories: number; protein: number; carbs: number; fat: number; brand: string }>();
-  private loaded = false;
+class OffReferenceAdapter {
+  /**
+   * @private
+   * @type {Map<string, {calories: number, protein: number, carbs: number, fat: number, brand: string}>}
+   */
+  #barcodeMap = new Map();
 
-  private csvPath: string;
+  /**
+   * @private
+   * @type {boolean}
+   */
+  #loaded = false;
 
-  constructor(csvPath: string) {
-    this.csvPath = csvPath;
+  /**
+   * @private
+   * @type {string}
+   */
+  #csvPath;
+
+  /**
+   * @param {string} csvPath - Path to the OpenFoodFacts CSV file
+   */
+  constructor(csvPath) {
+    this.#csvPath = csvPath;
   }
 
-  public async load(maxRecords = 25000): Promise<boolean> {
-    if (!fs.existsSync(this.csvPath)) {
+  /**
+   * Loads the OpenFoodFacts reference dataset from CSV file.
+   * @public
+   * @param {number} [maxRecords=25000] - Maximum number of records to load
+   * @returns {Promise<boolean>} True if loaded successfully, false otherwise
+   */
+  async load(maxRecords = 25000) {
+    if (!fs.existsSync(this.#csvPath)) {
       return false;
     }
     try {
       const rl = readline.createInterface({
-        input: fs.createReadStream(this.csvPath, { encoding: 'utf-8' }),
+        input: fs.createReadStream(this.#csvPath, { encoding: 'utf-8' }),
         crlfDelay: Infinity,
       });
 
-      let header: string[] | null = null;
-      let headerMap: Record<string, number> = {};
+      let header = null;
+      let headerMap = {};
       let count = 0;
 
       for await (const line of rl) {
@@ -44,7 +66,7 @@ export class OffReferenceAdapter {
         const cols = line.split(',').map((val) => val.replace(/^"|"$/g, '').trim());
         const barcode = cols[headerMap['barcode']];
         if (barcode && barcode.length > 3) {
-          this.barcodeMap.set(barcode, {
+          this.#barcodeMap.set(barcode, {
             calories: parseFloat(cols[headerMap['calories']]) || 0,
             protein: parseFloat(cols[headerMap['protein']]) || 0,
             carbs: parseFloat(cols[headerMap['carbohydrates']]) || 0,
@@ -56,20 +78,26 @@ export class OffReferenceAdapter {
         if (count >= maxRecords) break;
       }
 
-      this.loaded = true;
+      this.#loaded = true;
       return true;
     } catch {
       return false;
     }
   }
 
-  public auditFood(food: FoodRecord): AuditIssue[] {
-    if (!this.loaded || food.source !== 'OPEN_FOOD_FACTS' || !food.barcode) return [];
+  /**
+   * Audits a food record against OpenFoodFacts reference data.
+   * @public
+   * @param {import('../types').FoodRecord} food - The food record to audit
+   * @returns {import('../types').AuditIssue[]} Array of audit issues found
+   */
+  auditFood(food) {
+    if (!this.#loaded || food.source !== 'OPEN_FOOD_FACTS' || !food.barcode) return [];
 
-    const ref = this.barcodeMap.get(food.barcode);
+    const ref = this.#barcodeMap.get(food.barcode);
     if (!ref) return [];
 
-    const issues: AuditIssue[] = [];
+    const issues = [];
 
     if (Math.abs(food.calories - ref.calories) > 5.0) {
       issues.push({
@@ -95,3 +123,5 @@ export class OffReferenceAdapter {
     return issues;
   }
 }
+
+module.exports = { OffReferenceAdapter };

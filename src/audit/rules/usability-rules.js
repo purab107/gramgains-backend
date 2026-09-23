@@ -1,19 +1,20 @@
-import type { FoodRecord, AuditIssue } from '../types.ts';
-import {
+const {
   STAPLE_RAW_VS_COOKED_STEMS,
   PREPARATION_STATE_TOKENS,
   GENERIC_AMBIGUOUS_NAMES,
   INDIAN_VERNACULAR_DICTIONARY,
-} from '../config.ts';
-import { normalizeText, extractTokens } from '../normalizer.ts';
+} = require('../config');
+const { normalizeText, extractTokens } = require('../normalizer');
 
 /**
  * Audits food name and alias usability for Indian diet logging.
  * Identifies raw-vs-cooked ambiguity, unqualified generic names,
  * missing vernacular aliases, and corrupted/suspicious strings.
+ * @param {import('../types').FoodRecord} food - The food record to audit
+ * @returns {import('../types').AuditIssue[]} Array of audit issues found
  */
-export function auditUsabilityRules(food: FoodRecord): AuditIssue[] {
-  const issues: AuditIssue[] = [];
+function auditUsabilityRules(food) {
+  const issues = [];
   const rawName = food.name.trim();
   const normName = normalizeText(rawName);
   const nameTokens = extractTokens(rawName);
@@ -177,3 +178,5 @@ export function auditUsabilityRules(food: FoodRecord): AuditIssue[] {
 
   return issues;
 }
+
+module.exports = { auditUsabilityRules };

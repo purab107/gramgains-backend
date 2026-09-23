@@ -11,43 +11,34 @@
  * values PER 100 GRAMS of edible food unless explicitly documented.
  */
 
-import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
+require('dotenv/config');
+const { PrismaClient } = require('@prisma/client');
+const path = require('path');
+const fs = require('fs');
 
-const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-import type {
-  AuditConfig,
-  AuditIssue,
-  AuditReport,
-  AuditSummaryStats,
-  FoodRecord,
-  IssueCode,
-  Severity,
-  SourceStats,
-} from '../src/audit/types.ts';
-import { DEFAULT_AUDIT_CONFIG } from '../src/audit/config.ts';
-import { auditNutritionRules } from '../src/audit/rules/nutrition-rules.ts';
-import { auditServingRules } from '../src/audit/rules/serving-rules.ts';
-import { auditUsabilityRules } from '../src/audit/rules/usability-rules.ts';
-import { auditSourceRules } from '../src/audit/rules/source-rules.ts';
-import { DeduplicationAuditor } from '../src/audit/deduplication.ts';
-import { IndbReferenceAdapter } from '../src/audit/adapters/indb-adapter.ts';
-import { OffReferenceAdapter } from '../src/audit/adapters/off-adapter.ts';
-import { writeJsonReport } from '../src/audit/reporters/json-reporter.ts';
-import { writeCsvReport } from '../src/audit/reporters/csv-reporter.ts';
-import { writeMarkdownReport } from '../src/audit/reporters/markdown-reporter.ts';
+const { DEFAULT_AUDIT_CONFIG } = require('../src/audit/config');
+const { auditNutritionRules } = require('../src/audit/rules/nutrition-rules');
+const { auditServingRules } = require('../src/audit/rules/serving-rules');
+const { auditUsabilityRules } = require('../src/audit/rules/usability-rules');
+const { auditSourceRules } = require('../src/audit/rules/source-rules');
+const { DeduplicationAuditor } = require('../src/audit/deduplication');
+const { IndbReferenceAdapter } = require('../src/audit/adapters/indb-adapter');
+const { OffReferenceAdapter } = require('../src/audit/adapters/off-adapter');
+const { writeJsonReport } = require('../src/audit/reporters/json-reporter');
+const { writeCsvReport } = require('../src/audit/reporters/csv-reporter');
+const { writeMarkdownReport } = require('../src/audit/reporters/markdown-reporter');
 
 // Initialize Prisma Client (Read-Only usage)
 const prisma = new PrismaClient();
 
-// Parse CLI Flags
-function parseArgs(): AuditConfig {
+/**
+ * Parse CLI Flags
+ * @returns {import('../src/audit/types').AuditConfig} Audit configuration
+ */
+function parseArgs() {
   const args = process.argv.slice(2);
-  const config: AuditConfig = { ...DEFAULT_AUDIT_CONFIG };
+  const config = { ...DEFAULT_AUDIT_CONFIG };
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -111,7 +102,7 @@ async function runAudit() {
   }
 
   const dedupAuditor = new DeduplicationAuditor();
-  const allIssues: AuditIssue[] = [];
+  const allIssues = [];
 
   let processedCount = 0;
   let activeFoods = 0;
@@ -120,8 +111,8 @@ async function runAudit() {
   let withServingsCount = 0;
   let withDefaultServingCount = 0;
 
-  const sourceMap = new Map<string, SourceStats>();
-  const categoryMap: Record<string, number> = {};
+  const sourceMap = new Map();
+  const categoryMap = {};
 
   console.log('\n🔍 Auditing records in streaming batches...');
 
@@ -162,7 +153,7 @@ async function runAudit() {
 
     if (batch.length === 0) break;
 
-    for (const food of batch as FoodRecord[]) {
+    for (const food of batch) {
       processedCount++;
       if (food.deletedAt) {
         softDeletedFoods++;
@@ -228,140 +219,117 @@ async function runAudit() {
       const indbIssues = indbAdapter.auditFood(food);
       const offIssues = offAdapter.auditFood(food);
 
-      const foodIssues = [
-        ...nutrIssues,
-        ...servIssues,
-        ...usabIssues,
-        ...srcIssues,
-        ...indbIssues,
-        ...offIssues,
-      ];
+      // Collect all issues
+      allIssues.push(...nutrIssues, ...servIssues, ...usabIssues, ...srcIssues, ...indbIssues, ...offIssues);
 
-      for (const iss of foodIssues) {
-        allIssues.push(iss);
-        if (iss.severity === 'ERROR') srcStats.errorCount++;
-        else if (iss.severity === 'WARNING') srcStats.warningCount++;
-        else if (iss.severity === 'INFO') srcStats.infoCount++;
+      // Update source stats with issue counts
+      const issueCount = nutrIssues.length + servIssues.length + usabIssues.length + srcIssues.length + indbIssues.length + offIssues.length;
+      for (const issue of allIssues) {
+        if (issue.severity === 'ERROR') srcStats.errorCount++;
+        else if (issue.severity === 'WARNING') srcStats.warningCount++;
+        else if (issue.severity === 'INFO') srcStats.infoCount++;
+      }
+
+      // Progress update every 1000 foods
+      if (processedCount % 1000 === 0) {
+        process.stdout.write(`\r   Processed: ${processedCount}/${totalFoodsCount} foods (${((processedCount / totalFoodsCount) * 100).toFixed(1)}%)`);
       }
     }
 
-    skip += batch.length;
-    process.stdout.write(`   ... Audited ${processedCount.toLocaleString()} / ${totalFoodsCount.toLocaleString()} records (${Math.round((processedCount / totalFoodsCount) * 100)}%)\r`);
+    skip += config.batchSize;
   }
 
-  // Deduplication & Barcode collisions
-  console.log('\n🧩 Running CPU-efficient token deduplication and barcode audit...');
+  console.log(`\r   Processed: ${processedCount}/${totalFoodsCount} foods (100%)`);
+
+  // Generate deduplication issues
   const dedupIssues = dedupAuditor.generateIssues(config.duplicateSimilarityThreshold);
-  for (const iss of dedupIssues) {
-    allIssues.push(iss);
+  allIssues.push(...dedupIssues);
+
+  // Build summary statistics
+  const countsBySeverity = { ERROR: 0, WARNING: 0, INFO: 0 };
+  const countsByCode = {};
+  for (const issue of allIssues) {
+    countsBySeverity[issue.severity]++;
+    countsByCode[issue.issueCode] = (countsByCode[issue.issueCode] || 0) + 1;
   }
 
-  // Compute aggregate statistics
-  const countsBySeverity = {
-    ERROR: 0,
-    WARNING: 0,
-    INFO: 0,
-  };
-  const countsByCode: Record<string, number> = {};
-  const foodsRequiringReview = new Set<string>();
-
-  for (const iss of allIssues) {
-    countsBySeverity[iss.severity]++;
-    countsByCode[iss.issueCode] = (countsByCode[iss.issueCode] || 0) + 1;
-    if (iss.severity === 'ERROR' || iss.severity === 'WARNING') {
-      foodsRequiringReview.add(iss.foodId);
-    }
-  }
-
-  const durationMs = Date.now() - startTime;
-
-  const summaryStats: AuditSummaryStats = {
-    totalFoods: processedCount,
+  const summary = {
+    totalFoods: totalFoodsCount,
     totalServings: totalServingsCount,
     activeFoods,
     softDeletedFoods,
-    bySource: Array.from(sourceMap.values()).sort((a, b) => a.layer - b.layer),
+    bySource: Array.from(sourceMap.values()),
     byCategory: categoryMap,
-    percentageWithAliases: processedCount > 0 ? (withAliasesCount / processedCount) * 100 : 0,
-    percentageWithServings: processedCount > 0 ? (withServingsCount / processedCount) * 100 : 0,
-    percentageWithDefaultServing: processedCount > 0 ? (withDefaultServingCount / processedCount) * 100 : 0,
+    percentageWithAliases: (withAliasesCount / totalFoodsCount) * 100,
+    percentageWithServings: (withServingsCount / totalFoodsCount) * 100,
+    percentageWithDefaultServing: (withDefaultServingCount / totalFoodsCount) * 100,
     countsBySeverity,
-    countsByCode: countsByCode as Record<IssueCode, number>,
+    countsByCode,
     totalIssues: allIssues.length,
-    foodsRequiringManualReview: foodsRequiringReview.size,
+    foodsRequiringManualReview: new Set(allIssues.filter((i) => i.severity !== 'INFO').map((i) => i.foodId)).size,
   };
 
-  const report: AuditReport = {
+  // Sort issues by severity and code
+  allIssues.sort((a, b) => {
+    const severityOrder = { ERROR: 0, WARNING: 1, INFO: 2 };
+    if (severityOrder[a.severity] !== severityOrder[b.severity]) {
+      return severityOrder[a.severity] - severityOrder[b.severity];
+    }
+    return a.issueCode.localeCompare(b.issueCode);
+  });
+
+  const topIssues = allIssues.slice(0, 100);
+
+  const report = {
     metadata: {
       runTimestamp: new Date().toISOString(),
-      durationMs,
-      databaseUrl: process.env.DATABASE_URL || 'postgresql://localhost:5432/gramgains',
+      durationMs: Date.now() - startTime,
+      databaseUrl: process.env.DATABASE_URL || 'postgresql://***:***@localhost:5432/gramgains',
       auditVersion: '1.0.0',
-      nutritionalInvariant: 'All nutritional fields represent values per 100g edible food',
+      nutritionalInvariant: 'All nutritional values represent values per 100g of edible food unless explicitly documented.',
       strictMode: config.strict,
       config,
     },
-    summary: summaryStats,
-    topIssues: allIssues.filter((i) => i.severity === 'ERROR').slice(0, 50),
+    summary,
+    topIssues,
     issues: allIssues,
   };
 
   // Write reports
-  const outDir = path.resolve(process.cwd(), config.outDir);
-  const jsonPath = path.join(outDir, 'food-audit-report.json');
-  const csvPath = path.join(outDir, 'food-audit-report.csv');
-  const mdPath = path.join(outDir, 'food-audit-summary.md');
+  const outDir = config.outDir;
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+  
+  const jsonPath = path.join(outDir, `food-audit-report-${timestamp}.json`);
+  const csvPath = path.join(outDir, `food-audit-report-${timestamp}.csv`);
+  const mdPath = path.join(outDir, `food-audit-report-${timestamp}.md`);
 
-  console.log(`\n💾 Writing audit reports to: ${outDir}`);
   writeJsonReport(report, jsonPath);
-  console.log(`   ✓ ${jsonPath} (${(fs.statSync(jsonPath).size / 1024 / 1024).toFixed(2)} MB)`);
   writeCsvReport(allIssues, csvPath);
-  console.log(`   ✓ ${csvPath} (${(fs.statSync(csvPath).size / 1024 / 1024).toFixed(2)} MB)`);
   writeMarkdownReport(report, mdPath);
-  console.log(`   ✓ ${mdPath} (${(fs.statSync(mdPath).size / 1024).toFixed(1)} KB)`);
 
-  // Print Summary Table
-  console.log('\n' + '═'.repeat(82));
-  console.log('                          AUDIT EXECUTIVE SUMMARY');
-  console.log('═'.repeat(82));
-  console.log(`  Total Foods Audited:            ${summaryStats.totalFoods.toLocaleString()}`);
-  console.log(`  Active / Soft-Deleted:          ${summaryStats.activeFoods.toLocaleString()} / ${summaryStats.softDeletedFoods.toLocaleString()}`);
-  console.log(`  Search Aliases Coverage:        ${summaryStats.percentageWithAliases.toFixed(1)}%`);
-  console.log(`  Serving Portions Coverage:      ${summaryStats.percentageWithServings.toFixed(1)}%`);
-  console.log(`  Default Serving Coverage:       ${summaryStats.percentageWithDefaultServing.toFixed(1)}%`);
-  console.log('─'.repeat(82));
-  console.log(`  🔴 Errors:                      ${summaryStats.countsBySeverity.ERROR.toLocaleString()}`);
-  console.log(`  🟡 Warnings:                    ${summaryStats.countsBySeverity.WARNING.toLocaleString()}`);
-  console.log(`  🔵 Info / Usability Notices:    ${summaryStats.countsBySeverity.INFO.toLocaleString()}`);
-  console.log(`  📋 Foods Requiring Review:      ${summaryStats.foodsRequiringManualReview.toLocaleString()} (${((summaryStats.foodsRequiringManualReview / summaryStats.totalFoods) * 100).toFixed(1)}%)`);
-  console.log(`  ⏱️  Audit Execution Time:        ${(durationMs / 1000).toFixed(2)}s`);
-  console.log('═'.repeat(82));
+  console.log(`\n✅ Audit complete!`);
+  console.log(`   📄 JSON Report:   ${jsonPath}`);
+  console.log(`   📊 CSV Report:    ${csvPath}`);
+  console.log(`   📝 Markdown Report: ${mdPath}`);
+  console.log(`\n📈 Summary:`);
+  console.log(`   Total Foods:        ${summary.totalFoods.toLocaleString()}`);
+  console.log(`   Total Issues:       ${summary.totalIssues.toLocaleString()}`);
+  console.log(`   Errors:             ${summary.countsBySeverity.ERROR}`);
+  console.log(`   Warnings:           ${summary.countsBySeverity.WARNING}`);
+  console.log(`   Info:               ${summary.countsBySeverity.INFO}`);
+  console.log(`   Manual Review Needed: ${summary.foodsRequiringManualReview.toLocaleString()}`);
 
-  // Top issue codes
-  console.log('\nTop Issue Codes:');
-  const sortedCodes = Object.entries(summaryStats.countsByCode)
-    .filter(([, count]) => count > 0)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10);
-
-  for (const [code, count] of sortedCodes) {
-    const prefix = code.startsWith('ERR_') ? '🔴' : code.startsWith('WARN_') ? '🟡' : '🔵';
-    console.log(`   ${prefix} ${code.padEnd(35)} : ${count.toLocaleString()}`);
+  if (config.strict && summary.countsBySeverity.ERROR > 0) {
+    console.log(`\n❌ STRICT MODE: ${summary.countsBySeverity.ERROR} errors found. Exiting with error code 1.`);
+    await prisma.$disconnect();
+    process.exit(1);
   }
-  console.log('');
 
   await prisma.$disconnect();
-
-  if (config.strict && summaryStats.countsBySeverity.ERROR > 0) {
-    console.error(`❌ Audit failed in --strict mode: ${summaryStats.countsBySeverity.ERROR} ERROR-level issues found.\n`);
-    process.exit(1);
-  } else {
-    console.log('✅ Audit completed successfully.\n');
-  }
+  process.exit(0);
 }
 
-runAudit().catch(async (e) => {
-  console.error('\n❌ Fatal Audit Error:', e);
-  await prisma.$disconnect();
+runAudit().catch((error) => {
+  console.error('❌ Audit failed:', error);
   process.exit(1);
 });

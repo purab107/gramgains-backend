@@ -1,8 +1,12 @@
-import fs from 'fs';
-import path from 'path';
-import type { AuditIssue } from '../types.ts';
+const fs = require('fs');
+const path = require('path');
 
-function escapeCsv(val: any): string {
+/**
+ * Escapes a value for CSV format.
+ * @param {any} val - The value to escape
+ * @returns {string} The escaped CSV value
+ */
+function escapeCsv(val) {
   if (val === null || val === undefined) return '""';
   const str = String(val).replace(/"/g, '""');
   return `"${str}"`;
@@ -10,8 +14,10 @@ function escapeCsv(val: any): string {
 
 /**
  * Writes tabular issues report to CSV for filtering and analysis.
+ * @param {import('../types').AuditIssue[]} issues - Array of audit issues to write
+ * @param {string} targetPath - The target file path for the CSV report
  */
-export function writeCsvReport(issues: AuditIssue[], targetPath: string): void {
+function writeCsvReport(issues, targetPath) {
   const dir = path.dirname(targetPath);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -60,3 +66,5 @@ export function writeCsvReport(issues: AuditIssue[], targetPath: string): void {
 
   fs.writeFileSync(targetPath, lines.join('\n'), 'utf-8');
 }
+
+module.exports = { writeCsvReport };

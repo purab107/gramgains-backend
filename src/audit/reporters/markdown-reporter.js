@@ -1,11 +1,12 @@
-import fs from 'fs';
-import path from 'path';
-import type { AuditReport, AuditIssue } from '../types.ts';
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Generates an exhaustive, beautifully formatted executive Markdown audit report.
+ * @param {import('../types').AuditReport} report - The audit report to write
+ * @param {string} targetPath - The target file path for the Markdown report
  */
-export function writeMarkdownReport(report: AuditReport, targetPath: string): void {
+function writeMarkdownReport(report, targetPath) {
   const dir = path.dirname(targetPath);
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true });
@@ -25,7 +26,7 @@ export function writeMarkdownReport(report: AuditReport, targetPath: string): vo
   const consistencyIssues = issues.filter((i) => i.issueCategory === 'CONSISTENCY');
   const indianUsabilityIssues = issues.filter((i) => i.issueCategory === 'USABILITY_INDIAN');
 
-  const md: string[] = [];
+  const md = [];
 
   md.push('# GramGains Food Database QA Audit Summary');
   md.push('');
@@ -213,7 +214,12 @@ export function writeMarkdownReport(report: AuditReport, targetPath: string): vo
   fs.writeFileSync(targetPath, md.join('\n'), 'utf-8');
 }
 
-function getIssueCategoryName(code: string): string {
+/**
+ * Gets the category name for an issue code.
+ * @param {string} code - The issue code
+ * @returns {string} The category name
+ */
+function getIssueCategoryName(code) {
   if (code.includes('NUTRITION') || code.includes('MACRO') || code.includes('FIBER')) return 'Physical Bounds';
   if (code.includes('CONVENTION') || code.includes('CALORIE')) return 'Nutritional Consistency';
   if (code.includes('SERVING')) return 'Serving Architecture';
@@ -224,8 +230,13 @@ function getIssueCategoryName(code: string): string {
   return 'General QA';
 }
 
-function getIssueCodeDescription(code: string): string {
-  const map: Record<string, string> = {
+/**
+ * Gets the description for an issue code.
+ * @param {string} code - The issue code
+ * @returns {string} The issue code description
+ */
+function getIssueCodeDescription(code) {
+  const map = {
     ERR_NUTRITION_NEGATIVE: 'Negative values in nutritional fields violating physics',
     ERR_NUTRITION_EXTREME: 'Unrealistically high nutrients (>100g/100g or >1000 kcal/100g)',
     ERR_MACRO_SUM_EXCEEDS_100: 'Sum of protein + carbohydrates + fat exceeds 100g per 100g',
@@ -254,3 +265,5 @@ function getIssueCodeDescription(code: string): string {
   };
   return map[code] || 'Data quality check';
 }
+
+module.exports = { writeMarkdownReport };
