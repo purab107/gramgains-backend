@@ -10,9 +10,9 @@
     "prisma:push": "prisma db push",
     "prisma:seed": "node prisma/seed.js",
     "import:off": "node prisma/openfoodfacts-import.js",
-    "audit:food": "node --experimental-strip-types scripts/audit-food-database.ts",
-    "audit:food:strict": "node --experimental-strip-types scripts/audit-food-database.ts --strict",
-    "test:audit": "node --experimental-strip-types --test test/audit.test.ts",
+    "audit:food": "node scripts/audit-food-database.js",
+    "audit:food:strict": "node scripts/audit-food-database.js --strict",
+    "test:audit": "node --test test/audit.test.js",
     "test:search": "node --test test/food-search.test.js",
     "benchmark:search": "node scripts/benchmark-search.js"
   },
