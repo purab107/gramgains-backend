@@ -1,16 +1,17 @@
-import type { FoodRecord, AuditIssue } from '../types.ts';
-import {
+const {
   HOUSEHOLD_UNIT_CATEGORY_MAP,
   SERVING_UNIT_PLAUSIBLE_RANGES,
-} from '../config.ts';
-import { normalizeText } from '../normalizer.ts';
+} = require('../config');
+const { normalizeText } = require('../normalizer');
 
 /**
  * Audits FoodServing records for schema integrity, positive weights, plausible units,
  * and household serving availability for real-world Indian logging.
+ * @param {import('../types').FoodRecord} food - The food record to audit
+ * @returns {import('../types').AuditIssue[]} Array of audit issues found
  */
-export function auditServingRules(food: FoodRecord): AuditIssue[] {
-  const issues: AuditIssue[] = [];
+function auditServingRules(food) {
+  const issues = [];
   const servings = food.servings || [];
 
   // 1. Check if food has at least one serving
@@ -73,9 +74,9 @@ export function auditServingRules(food: FoodRecord): AuditIssue[] {
   }
 
   // 3. Individual serving validations: weights, duplicates, plausibility
-  const seenServingKeys = new Set<string>();
+  const seenServingKeys = new Set();
   let hasGramOrStandardServing = false;
-  const unitLabelsPresent: string[] = [];
+  const unitLabelsPresent = [];
 
   for (const s of servings) {
     const normUnit = normalizeText(s.unitLabel);
@@ -224,3 +225,5 @@ export function auditServingRules(food: FoodRecord): AuditIssue[] {
 
   return issues;
 }
+
+module.exports = { auditServingRules };
