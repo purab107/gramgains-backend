@@ -1,17 +1,19 @@
-import type { FoodRecord, AuditIssue, AuditConfig } from '../types.ts';
-
 /**
  * Audits nutritional fields against the fundamental per-100g invariant and physical laws.
  *
  * Invariant:
  * calories, protein, carbohydrates, fat, and fiber MUST represent values per 100 g edible food.
+ * 
+ * @param {import('../types').FoodRecord} food - The food record to audit
+ * @param {import('../types').AuditConfig} config - The audit configuration
+ * @returns {import('../types').AuditIssue[]} Array of audit issues found
  */
-export function auditNutritionRules(food: FoodRecord, config: AuditConfig): AuditIssue[] {
-  const issues: AuditIssue[] = [];
+function auditNutritionRules(food, config) {
+  const issues = [];
   const { calories, protein, carbohydrates, fat, fiber } = food;
 
   // 1. Negative nutrient checks
-  const nutrients: Array<{ field: string; val: number }> = [
+  const nutrients = [
     { field: 'calories', val: calories },
     { field: 'protein', val: protein },
     { field: 'carbohydrates', val: carbohydrates },
@@ -197,3 +199,5 @@ export function auditNutritionRules(food: FoodRecord, config: AuditConfig): Audi
 
   return issues;
 }
+
+module.exports = { auditNutritionRules };
