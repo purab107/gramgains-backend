@@ -31,8 +31,10 @@ const STOP_WORDS = new Set([
  * 3. Lowercase
  * 4. Replace non-alphanumeric characters with space
  * 5. Collapse duplicate whitespace
+ * @param {string|null|undefined} text - The text to normalize
+ * @returns {string} The normalized text
  */
-export function normalizeText(text: string | null | undefined): string {
+function normalizeText(text) {
   if (!text) return '';
   return text
     .normalize('NFKD')
@@ -45,12 +47,14 @@ export function normalizeText(text: string | null | undefined): string {
 
 /**
  * Extracts distinct, meaningful tokens from a name (excluding common stopwords and numbers).
+ * @param {string|null|undefined} text - The text to extract tokens from
+ * @returns {string[]} Array of distinct tokens
  */
-export function extractTokens(text: string | null | undefined): string[] {
+function extractTokens(text) {
   const norm = normalizeText(text);
   if (!norm) return [];
   const rawTokens = norm.split(' ');
-  const result = new Set<string>();
+  const result = new Set();
   for (const t of rawTokens) {
     if (t.length > 1 && !STOP_WORDS.has(t)) {
       result.add(t);
@@ -62,8 +66,11 @@ export function extractTokens(text: string | null | undefined): string[] {
 /**
  * Computes Jaccard similarity between two token sets:
  * J(A, B) = |A ∩ B| / |A ∪ B|
+ * @param {string[]} tokensA - First token set
+ * @param {string[]} tokensB - Second token set
+ * @returns {number} Jaccard similarity coefficient (0.0 to 1.0)
  */
-export function calculateJaccardSimilarity(tokensA: string[], tokensB: string[]): number {
+function calculateJaccardSimilarity(tokensA, tokensB) {
   if (tokensA.length === 0 && tokensB.length === 0) return 1.0;
   if (tokensA.length === 0 || tokensB.length === 0) return 0.0;
 
@@ -83,12 +90,12 @@ export function calculateJaccardSimilarity(tokensA: string[], tokensB: string[])
  * Items with different blocking keys are not compared for near-duplicate similarity.
  *
  * Format: `<normalized_category>:<brand_or_none>:<sorted_top_tokens>`
+ * @param {string|null|undefined} category - The food category
+ * @param {string|null|undefined} brand - The food brand
+ * @param {string|null|undefined} name - The food name
+ * @returns {string} The blocking key for the food item
  */
-export function generateBlockingKey(
-  category: string | null | undefined,
-  brand: string | null | undefined,
-  name: string | null | undefined
-): string {
+function generateBlockingKey(category, brand, name) {
   const normCat = normalizeText(category) || 'other';
   const normBrand = normalizeText(brand) || 'nobrand';
   const tokens = extractTokens(name);
@@ -96,3 +103,10 @@ export function generateBlockingKey(
   const prefix = tokens.slice(0, 2).sort().join('_') || 'empty';
   return `${normCat}::${normBrand}::${prefix}`;
 }
+
+module.exports = {
+  normalizeText,
+  extractTokens,
+  calculateJaccardSimilarity,
+  generateBlockingKey,
+};
