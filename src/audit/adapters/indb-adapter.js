@@ -1,60 +1,87 @@
-import fs from 'fs';
-import path from 'path';
-import XLSX from 'xlsx';
-import type { FoodRecord, AuditIssue } from '../types.ts';
-import { normalizeText } from '../normalizer.ts';
+const fs = require('fs');
+const path = require('path');
+const XLSX = require('xlsx');
+const { normalizeText } = require('../normalizer');
 
 /**
  * Local Reference Dataset Adapter for INDB 2024.
  * Compares database records against Anuvaad_INDB_2024.11 (1).xlsx.
  * Strictly read-only, never modifies data.
+ * @class
  */
-export class IndbReferenceAdapter {
-  private indbMap = new Map<string, any>();
-  private loaded = false;
+class IndbReferenceAdapter {
+  /**
+   * @private
+   * @type {Map<string, any>}
+   */
+  #indbMap = new Map();
 
-  private xlsxPath: string;
+  /**
+   * @private
+   * @type {boolean}
+   */
+  #loaded = false;
 
-  constructor(xlsxPath: string) {
-    this.xlsxPath = xlsxPath;
+  /**
+   * @private
+   * @type {string}
+   */
+  #xlsxPath;
+
+  /**
+   * @param {string} xlsxPath - Path to the INDB Excel file
+   */
+  constructor(xlsxPath) {
+    this.#xlsxPath = xlsxPath;
   }
 
-  public load(): boolean {
-    if (!fs.existsSync(this.xlsxPath)) {
+  /**
+   * Loads the INDB reference dataset from Excel file.
+   * @public
+   * @returns {boolean} True if loaded successfully, false otherwise
+   */
+  load() {
+    if (!fs.existsSync(this.#xlsxPath)) {
       return false;
     }
     try {
-      const workbook = XLSX.readFile(this.xlsxPath);
+      const workbook = XLSX.readFile(this.#xlsxPath);
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json<any>(sheet);
+      const rows = XLSX.utils.sheet_to_json(sheet);
 
       for (const r of rows) {
         const foodCode = (r['food_code'] || r['foodcode'] || r['code'] || '').toString().trim();
         const foodName = (r['food_name'] || r['foodname'] || r['name'] || '').toString().trim();
         if (foodCode) {
-          this.indbMap.set(foodCode, r);
+          this.#indbMap.set(foodCode, r);
         }
         if (foodName) {
-          this.indbMap.set(`name::${normalizeText(foodName)}`, r);
+          this.#indbMap.set(`name::${normalizeText(foodName)}`, r);
         }
       }
-      this.loaded = true;
+      this.#loaded = true;
       return true;
     } catch {
       return false;
     }
   }
 
-  public auditFood(food: FoodRecord): AuditIssue[] {
-    if (!this.loaded || food.source !== 'INDB') return [];
+  /**
+   * Audits a food record against INDB reference data.
+   * @public
+   * @param {import('../types').FoodRecord} food - The food record to audit
+   * @returns {import('../types').AuditIssue[]} Array of audit issues found
+   */
+  auditFood(food) {
+    if (!this.#loaded || food.source !== 'INDB') return [];
 
-    const issues: AuditIssue[] = [];
+    const issues = [];
     // foodCode is stored in aliases[0]
     const foodCode = food.aliases && food.aliases.length > 0 ? food.aliases[0] : null;
-    let refRow = foodCode ? this.indbMap.get(foodCode) : null;
+    let refRow = foodCode ? this.#indbMap.get(foodCode) : null;
     if (!refRow) {
-      refRow = this.indbMap.get(`name::${normalizeText(food.name)}`);
+      refRow = this.#indbMap.get(`name::${normalizeText(food.name)}`);
     }
 
     if (!refRow) return [];
@@ -105,3 +132,5 @@ export class IndbReferenceAdapter {
     return issues;
   }
 }
+
+module.exports = { IndbReferenceAdapter };
