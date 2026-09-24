@@ -86,7 +86,16 @@ function calculateWeightTrend(logs, options = {}) {
   let prevDateObj = sorted[0].dateObj;
   const smoothedLogs = [];
 
-  for (let i = 0; i < sorted.length; i++) {
+  // Record baseline for first point
+  smoothedLogs.push({
+    id: sorted[0].id,
+    date: sorted[0].dateObj.toISOString().split('T')[0],
+    rawWeightKg: Math.round(sorted[0].weightKg * 10) / 10,
+    trendWeightKg: Math.round(level * 100) / 100,
+    isExcluded: Boolean(sorted[0].isExcluded),
+  });
+
+  for (let i = 1; i < sorted.length; i++) {
     const item = sorted[i];
     const dayDiff = Math.max(1, Math.round((item.dateObj.getTime() - prevDateObj.getTime()) / (1000 * 60 * 60 * 24)));
     prevDateObj = item.dateObj;

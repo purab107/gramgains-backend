@@ -1,8 +1,20 @@
 const { prisma } = require('../../config/db');
+const { allocateMacros } = require('../adaptive/algorithms/macroAllocator');
 
 const DEFAULT_USER_ID = 'default-user';
 
-function calculateMetrics({ age, gender, heightCm, weightKg = 70, activityLevel, goal }) {
+function calculateMetrics({
+  age,
+  gender,
+  heightCm,
+  weightKg = 70,
+  activityLevel,
+  goal,
+  targetRateKgPerWeek,
+  macroPreset = 'BALANCED',
+  proteinGramsPerKg = 2.0,
+  fatPercent = 25.0,
+}) {
   // Mifflin-St Jeor BMR
   let bmr = 10 * weightKg + 6.25 * heightCm - 5 * age;
   bmr += String(gender).toUpperCase() === 'FEMALE' ? -161 : 5;
@@ -17,25 +29,34 @@ function calculateMetrics({ age, gender, heightCm, weightKg = 70, activityLevel,
   const normalizedActivity = String(activityLevel || 'MODERATE').toUpperCase();
   const tdee = bmr * (activityMap[normalizedActivity] || 1.55);
 
-  let targetCalories = tdee;
   const normalizedGoal = String(goal || 'MAINTAIN').toUpperCase();
-  if (normalizedGoal === 'WEIGHT_LOSS') targetCalories = tdee - 500;
-  if (normalizedGoal === 'BULK')        targetCalories = tdee + 350;
+  let rate = typeof targetRateKgPerWeek === 'number' ? targetRateKgPerWeek : 0.0;
+  if (targetRateKgPerWeek === undefined || targetRateKgPerWeek === null) {
+    if (normalizedGoal === 'WEIGHT_LOSS') rate = -0.5;
+    else if (normalizedGoal === 'BULK') rate = 0.35;
+    else rate = 0.0;
+  }
 
-  const targetProtein = Math.round(weightKg * 2.0);
-  const fatCalories   = targetCalories * 0.25;
-  const targetFat     = Math.round(fatCalories / 9);
-  const targetCarbs   = Math.round(Math.max(0, targetCalories - targetProtein * 4 - fatCalories) / 4);
-  const targetFiber   = Math.round((targetCalories / 1000) * 14);
+  const calorieDelta = Math.round((rate * 7700) / 7);
+  const targetCalories = Math.round(tdee + calorieDelta);
+
+  const macros = allocateMacros({
+    targetCalories,
+    bodyWeightKg: weightKg,
+    macroPreset,
+    proteinGramsPerKg,
+    fatPercent,
+  });
 
   return {
-    bmr:            Math.round(bmr),
-    tdee:           Math.round(tdee),
-    targetCalories: Math.round(targetCalories),
-    targetProtein,
-    targetCarbs,
-    targetFat,
-    targetFiber,
+    bmr: Math.round(bmr),
+    tdee: Math.round(tdee),
+    targetCalories,
+    targetProtein: macros.proteinGrams,
+    targetCarbs: macros.carbsGrams,
+    targetFat: macros.fatGrams,
+    targetFiber: macros.fiberGrams,
+    targetRateKgPerWeek: rate,
   };
 }
 
@@ -136,7 +157,40 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
   const activityLevel = input.activityLevel ? String(input.activityLevel).toUpperCase() : current.activityLevel;
   const goal          = input.goal          ? String(input.goal).toUpperCase() : current.goal;
 
-  const calculated = calculateMetrics({ age, gender, heightCm, weightKg, activityLevel, goal });
+  const targetRateKgPerWeek = input.targetRateKgPerWeek !== undefined
+    ? parseFloat(input.targetRateKgPerWeek)
+    : current.targetRateKgPerWeek;
+  const targetWeightKg = input.targetWeightKg !== undefined
+    ? (input.targetWeightKg ? parseFloat(input.targetWeightKg) : null)
+    : current.targetWeightKg;
+  const macroPreset = input.macroPreset
+    ? String(input.macroPreset).toUpperCase()
+    : (current.macroPreset || 'BALANCED');
+  const proteinGramsPerKg = input.proteinGramsPerKg !== undefined
+    ? parseFloat(input.proteinGramsPerKg)
+    : (current.proteinGramsPerKg || 2.0);
+  const fatPercent = input.fatPercent !== undefined
+    ? parseFloat(input.fatPercent)
+    : (current.fatPercent || 25.0);
+  const isAdaptiveEnabled = input.isAdaptiveEnabled !== undefined
+    ? Boolean(input.isAdaptiveEnabled)
+    : (current.isAdaptiveEnabled !== false);
+  const checkInDayOfWeek = input.checkInDayOfWeek !== undefined
+    ? parseInt(input.checkInDayOfWeek, 10)
+    : (current.checkInDayOfWeek || 1);
+
+  const calculated = calculateMetrics({
+    age,
+    gender,
+    heightCm,
+    weightKg,
+    activityLevel,
+    goal,
+    targetRateKgPerWeek,
+    macroPreset,
+    proteinGramsPerKg,
+    fatPercent,
+  });
 
   // Update User name if provided
   if (input.name) {
@@ -174,6 +228,13 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
       heightCm,
       activityLevel,
       goal,
+      targetRateKgPerWeek,
+      targetWeightKg,
+      macroPreset,
+      proteinGramsPerKg,
+      fatPercent,
+      isAdaptiveEnabled,
+      checkInDayOfWeek,
       bmr:            calculated.bmr,
       tdee:           calculated.tdee,
       targetCalories: input.customTargetCalories !== undefined ? parseFloat(input.customTargetCalories) : calculated.targetCalories,
