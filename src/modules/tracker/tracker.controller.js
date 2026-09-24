@@ -109,6 +109,52 @@ async function getRecentFoods(req, res) {
   }
 }
 
+async function getWeight(req, res) {
+  try {
+    const days = req.query.days ? parseInt(req.query.days, 10) : 90;
+    const data = await TrackerService.getWeightLogs(days, req.userId);
+    return res.json({ success: true, data });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error fetching weight logs', error: error.message });
+  }
+}
+
+async function logWeight(req, res) {
+  try {
+    const { date, weightKg, note, isExcluded } = req.body;
+    if (!date || weightKg === undefined) {
+      return res.status(400).json({ success: false, message: 'date and weightKg are required' });
+    }
+    const data = await TrackerService.logWeight(
+      { date, weightKg, note, isExcluded },
+      req.userId
+    );
+    return res.status(201).json({ success: true, message: 'Weight logged successfully', data });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error logging weight', error: error.message });
+  }
+}
+
+async function toggleWeightExclusion(req, res) {
+  try {
+    const { id } = req.params;
+    const data = await TrackerService.toggleWeightExclusion(id, req.userId);
+    return res.json({ success: true, message: 'Weight exclusion status toggled', data });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error toggling weight exclusion', error: error.message });
+  }
+}
+
+async function deleteWeight(req, res) {
+  try {
+    const { id } = req.params;
+    await TrackerService.deleteWeightLog(id, req.userId);
+    return res.json({ success: true, message: 'Weight log deleted successfully' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error deleting weight log', error: error.message });
+  }
+}
+
 module.exports = {
   getDaily,
   logMeal,
@@ -118,5 +164,9 @@ module.exports = {
   logWater,
   deleteWater,
   getRecentFoods,
+  getWeight,
+  logWeight,
+  toggleWeightExclusion,
+  deleteWeight,
 };
 
