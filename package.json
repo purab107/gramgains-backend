@@ -14,6 +14,8 @@
     "audit:food:strict": "node scripts/audit-food-database.js --strict",
     "test:audit": "node --test test/audit.test.js",
     "test:search": "node --test test/food-search.test.js",
+    "test:adaptive": "node --test test/weight-smoothing.test.js test/adaptive-algorithms.test.js test/adaptive-api.test.js",
+    "test": "node --test test/weight-smoothing.test.js test/adaptive-algorithms.test.js test/adaptive-api.test.js",
     "benchmark:search": "node scripts/benchmark-search.js"
   },
   "dependencies": {
