@@ -1,5 +1,6 @@
 const { prisma } = require('../../config/db');
 const { DEFAULT_USER_ID, ensureDefaultUser } = require('../profile/profile.service');
+const { calculateWeightTrend } = require('../adaptive/algorithms/weightSmoothing');
 
 function parseDateInput(dateStr) {
   if (!dateStr) return new Date();
@@ -267,6 +268,127 @@ async function getRecentFoods(userId = DEFAULT_USER_ID, limit = 30) {
   }));
 }
 
+async function getWeightLogs(days = 90, userId = DEFAULT_USER_ID) {
+  const daysNum = Math.max(1, parseInt(days, 10) || 90);
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - daysNum);
+  cutoffDate.setHours(0, 0, 0, 0);
+
+  const logs = await prisma.weightLog.findMany({
+    where: {
+      userId,
+      date: { gte: cutoffDate },
+    },
+    orderBy: { date: 'asc' },
+  });
+
+  const trendResult = calculateWeightTrend(logs);
+
+  return {
+    windowDays: daysNum,
+    latestRawKg: trendResult.latestRawKg,
+    latestTrendKg: trendResult.latestTrendKg,
+    velocityKgPerDay: trendResult.velocityKgPerDay,
+    velocityKgPerWeek: trendResult.velocityKgPerWeek,
+    logs: trendResult.smoothedLogs.map((item, idx) => ({
+      ...item,
+      id: logs[idx]?.id,
+      note: logs[idx]?.note || null,
+    })),
+  };
+}
+
+async function logWeight({ date, weightKg, note, isExcluded = false }, userId = DEFAULT_USER_ID) {
+  const parsedDate = parseDateInput(date);
+  const weight = parseFloat(weightKg);
+  if (!weight || isNaN(weight) || weight <= 0) {
+    throw new Error('Valid weight in kg is required');
+  }
+
+  const log = await prisma.weightLog.upsert({
+    where: {
+      userId_date: {
+        userId,
+        date: parsedDate,
+      },
+    },
+    update: {
+      weightKg: weight,
+      note: note !== undefined ? note : undefined,
+      isExcluded: Boolean(isExcluded),
+    },
+    create: {
+      userId,
+      weightKg: weight,
+      date: parsedDate,
+      note: note || null,
+      isExcluded: Boolean(isExcluded),
+    },
+  });
+
+  // Re-sync trend weights for all user's logs
+  await syncWeightTrends(userId);
+
+  return {
+    ...log,
+    date: formatDateOutput(log.date),
+  };
+}
+
+async function toggleWeightExclusion(id, userId = DEFAULT_USER_ID) {
+  const existing = await prisma.weightLog.findFirst({
+    where: { id, userId },
+  });
+  if (!existing) throw new Error('Weight log not found');
+
+  const updated = await prisma.weightLog.update({
+    where: { id },
+    data: { isExcluded: !existing.isExcluded },
+  });
+
+  await syncWeightTrends(userId);
+
+  return {
+    ...updated,
+    date: formatDateOutput(updated.date),
+  };
+}
+
+async function deleteWeightLog(id, userId = DEFAULT_USER_ID) {
+  const existing = await prisma.weightLog.findFirst({
+    where: { id, userId },
+  });
+  if (!existing) throw new Error('Weight log not found');
+
+  const deleted = await prisma.weightLog.delete({
+    where: { id },
+  });
+
+  await syncWeightTrends(userId);
+  return deleted;
+}
+
+async function syncWeightTrends(userId = DEFAULT_USER_ID) {
+  const allLogs = await prisma.weightLog.findMany({
+    where: { userId },
+    orderBy: { date: 'asc' },
+  });
+
+  if (allLogs.length === 0) return;
+
+  const trendResult = calculateWeightTrend(allLogs);
+
+  for (let i = 0; i < allLogs.length; i++) {
+    const smoothed = trendResult.smoothedLogs[i];
+    if (smoothed && allLogs[i].trendWeightKg !== smoothed.trendWeightKg) {
+      await prisma.weightLog.update({
+        where: { id: allLogs[i].id },
+        data: { trendWeightKg: smoothed.trendWeightKg },
+      });
+    }
+  }
+}
+
 module.exports = {
   getDailyLogs,
   getDailyWaterLogs,
@@ -276,6 +398,11 @@ module.exports = {
   updateLog,
   deleteLog,
   getRecentFoods,
+  getWeightLogs,
+  logWeight,
+  toggleWeightExclusion,
+  deleteWeightLog,
+  syncWeightTrends,
   parseDateInput,
   formatDateOutput,
 };

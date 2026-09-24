@@ -11,6 +11,8 @@ const trackerRoutes    = require('./modules/tracker/tracker.routes');
 const dashboardRoutes  = require('./modules/dashboard/dashboard.routes');
 const profileRoutes    = require('./modules/profile/profile.routes');
 const savedMealsRoutes = require('./modules/saved-meals/saved-meals.routes');
+const adaptiveRoutes   = require('./modules/adaptive/adaptive.routes');
+const analyticsRoutes  = require('./modules/analytics/analytics.routes');
 
 const app = express();
 
@@ -40,7 +42,7 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
-    modules: ['food', 'tracker', 'dashboard', 'profile', 'saved-meals', 'auth'],
+    modules: ['food', 'tracker', 'dashboard', 'profile', 'saved-meals', 'adaptive', 'analytics', 'auth'],
   });
 });
 
@@ -50,5 +52,7 @@ app.use('/api/tracker',     requireAuth, trackerRoutes);
 app.use('/api/dashboard',   requireAuth, dashboardRoutes);
 app.use('/api/profile',     requireAuth, profileRoutes);
 app.use('/api/saved-meals', requireAuth, savedMealsRoutes);
+app.use('/api/adaptive',    requireAuth, adaptiveRoutes);
+app.use('/api/analytics',   requireAuth, analyticsRoutes);
 
 module.exports = app;

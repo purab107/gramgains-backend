@@ -14,4 +14,9 @@ router.get('/water', TrackerController.getWater);
 router.post('/water', TrackerController.logWater);
 router.delete('/water/:id', TrackerController.deleteWater);
 
+router.get('/weight', TrackerController.getWeight);
+router.post('/weight', TrackerController.logWeight);
+router.put('/weight/:id/exclude', TrackerController.toggleWeightExclusion);
+router.delete('/weight/:id', TrackerController.deleteWeight);
+
 module.exports = router;
