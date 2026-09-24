@@ -18,8 +18,10 @@ model User {
   savedMeals    SavedMeal[]
   activityLogs  ActivityLog[]
   waterLogs     WaterLog[]
-  favoriteFoods FavoriteFood[]
-  createdFoods  Food[]         @relation("FoodCreator")
+  favoriteFoods      FavoriteFood[]
+  createdFoods       Food[]               @relation("FoodCreator")
+  metabolicSnapshots MetabolicSnapshot[]
+  adaptiveCheckIns   AdaptiveCheckIn[]
 
   @@index([deletedAt])
   @@map("user")

@@ -18,6 +18,28 @@ enum Goal {
   BULK
 }
 
+enum MacroPreset {
+  BALANCED
+  HIGH_PROTEIN
+  KETO
+  LOW_CARB
+  CUSTOM
+}
+
+enum ConfidenceLevel {
+  INSUFFICIENT
+  CALIBRATING
+  MODERATE
+  HIGH
+}
+
+enum CheckInStatus {
+  PENDING
+  ACCEPTED
+  ADJUSTED
+  DISMISSED
+}
+
 model UserProfile {
   id     String @id @default(cuid())
   userId String @unique
@@ -30,13 +52,33 @@ model UserProfile {
   goal          Goal          @default(MAINTAIN)
   timezone      String        @default("UTC")
 
-  bmr            Float
-  tdee           Float
+  // Target goals
+  targetWeightKg      Float?
+  targetRateKgPerWeek Float  @default(0.0)
+
+  // Dynamic & Baseline TDEE
+  bmr               Float
+  tdee              Float
+  adaptiveTdee      Float?
+  confidenceLevel   ConfidenceLevel @default(INSUFFICIENT)
+  confidenceDays    Int             @default(0)
+  isAdaptiveEnabled Boolean         @default(true)
+
+  // Calorie & Macro distribution settings
+  macroPreset       MacroPreset     @default(BALANCED)
+  proteinGramsPerKg Float           @default(2.0)
+  fatPercent        Float           @default(25.0)
+
+  // Current Active Targets
   targetCalories Float
   targetProtein  Float
   targetCarbs    Float
   targetFat      Float
   targetFiber    Float
+
+  // Weekly Check-In Settings
+  checkInDayOfWeek Int       @default(1)
+  lastCheckInDate  DateTime? @db.Date
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -63,14 +105,75 @@ model GoalHistory {
 }
 
 model WeightLog {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  weightKg  Float
-  date      DateTime @db.Date
-  note      String?
-  createdAt DateTime @default(now())
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weightKg      Float
+  trendWeightKg Float?
+  date          DateTime @db.Date
+  note          String?
+  isExcluded    Boolean  @default(false)
+  createdAt     DateTime @default(now())
 
   @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model MetabolicSnapshot {
+  id                String          @id @default(cuid())
+  userId            String
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date              DateTime        @db.Date
+
+  rawWeightKg       Float
+  trendWeightKg     Float
+  avgIntakeCalories Float
+  formulaTdee       Float
+  observedTdee      Float?
+  effectiveTdee     Float
+  confidenceLevel   ConfidenceLevel
+  confidenceScore   Float
+  validLogDays      Int
+
+  createdAt         DateTime        @default(now())
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model AdaptiveCheckIn {
+  id                 String          @id @default(cuid())
+  userId             String
+  user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date               DateTime        @db.Date
+  status             CheckInStatus   @default(PENDING)
+
+  // Summary Metrics of the review period
+  startWeightKg      Float
+  endWeightKg        Float
+  trendChangeKg      Float
+  avgIntakeKcal      Float
+  adherenceScore     Float
+
+  // Suggested Target Updates
+  currentCalories    Float
+  suggestedCalories  Float
+  suggestedProtein   Float
+  suggestedCarbs     Float
+  suggestedFat       Float
+  adjustmentKcal     Float
+
+  // Insights & Explanations
+  headline           String
+  rationaleText      String
+  confidenceLevel    ConfidenceLevel
+
+  // User Action Tracking
+  appliedAt          DateTime?
+  userFeedback       String?
+
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+
   @@index([userId, date])
 }
