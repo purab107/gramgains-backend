@@ -166,8 +166,106 @@ function calculateWeightTrend(logs, options = {}) {
   };
 }
 
+/**
+ * Calculates multi-week trend rate and stability score over a specified observation window.
+ *
+ * @param {Array<{ date: string|Date, trendWeightKg: number, rawWeightKg?: number, isExcluded?: boolean }>} logs
+ * @param {Object} [options]
+ * @param {number} [options.windowDays=21]
+ * @returns {{
+ *   observedRateKgPerWeek: number,
+ *   trendStabilityScore: number,
+ *   windowDays: number,
+ *   sufficientData: boolean,
+ *   startTrendKg: number,
+ *   endTrendKg: number
+ * }}
+ */
+function calculateMultiWeekTrend(logs = [], options = {}) {
+  const windowDays = typeof options.windowDays === 'number' && options.windowDays > 0 ? options.windowDays : 21;
+
+  if (!Array.isArray(logs) || logs.length === 0) {
+    return {
+      observedRateKgPerWeek: 0,
+      trendStabilityScore: 0,
+      windowDays,
+      sufficientData: false,
+      startTrendKg: 0,
+      endTrendKg: 0,
+    };
+  }
+
+  // Ensure smoothed trend logs are available
+  let smoothed = logs;
+  if (!logs[0].trendWeightKg && logs[0].weightKg) {
+    smoothed = calculateWeightTrend(logs).smoothedLogs;
+  }
+
+  const validLogs = smoothed
+    .filter((l) => l && typeof l.trendWeightKg === 'number' && !isNaN(l.trendWeightKg) && !l.isExcluded)
+    .map((l) => ({
+      ...l,
+      dateObj: l.date instanceof Date ? l.date : new Date(l.date),
+    }))
+    .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
+
+  if (validLogs.length < 2) {
+    const single = validLogs[0] || { trendWeightKg: 0 };
+    return {
+      observedRateKgPerWeek: 0,
+      trendStabilityScore: 0,
+      windowDays,
+      sufficientData: false,
+      startTrendKg: single.trendWeightKg || 0,
+      endTrendKg: single.trendWeightKg || 0,
+    };
+  }
+
+  const latest = validLogs[validLogs.length - 1];
+  const latestTime = latest.dateObj.getTime();
+  const windowStartTime = latestTime - (windowDays * 24 * 60 * 60 * 1000);
+
+  const windowLogs = validLogs.filter((l) => l.dateObj.getTime() >= windowStartTime);
+
+  const activeLogs = windowLogs.length >= 2 ? windowLogs : validLogs;
+  const startLog = activeLogs[0];
+  const endLog = activeLogs[activeLogs.length - 1];
+
+  const elapsedDays = Math.max(1, Math.round((endLog.dateObj.getTime() - startLog.dateObj.getTime()) / (1000 * 60 * 60 * 24)));
+  const observedRateKgPerWeek = Math.round(((endLog.trendWeightKg - startLog.trendWeightKg) / elapsedDays) * 7 * 100) / 100;
+
+  // Standard deviation of daily velocities within window
+  const velocities = [];
+  for (let i = 1; i < activeLogs.length; i++) {
+    const prev = activeLogs[i - 1];
+    const curr = activeLogs[i];
+    const days = Math.max(1, Math.round((curr.dateObj.getTime() - prev.dateObj.getTime()) / (1000 * 60 * 60 * 24)));
+    const vel = (curr.trendWeightKg - prev.trendWeightKg) / days;
+    velocities.push(vel);
+  }
+
+  let trendStabilityScore = 0;
+  if (velocities.length > 1) {
+    const mean = velocities.reduce((sum, v) => sum + v, 0) / velocities.length;
+    const variance = velocities.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / velocities.length;
+    trendStabilityScore = Math.round(Math.sqrt(variance) * 10000) / 10000;
+  }
+
+  const sufficientData = activeLogs.length >= 7 && elapsedDays >= 7;
+
+  return {
+    observedRateKgPerWeek,
+    trendStabilityScore,
+    windowDays,
+    sufficientData,
+    startTrendKg: startLog.trendWeightKg,
+    endTrendKg: endLog.trendWeightKg,
+  };
+}
+
 module.exports = {
   calculateWeightTrend,
+  calculateMultiWeekTrend,
   DEFAULT_ALPHA,
   DEFAULT_BETA,
   OUTLIER_THRESHOLD_KG,
