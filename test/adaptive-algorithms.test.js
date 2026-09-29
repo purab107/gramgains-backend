@@ -150,3 +150,79 @@ describe('Flexible Macro Allocator', () => {
     assert.ok(macros.carbsGrams <= 30);
   });
 });
+
+const {
+  calculateBmr,
+  calculateTdee,
+  calculateGoalCalorieDelta,
+  calculateGoalCalories,
+  calculateSafetyFloor,
+  calculateProfileMetrics,
+  CALORIES_PER_KG,
+  SAFETY_FLOORS,
+} = require('../src/modules/adaptive/algorithms/calorieCalculator');
+
+describe('Centralised Calorie Calculator Service', () => {
+  it('calculates Mifflin-St Jeor BMR correctly for male and female', () => {
+    const maleBmr = calculateBmr({ age: 25, gender: 'MALE', heightCm: 175, weightKg: 70 });
+    // 10*70 + 6.25*175 - 5*25 + 5 = 700 + 1093.75 - 125 + 5 = 1673.75 -> 1674
+    assert.equal(maleBmr, 1674);
+
+    const femaleBmr = calculateBmr({ age: 25, gender: 'FEMALE', heightCm: 165, weightKg: 60 });
+    // 10*60 + 6.25*165 - 5*25 - 161 = 600 + 1031.25 - 125 - 161 = 1345.25 -> 1345
+    assert.equal(femaleBmr, 1345);
+  });
+
+  it('calculates baseline TDEE with activity multipliers', () => {
+    const tdee = calculateTdee({ bmr: 1600, activityLevel: 'MODERATE' });
+    // 1600 * 1.55 = 2480
+    assert.equal(tdee, 2480);
+
+    const sedentaryTdee = calculateTdee({ bmr: 1600, activityLevel: 'SEDENTARY' });
+    // 1600 * 1.2 = 1920
+    assert.equal(sedentaryTdee, 1920);
+  });
+
+  it('calculates goal calorie deltas and targets', () => {
+    const lossDelta = calculateGoalCalorieDelta({ targetRateKgPerWeek: -0.5 });
+    assert.equal(lossDelta, -550);
+
+    const gainDelta = calculateGoalCalorieDelta({ targetRateKgPerWeek: 0.25 });
+    assert.equal(gainDelta, 275);
+
+    const target = calculateGoalCalories({ tdee: 2500, targetRateKgPerWeek: -0.5 });
+    assert.equal(target, 1950);
+  });
+
+  it('enforces clinical safety floor constants', () => {
+    assert.equal(calculateSafetyFloor({ gender: 'MALE' }), SAFETY_FLOORS.MALE);
+    assert.equal(calculateSafetyFloor({ gender: 'FEMALE' }), SAFETY_FLOORS.FEMALE);
+    assert.equal(SAFETY_FLOORS.MALE, 1500);
+    assert.equal(SAFETY_FLOORS.FEMALE, 1200);
+    assert.equal(CALORIES_PER_KG, 7700);
+  });
+
+  it('calculates complete profile metrics with macro distribution', () => {
+    const metrics = calculateProfileMetrics({
+      age: 26,
+      gender: 'MALE',
+      heightCm: 178,
+      weightKg: 75,
+      activityLevel: 'MODERATE',
+      goal: 'WEIGHT_LOSS',
+      targetRateKgPerWeek: -0.5,
+      macroPreset: 'BALANCED',
+    });
+
+    assert.equal(typeof metrics.bmr, 'number');
+    assert.equal(typeof metrics.tdee, 'number');
+    assert.equal(typeof metrics.targetCalories, 'number');
+    assert.equal(metrics.targetRateKgPerWeek, -0.5);
+    assert.equal(metrics.targetCalories, metrics.tdee - 550);
+    assert.ok(metrics.targetProtein > 0);
+    assert.ok(metrics.targetCarbs > 0);
+    assert.ok(metrics.targetFat > 0);
+    assert.ok(metrics.targetFiber > 0);
+  });
+});
+
