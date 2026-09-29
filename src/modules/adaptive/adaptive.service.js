@@ -1,15 +1,19 @@
 const { prisma } = require('../../config/db');
 const { getProfile, DEFAULT_USER_ID } = require('../profile/profile.service');
-const { calculateWeightTrend } = require('./algorithms/weightSmoothing');
+const { calculateWeightTrend, calculateMultiWeekTrend } = require('./algorithms/weightSmoothing');
 const {
   solveObservedTdee,
   calculateRecommendedCalories,
   filterValidIntakeDays,
 } = require('./algorithms/expenditureSolver');
-const { evaluateExpenditureConfidence } = require('./algorithms/confidenceModel');
+const {
+  evaluateExpenditureConfidence,
+  evaluateEvidenceSufficiency,
+} = require('./algorithms/confidenceModel');
 const { allocateMacros } = require('./algorithms/macroAllocator');
 
 const EVALUATION_DAYS = 28;
+const TREND_WINDOW_DAYS = 21;
 
 /**
  * Computes and returns the complete adaptive metabolic status for a user.
@@ -21,17 +25,21 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
   cutoffDate.setDate(cutoffDate.getDate() - EVALUATION_DAYS);
   cutoffDate.setHours(0, 0, 0, 0);
 
-  // 1. Fetch weight logs over the last 28 days
-  const weightLogs = await prisma.weightLog.findMany({
-    where: {
-      userId,
-      date: { gte: cutoffDate },
-    },
+  // 1a. Fetch full weight history for multi-week trend calculation
+  const allWeightLogs = await prisma.weightLog.findMany({
+    where: { userId },
     orderBy: { date: 'asc' },
   });
 
+  // 1b. Window to 28 days for evaluation metrics
+  const weightLogs = allWeightLogs.filter((w) => w.date >= cutoffDate);
+
   const trendResult = calculateWeightTrend(weightLogs);
   const latestWeight = trendResult.latestRawKg || profile.weightKg || 70;
+
+  // 1c. Compute multi-week (21-day) trend rate and stability from full history
+  const fullTrendResult = calculateWeightTrend(allWeightLogs);
+  const multiWeekTrend = calculateMultiWeekTrend(fullTrendResult.smoothedLogs, { windowDays: TREND_WINDOW_DAYS });
 
   // 2. Fetch meal logs over the last 28 days and aggregate by date
   const mealLogs = await prisma.mealLog.findMany({
@@ -58,6 +66,11 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
   const validFoodDays = validDays.length;
   const validWeightDays = weightLogs.filter((w) => !w.isExcluded).length;
 
+  // Compute log density metrics for composite confidence
+  const foodLogDensity = Math.min(1.0, validFoodDays / EVALUATION_DAYS);
+  const weightLogDensity = Math.min(1.0, validWeightDays / EVALUATION_DAYS);
+  const trendStabilityScore = multiWeekTrend.trendStabilityScore;
+
   const totalValidCalories = validDays.reduce((acc, d) => acc + d.calories, 0);
   const avgDailyIntake = validFoodDays > 0 ? Math.round(totalValidCalories / validFoodDays) : null;
 
@@ -68,11 +81,26 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
     bmr: profile.bmr,
   });
 
-  // 4. Bayesian confidence evaluation
+  // 4. Bayesian confidence evaluation (now with density and stability inputs)
   const confidence = evaluateExpenditureConfidence({
     validFoodDays,
     validWeightDays,
     formulaTdee: profile.tdee,
+    observedTdee,
+    foodLogDensity,
+    weightLogDensity,
+    trendStabilityScore,
+    windowDays: EVALUATION_DAYS,
+  });
+
+  // 4b. Evidence sufficiency gate (drives check-in recommendation decisions in later phases)
+  const evidenceSufficiency = evaluateEvidenceSufficiency({
+    validFoodDays,
+    validWeightDays,
+    windowDays: TREND_WINDOW_DAYS,
+    foodLogDensity,
+    weightLogDensity,
+    trendStabilityScore,
     observedTdee,
   });
 
@@ -99,6 +127,24 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   try {
+    const snapshotData = {
+      rawWeightKg: trendResult.latestRawKg || latestWeight,
+      trendWeightKg: trendResult.latestTrendKg || latestWeight,
+      avgIntakeCalories: avgDailyIntake || profile.targetCalories,
+      formulaTdee: profile.tdee,
+      observedTdee: observedTdee || null,
+      effectiveTdee: confidence.effectiveTdee,
+      confidenceLevel: confidence.level,
+      confidenceScore: confidence.score,
+      validLogDays: validFoodDays,
+      // Phase 1 / Phase 3 new fields
+      foodLogDensity,
+      weightLogDensity,
+      trendStabilityScore,
+      trendWindowDays: multiWeekTrend.windowDays,
+      observedRateKgPerWeek: multiWeekTrend.observedRateKgPerWeek,
+      metabolicModelVersion: 1,
+    };
     await prisma.metabolicSnapshot.upsert({
       where: {
         userId_date: {
@@ -106,30 +152,8 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
           date: today,
         },
       },
-      update: {
-        rawWeightKg: trendResult.latestRawKg || latestWeight,
-        trendWeightKg: trendResult.latestTrendKg || latestWeight,
-        avgIntakeCalories: avgDailyIntake || profile.targetCalories,
-        formulaTdee: profile.tdee,
-        observedTdee: observedTdee || null,
-        effectiveTdee: confidence.effectiveTdee,
-        confidenceLevel: confidence.level,
-        confidenceScore: confidence.score,
-        validLogDays: validFoodDays,
-      },
-      create: {
-        userId,
-        date: today,
-        rawWeightKg: trendResult.latestRawKg || latestWeight,
-        trendWeightKg: trendResult.latestTrendKg || latestWeight,
-        avgIntakeCalories: avgDailyIntake || profile.targetCalories,
-        formulaTdee: profile.tdee,
-        observedTdee: observedTdee || null,
-        effectiveTdee: confidence.effectiveTdee,
-        confidenceLevel: confidence.level,
-        confidenceScore: confidence.score,
-        validLogDays: validFoodDays,
-      },
+      update: snapshotData,
+      create: { userId, date: today, ...snapshotData },
     });
 
     // Update profile with cached adaptive metrics
@@ -161,6 +185,14 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
       validWeightDays,
       evaluationWindowDays: EVALUATION_DAYS,
       message: confidence.message,
+      foodLogDensity,
+      weightLogDensity,
+      trendStabilityScore,
+    },
+    evidenceSufficiency: {
+      evidenceStatus: evidenceSufficiency.evidenceStatus,
+      isReadyForRecommendation: evidenceSufficiency.isReadyForRecommendation,
+      message: evidenceSufficiency.message,
     },
     expenditure: {
       formulaBaselineTdee: profile.tdee,
@@ -175,6 +207,9 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
       velocityKgPerDay: trendResult.velocityKgPerDay,
       velocityKgPerWeek: trendResult.velocityKgPerWeek,
       targetVelocityKgPerWeek: targetRate,
+      multiWeekObservedRateKgPerWeek: multiWeekTrend.observedRateKgPerWeek,
+      trendWindowDays: multiWeekTrend.windowDays,
+      sufficientTrendData: multiWeekTrend.sufficientData,
     },
     targets: {
       currentCalories: profile.targetCalories,
