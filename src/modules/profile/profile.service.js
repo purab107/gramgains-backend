@@ -1,63 +1,10 @@
 const { prisma } = require('../../config/db');
-const { allocateMacros } = require('../adaptive/algorithms/macroAllocator');
+const { calculateProfileMetrics } = require('../adaptive/algorithms/calorieCalculator');
 
 const DEFAULT_USER_ID = 'default-user';
 
-function calculateMetrics({
-  age,
-  gender,
-  heightCm,
-  weightKg = 70,
-  activityLevel,
-  goal,
-  targetRateKgPerWeek,
-  macroPreset = 'BALANCED',
-  proteinGramsPerKg = 2.0,
-  fatPercent = 25.0,
-}) {
-  // Mifflin-St Jeor BMR
-  let bmr = 10 * weightKg + 6.25 * heightCm - 5 * age;
-  bmr += String(gender).toUpperCase() === 'FEMALE' ? -161 : 5;
-
-  const activityMap = {
-    SEDENTARY:    1.2,
-    LIGHT:        1.375,
-    MODERATE:     1.55,
-    VERY_ACTIVE:  1.725,
-    EXTRA_ACTIVE: 1.9,
-  };
-  const normalizedActivity = String(activityLevel || 'MODERATE').toUpperCase();
-  const tdee = bmr * (activityMap[normalizedActivity] || 1.55);
-
-  const normalizedGoal = String(goal || 'MAINTAIN').toUpperCase();
-  let rate = typeof targetRateKgPerWeek === 'number' ? targetRateKgPerWeek : 0.0;
-  if (targetRateKgPerWeek === undefined || targetRateKgPerWeek === null) {
-    if (normalizedGoal === 'WEIGHT_LOSS') rate = -0.5;
-    else if (normalizedGoal === 'BULK') rate = 0.35;
-    else rate = 0.0;
-  }
-
-  const calorieDelta = Math.round((rate * 7700) / 7);
-  const targetCalories = Math.round(tdee + calorieDelta);
-
-  const macros = allocateMacros({
-    targetCalories,
-    bodyWeightKg: weightKg,
-    macroPreset,
-    proteinGramsPerKg,
-    fatPercent,
-  });
-
-  return {
-    bmr: Math.round(bmr),
-    tdee: Math.round(tdee),
-    targetCalories,
-    targetProtein: macros.proteinGrams,
-    targetCarbs: macros.carbsGrams,
-    targetFat: macros.fatGrams,
-    targetFiber: macros.fiberGrams,
-    targetRateKgPerWeek: rate,
-  };
+function calculateMetrics(params) {
+  return calculateProfileMetrics(params);
 }
 
 async function ensureDefaultUser() {

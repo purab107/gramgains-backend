@@ -8,10 +8,17 @@
  * Includes anti-whiplash clamps, physiological bounding, and clinical safety floors.
  */
 
-const CALORIES_PER_KG_WEIGHT = 7700; // Standard tissue caloric equivalent
+const {
+  CALORIES_PER_KG,
+  SAFETY_FLOORS,
+  calculateGoalCalorieDelta,
+  calculateSafetyFloor,
+} = require('./calorieCalculator');
+
+const CALORIES_PER_KG_WEIGHT = CALORIES_PER_KG; // Standard tissue caloric equivalent (7700)
 const MAX_WEEKLY_ADJUSTMENT_KCAL = 150; // Anti-whiplash adjustment clamp
-const MIN_CALORIES_FEMALE = 1200; // Clinical safety floor
-const MIN_CALORIES_MALE = 1500;   // Clinical safety floor
+const MIN_CALORIES_FEMALE = SAFETY_FLOORS.FEMALE; // Clinical safety floor (1200)
+const MIN_CALORIES_MALE = SAFETY_FLOORS.MALE;   // Clinical safety floor (1500)
 const MIN_VALID_DAY_INTAKE = 500; // Exclude incomplete logging days (<500 kcal)
 
 /**
@@ -88,7 +95,7 @@ function calculateRecommendedCalories({
   gender = 'MALE',
   bodyWeightKg = 70,
 }) {
-  const dailyTargetDeltaKcal = Math.round((targetRateKgPerWeek * CALORIES_PER_KG_WEIGHT) / 7);
+  const dailyTargetDeltaKcal = calculateGoalCalorieDelta({ targetRateKgPerWeek });
   const rawTargetCalories = Math.round(effectiveTdee + dailyTargetDeltaKcal);
 
   // Anti-whiplash clamping if currentCalories exists
@@ -106,8 +113,7 @@ function calculateRecommendedCalories({
     }
   }
 
-  const isFemale = String(gender).toUpperCase() === 'FEMALE';
-  const safetyFloorKcal = isFemale ? MIN_CALORIES_FEMALE : MIN_CALORIES_MALE;
+  const safetyFloorKcal = calculateSafetyFloor({ gender });
   const isBelowSafetyFloor = recommendedCalories < safetyFloorKcal;
 
   // Rate safety check: Loss exceeding 1% body weight per week risks lean tissue loss
