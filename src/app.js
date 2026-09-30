@@ -20,6 +20,7 @@ app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
     'https://gramgains-frontend.vercel.app',
+    'https://gramgains.vercel.app',
   ],
   credentials: true,
 }));

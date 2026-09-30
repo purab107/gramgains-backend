@@ -8,11 +8,19 @@
  * Includes anti-whiplash clamps, physiological bounding, and clinical safety floors.
  */
 
-const CALORIES_PER_KG_WEIGHT = 7700; // Standard tissue caloric equivalent
+const {
+  CALORIES_PER_KG,
+  SAFETY_FLOORS,
+  calculateGoalCalorieDelta,
+  calculateSafetyFloor,
+} = require('./calorieCalculator');
+const { weightVelocityToEnergy } = require('./energyBalance');
+
 const MAX_WEEKLY_ADJUSTMENT_KCAL = 150; // Anti-whiplash adjustment clamp
-const MIN_CALORIES_FEMALE = 1200; // Clinical safety floor
-const MIN_CALORIES_MALE = 1500;   // Clinical safety floor
+const MIN_CALORIES_FEMALE = SAFETY_FLOORS.FEMALE; // Clinical safety floor (1200)
+const MIN_CALORIES_MALE = SAFETY_FLOORS.MALE;   // Clinical safety floor (1500)
 const MIN_VALID_DAY_INTAKE = 500; // Exclude incomplete logging days (<500 kcal)
+const MAINTENANCE_TOLERANCE_KG_PER_WEEK = 0.1; // Maintenance band tolerance (kg/week)
 
 /**
  * Filters out incomplete/untracked days from meal log records.
@@ -46,7 +54,7 @@ function solveObservedTdee({ avgDailyIntake, velocityKgPerDay, bmr }) {
     return { observedTdee: null, dailyEnergySurplusKcal: 0 };
   }
 
-  const dailyEnergySurplusKcal = Math.round(velocityKgPerDay * CALORIES_PER_KG_WEIGHT);
+  const dailyEnergySurplusKcal = weightVelocityToEnergy(velocityKgPerDay);
   let observedTdee = Math.round(avgDailyIntake - dailyEnergySurplusKcal);
 
   // Physiological bounds check if BMR is supplied
@@ -88,7 +96,7 @@ function calculateRecommendedCalories({
   gender = 'MALE',
   bodyWeightKg = 70,
 }) {
-  const dailyTargetDeltaKcal = Math.round((targetRateKgPerWeek * CALORIES_PER_KG_WEIGHT) / 7);
+  const dailyTargetDeltaKcal = calculateGoalCalorieDelta({ targetRateKgPerWeek });
   const rawTargetCalories = Math.round(effectiveTdee + dailyTargetDeltaKcal);
 
   // Anti-whiplash clamping if currentCalories exists
@@ -106,8 +114,7 @@ function calculateRecommendedCalories({
     }
   }
 
-  const isFemale = String(gender).toUpperCase() === 'FEMALE';
-  const safetyFloorKcal = isFemale ? MIN_CALORIES_FEMALE : MIN_CALORIES_MALE;
+  const safetyFloorKcal = calculateSafetyFloor({ gender });
   const isBelowSafetyFloor = recommendedCalories < safetyFloorKcal;
 
   // Rate safety check: Loss exceeding 1% body weight per week risks lean tissue loss
@@ -127,13 +134,55 @@ function calculateRecommendedCalories({
   };
 }
 
+/**
+ * Calculates proportional calorie adjustments based on rate deviation magnitude (Improvement 14).
+ * Replaces hard binary ±150 kcal clamp with graduated responses.
+ *
+ * @param {Object} params
+ * @param {number} params.currentCalories
+ * @param {number} params.rawTargetCalories
+ * @param {number} params.observedRateKgPerWeek
+ * @param {number} params.targetRateKgPerWeek
+ * @param {number} [params.maxAdjustmentKcal=150]
+ * @returns {number} recommendedCalories
+ */
+function calculateProportionalAdjustment({
+  currentCalories,
+  rawTargetCalories,
+  observedRateKgPerWeek,
+  targetRateKgPerWeek,
+  maxAdjustmentKcal = MAX_WEEKLY_ADJUSTMENT_KCAL,
+}) {
+  if (!currentCalories || currentCalories <= 0) {
+    return Math.round(rawTargetCalories);
+  }
+
+  const delta = rawTargetCalories - currentCalories;
+  if (delta === 0) return Math.round(currentCalories);
+
+  // Normalize deviation magnitude against target rate (minimum 0.1 to prevent division by zero in maintain goals)
+  const deviationFraction = Math.abs(observedRateKgPerWeek - targetRateKgPerWeek) / Math.max(0.1, Math.abs(targetRateKgPerWeek));
+
+  // Small deviation (< 50%): move 50% toward target, max 75 kcal
+  // Medium deviation (50–100%): move 75% toward target, max 100 kcal
+  // Large deviation (> 100%): move fully clamped at maxAdjustmentKcal
+  const adjustmentFraction = deviationFraction < 0.5 ? 0.5 : deviationFraction < 1.0 ? 0.75 : 1.0;
+  const maxForDeviation = deviationFraction < 0.5 ? 75 : deviationFraction < 1.0 ? 100 : maxAdjustmentKcal;
+
+  const rawAdjustment = delta * adjustmentFraction;
+  const clampedAdjustment = Math.sign(delta) * Math.min(Math.abs(rawAdjustment), maxForDeviation);
+
+  return Math.round(currentCalories + clampedAdjustment);
+}
+
 module.exports = {
   solveObservedTdee,
   calculateRecommendedCalories,
+  calculateProportionalAdjustment,
   filterValidIntakeDays,
-  CALORIES_PER_KG_WEIGHT,
   MAX_WEEKLY_ADJUSTMENT_KCAL,
   MIN_CALORIES_FEMALE,
   MIN_CALORIES_MALE,
   MIN_VALID_DAY_INTAKE,
+  MAINTENANCE_TOLERANCE_KG_PER_WEEK,
 };

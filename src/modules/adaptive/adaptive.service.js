@@ -1,104 +1,47 @@
 const { prisma } = require('../../config/db');
 const { getProfile, DEFAULT_USER_ID } = require('../profile/profile.service');
-const { calculateWeightTrend } = require('./algorithms/weightSmoothing');
-const {
-  solveObservedTdee,
-  calculateRecommendedCalories,
-  filterValidIntakeDays,
-} = require('./algorithms/expenditureSolver');
-const { evaluateExpenditureConfidence } = require('./algorithms/confidenceModel');
+const { runAdaptiveLoop } = require('./adaptiveLoop');
 const { allocateMacros } = require('./algorithms/macroAllocator');
+const { evaluateRecomp } = require('./algorithms/recompEvaluator');
+const { computeActivityConsistency } = require('./algorithms/activityEvaluator');
+const { METABOLIC_MODEL_VERSION } = require('../../config/metabolicModelVersion');
 
 const EVALUATION_DAYS = 28;
+const TREND_WINDOW_DAYS = 21;
+const ADJUSTMENT_COOLDOWN_DAYS = 14;
+const MAINTENANCE_TOLERANCE_KG_PER_WEEK = 0.1;
 
 /**
  * Computes and returns the complete adaptive metabolic status for a user.
+ * This is now a thin wrapper around the formalised adaptive loop.
  */
 async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
-  const profile = await getProfile(userId);
-  const now = new Date();
-  const cutoffDate = new Date(now);
-  cutoffDate.setDate(cutoffDate.getDate() - EVALUATION_DAYS);
-  cutoffDate.setHours(0, 0, 0, 0);
+  // Run the formalised adaptive loop
+  const loopOutput = await runAdaptiveLoop(userId, { windowDays: EVALUATION_DAYS });
 
-  // 1. Fetch weight logs over the last 28 days
-  const weightLogs = await prisma.weightLog.findMany({
-    where: {
-      userId,
-      date: { gte: cutoffDate },
-    },
-    orderBy: { date: 'asc' },
-  });
+  const { profile, confidence, evidenceSufficiency, recommendedMacros, targetRecommendation, multiWeekTrend, trendResult, observedTdee, dailyEnergySurplusKcal, observedRateKgPerWeek, targetRate, foodLogDensity, weightLogDensity, trendStabilityScore, validFoodDays, validWeightDays, latestWeight, avgDailyIntake } = loopOutput;
 
-  const trendResult = calculateWeightTrend(weightLogs);
-  const latestWeight = trendResult.latestRawKg || profile.weightKg || 70;
-
-  // 2. Fetch meal logs over the last 28 days and aggregate by date
-  const mealLogs = await prisma.mealLog.findMany({
-    where: {
-      userId,
-      date: { gte: cutoffDate },
-    },
-    select: { date: true, calories: true },
-  });
-
-  const dailyIntakeMap = new Map();
-  for (const log of mealLogs) {
-    const dStr = log.date.toISOString().split('T')[0];
-    const curr = dailyIntakeMap.get(dStr) || 0;
-    dailyIntakeMap.set(dStr, curr + (log.calories || 0));
-  }
-
-  const rawDailyIntakes = Array.from(dailyIntakeMap.entries()).map(([date, calories]) => ({
-    date,
-    calories: Math.round(calories),
-  }));
-
-  const validDays = filterValidIntakeDays(rawDailyIntakes);
-  const validFoodDays = validDays.length;
-  const validWeightDays = weightLogs.filter((w) => !w.isExcluded).length;
-
-  const totalValidCalories = validDays.reduce((acc, d) => acc + d.calories, 0);
-  const avgDailyIntake = validFoodDays > 0 ? Math.round(totalValidCalories / validFoodDays) : null;
-
-  // 3. Solve observed TDEE
-  const { observedTdee, dailyEnergySurplusKcal } = solveObservedTdee({
-    avgDailyIntake,
-    velocityKgPerDay: trendResult.velocityKgPerDay,
-    bmr: profile.bmr,
-  });
-
-  // 4. Bayesian confidence evaluation
-  const confidence = evaluateExpenditureConfidence({
-    validFoodDays,
-    validWeightDays,
-    formulaTdee: profile.tdee,
-    observedTdee,
-  });
-
-  // 5. Calculate recommended calorie target
-  const targetRate = typeof profile.targetRateKgPerWeek === 'number' ? profile.targetRateKgPerWeek : 0;
-  const targetRecommendation = calculateRecommendedCalories({
-    effectiveTdee: confidence.effectiveTdee,
-    targetRateKgPerWeek: targetRate,
-    currentCalories: profile.targetCalories,
-    gender: profile.gender,
-    bodyWeightKg: latestWeight,
-  });
-
-  // 6. Allocate macros for the recommended target
-  const recommendedMacros = allocateMacros({
-    targetCalories: targetRecommendation.recommendedCalories,
-    bodyWeightKg: latestWeight,
-    macroPreset: profile.macroPreset || 'BALANCED',
-    proteinGramsPerKg: profile.proteinGramsPerKg || 2.0,
-    fatPercent: profile.fatPercent || 25.0,
-  });
-
-  // 7. Persist or update MetabolicSnapshot for today
+  // Persist or update MetabolicSnapshot for today
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   try {
+    const snapshotData = {
+      rawWeightKg: trendResult.latestRawKg || latestWeight,
+      trendWeightKg: trendResult.latestTrendKg || latestWeight,
+      avgIntakeCalories: avgDailyIntake || profile.targetCalories,
+      formulaTdee: profile.tdee,
+      observedTdee: observedTdee || null,
+      effectiveTdee: confidence.effectiveTdee,
+      confidenceLevel: confidence.level,
+      confidenceScore: confidence.score,
+      validLogDays: validFoodDays,
+      foodLogDensity,
+      weightLogDensity,
+      trendStabilityScore,
+      trendWindowDays: multiWeekTrend.windowDays,
+      observedRateKgPerWeek: multiWeekTrend.observedRateKgPerWeek,
+      metabolicModelVersion: METABOLIC_MODEL_VERSION,
+    };
     await prisma.metabolicSnapshot.upsert({
       where: {
         userId_date: {
@@ -106,30 +49,8 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
           date: today,
         },
       },
-      update: {
-        rawWeightKg: trendResult.latestRawKg || latestWeight,
-        trendWeightKg: trendResult.latestTrendKg || latestWeight,
-        avgIntakeCalories: avgDailyIntake || profile.targetCalories,
-        formulaTdee: profile.tdee,
-        observedTdee: observedTdee || null,
-        effectiveTdee: confidence.effectiveTdee,
-        confidenceLevel: confidence.level,
-        confidenceScore: confidence.score,
-        validLogDays: validFoodDays,
-      },
-      create: {
-        userId,
-        date: today,
-        rawWeightKg: trendResult.latestRawKg || latestWeight,
-        trendWeightKg: trendResult.latestTrendKg || latestWeight,
-        avgIntakeCalories: avgDailyIntake || profile.targetCalories,
-        formulaTdee: profile.tdee,
-        observedTdee: observedTdee || null,
-        effectiveTdee: confidence.effectiveTdee,
-        confidenceLevel: confidence.level,
-        confidenceScore: confidence.score,
-        validLogDays: validFoodDays,
-      },
+      update: snapshotData,
+      create: { userId, date: today, ...snapshotData },
     });
 
     // Update profile with cached adaptive metrics
@@ -146,7 +67,7 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
     console.error('Failed to update metabolic snapshot cache:', err.message);
   }
 
-  // 8. Check for pending or available check-in
+  // Check for pending or available check-in
   const pendingCheckIn = await prisma.adaptiveCheckIn.findFirst({
     where: { userId, status: 'PENDING' },
     orderBy: { date: 'desc' },
@@ -161,6 +82,22 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
       validWeightDays,
       evaluationWindowDays: EVALUATION_DAYS,
       message: confidence.message,
+      foodLogDensity,
+      weightLogDensity,
+      trendStabilityScore,
+    },
+    evidenceSufficiency: {
+      evidenceStatus: evidenceSufficiency.evidenceStatus,
+      isReadyForRecommendation: evidenceSufficiency.isReadyForRecommendation,
+      message: evidenceSufficiency.message,
+      adherence: evidenceSufficiency.adherence ? {
+        totalLoggedDays: evidenceSufficiency.adherence.totalLoggedDays,
+        adherentDays: evidenceSufficiency.adherence.adherentDays,
+        density: evidenceSufficiency.adherence.density,
+        adherenceRate: evidenceSufficiency.adherence.adherenceRate,
+        adherenceScore: evidenceSufficiency.adherence.adherenceScore,
+        isAdherent: evidenceSufficiency.adherence.isAdherent,
+      } : null,
     },
     expenditure: {
       formulaBaselineTdee: profile.tdee,
@@ -175,6 +112,9 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
       velocityKgPerDay: trendResult.velocityKgPerDay,
       velocityKgPerWeek: trendResult.velocityKgPerWeek,
       targetVelocityKgPerWeek: targetRate,
+      multiWeekObservedRateKgPerWeek: multiWeekTrend.observedRateKgPerWeek,
+      trendWindowDays: multiWeekTrend.windowDays,
+      sufficientTrendData: multiWeekTrend.sufficientData,
     },
     targets: {
       currentCalories: profile.targetCalories,
@@ -191,87 +131,327 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
 }
 
 /**
+ * Calculates start of week given a reference date and start day (0=Sunday, 1=Monday).
+ */
+function getStartOfWeek(date, startDay = 1) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  const day = d.getDay();
+  const diff = (day < startDay ? 7 : 0) + day - startDay;
+  d.setDate(d.getDate() - diff);
+  return d;
+}
+
+/**
  * Retrieves the current or newly generated weekly check-in proposal.
  */
-async function getCheckIn(userId = DEFAULT_USER_ID) {
-  // Check for an existing pending check-in
+async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = {}) {
+  // 1. Check for an existing pending check-in (pending takes priority)
   let checkIn = await prisma.adaptiveCheckIn.findFirst({
     where: { userId, status: 'PENDING' },
     orderBy: { date: 'desc' },
   });
 
-  if (!checkIn) {
-    // Generate fresh check-in proposal
-    const status = await getAdaptiveStatus(userId);
-    const profile = await getProfile(userId);
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const startDate = new Date(today);
-    startDate.setDate(startDate.getDate() - 7);
-
-    // Evaluate adherence in the last 7 days
-    const weekLogs = await prisma.mealLog.findMany({
-      where: {
-        userId,
-        date: { gte: startDate },
-      },
-      select: { date: true, calories: true },
-    });
-
-    const daySums = new Map();
-    for (const l of weekLogs) {
-      const d = l.date.toISOString().split('T')[0];
-      daySums.set(d, (daySums.get(d) || 0) + l.calories);
+  if (checkIn) {
+    if (!forceGenerate) {
+      return checkIn;
     }
+    await prisma.adaptiveCheckIn.delete({ where: { id: checkIn.id } });
+  }
 
-    let adheredDays = 0;
-    const target = profile.targetCalories;
-    for (const [, kcal] of daySums.entries()) {
-      if (Math.abs(kcal - target) <= Math.max(100, target * 0.10)) {
-        adheredDays += 1;
+  const profile = await getProfile(userId);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // 2. Server-side check-in cadence guard (Improvement 12)
+  const todayDow = today.getDay(); // 0=Sunday, 1=Monday, ...
+  const checkInDay = typeof profile.checkInDayOfWeek === 'number' ? profile.checkInDayOfWeek : 1;
+
+  if (todayDow !== checkInDay && !forceGenerate) {
+    return null; // Not check-in day
+  }
+
+  // 3. Idempotency guard (Improvement 22)
+  // Check if a check-in already exists for current observation window end date (today)
+  const existingForPeriod = await prisma.adaptiveCheckIn.findFirst({
+    where: {
+      userId,
+      observationEnd: today,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+  if (existingForPeriod && !forceGenerate) {
+    return existingForPeriod;
+  }
+
+  // Also check if a check-in was already created this week
+  const startOfWeek = getStartOfWeek(today, checkInDay);
+  const existingThisWeek = await prisma.adaptiveCheckIn.findFirst({
+    where: {
+      userId,
+      createdAt: { gte: startOfWeek },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+  if (existingThisWeek && !forceGenerate) {
+    return existingThisWeek;
+  }
+
+  // 4. Generate fresh check-in proposal
+  const status = await getAdaptiveStatus(userId);
+
+  const observationEnd = new Date(today);
+  const observationStart = new Date(today);
+  observationStart.setDate(observationStart.getDate() - TREND_WINDOW_DAYS);
+  observationStart.setHours(0, 0, 0, 0);
+
+  // Fetch activity logs in observation window (Improvement 19 — Phase 11)
+  const activityLogs = await prisma.activityLog.findMany({
+    where: {
+      userId,
+      date: {
+        gte: observationStart,
+        lte: observationEnd,
+      },
+    },
+    orderBy: { date: 'asc' },
+  });
+  const activityContext = computeActivityConsistency(activityLogs, TREND_WINDOW_DAYS);
+
+  const currentCalories = profile.targetCalories;
+
+  // 5. Use 21-day window adherence from getAdaptiveStatus (Improvement 5 — Phase 6)
+  const windowAdherence = status.evidenceSufficiency?.adherence || null;
+  const adherenceScore = windowAdherence ? windowAdherence.adherenceScore : 0;
+
+  // 6. Recommendation and Reason Code Logic (Improvement 1, 15)
+  const evidenceStatus = status.evidenceSufficiency?.evidenceStatus || 'INSUFFICIENT';
+  const targetRate = typeof profile.targetRateKgPerWeek === 'number' ? profile.targetRateKgPerWeek : 0;
+  const observedRate = typeof status.weightTrend.multiWeekObservedRateKgPerWeek === 'number'
+    ? status.weightTrend.multiWeekObservedRateKgPerWeek
+    : (status.weightTrend.velocityKgPerWeek || 0);
+
+  const RATE_TOLERANCE_KG_PER_WEEK = 0.1;
+  const rateDeviation = observedRate - targetRate;
+  const isWithinTolerance = Math.abs(rateDeviation) <= RATE_TOLERANCE_KG_PER_WEEK;
+
+  // Check 14-day adjustment cooldown (Improvement 2)
+  let isCooldownActive = false;
+  let cooldownDaysSince = 0;
+  if (profile.lastAdjustmentAppliedAt) {
+    const elapsedMs = today.getTime() - new Date(profile.lastAdjustmentAppliedAt).getTime();
+    cooldownDaysSince = Math.max(0, elapsedMs / (1000 * 60 * 60 * 24));
+    if (cooldownDaysSince < ADJUSTMENT_COOLDOWN_DAYS) {
+      isCooldownActive = true;
+    }
+  }
+
+  const safetyFloorKcal = status.targets.safetyFloorKcal || (profile.gender === 'FEMALE' ? 1200 : 1500);
+  const isCurrentBelowSafetyFloor = currentCalories < safetyFloorKcal;
+  const isBelowSafetyFloor = Boolean(status.targets.isBelowSafetyFloor) || isCurrentBelowSafetyFloor;
+
+  let reasonCode = 'KEEP_CURRENT_TARGET';
+  let suggestedCalories = currentCalories;
+  let adjustmentKcal = 0;
+  let headline = 'Steady Progress';
+  let rationaleText = 'Your calorie targets are currently well-aligned with your metabolic expenditure.';
+
+  if (isBelowSafetyFloor) {
+    // Safety floor violation overrides cooldown and calibration gates
+    reasonCode = 'TREND_BELOW_TARGET';
+    headline = 'Safety Floor Adjustment';
+    suggestedCalories = Math.max(status.targets.recommendedCalories || safetyFloorKcal, safetyFloorKcal);
+    adjustmentKcal = suggestedCalories - currentCalories;
+    rationaleText = `Intake was below the clinical safety floor (${safetyFloorKcal} kcal). Target has been raised to protect metabolic health.`;
+  } else if (isCooldownActive) {
+    // 14-day cooldown active between adjustments (Improvement 2)
+    reasonCode = 'COOLDOWN_ACTIVE';
+    suggestedCalories = currentCalories;
+    adjustmentKcal = 0;
+    headline = 'Recent Adjustment Active';
+    const daysRemaining = Math.max(1, Math.ceil(ADJUSTMENT_COOLDOWN_DAYS - cooldownDaysSince));
+    rationaleText = `Your calories were adjusted ${Math.floor(cooldownDaysSince)} day${Math.floor(cooldownDaysSince) === 1 ? '' : 's'} ago. Maintaining current targets for ${daysRemaining} more day${daysRemaining === 1 ? '' : 's'} to observe metabolic adaptation before making further changes.`;
+  } else if (evidenceStatus === 'INSUFFICIENT') {
+    reasonCode = 'INSUFFICIENT_DATA';
+    suggestedCalories = currentCalories;
+    adjustmentKcal = 0;
+    headline = 'Calibrating Baseline Data';
+    rationaleText = `We are still gathering data (${status.confidence.validFoodDays} of ${EVALUATION_DAYS} days). Keep logging your meals and weight consistently!`;
+  } else if (evidenceStatus === 'CALIBRATING') {
+    reasonCode = 'KEEP_CURRENT_TARGET';
+    suggestedCalories = currentCalories;
+    adjustmentKcal = 0;
+    headline = 'Calibrating Baseline Data';
+    rationaleText = `Your metabolic baseline is calibrating (${status.confidence.validFoodDays} days logged). Maintaining current targets until enough evidence is established.`;
+  } else if (evidenceStatus === 'LOW_ADHERENCE') {
+    reasonCode = 'LOW_ADHERENCE';
+    suggestedCalories = currentCalories;
+    adjustmentKcal = 0;
+    headline = 'More Consistent Logging Needed';
+    rationaleText = 'Logging frequency has been inconsistent. Aim for at least 14 days of complete meal tracking across the observation period for accurate adaptation.';
+  } else if (evidenceStatus === 'READY') {
+    if (profile.goal === 'RECOMP') {
+      // RECOMP Goal Mode: Cross-reference multi-signal recomposition evaluation (Improvement 17)
+      const recompResult = evaluateRecomp({
+        observedRateKgPerWeek: observedRate,
+        activityLogs, // Phase 11: real activity logs from observation window
+        waistLogs: null,
+      });
+
+      if (recompResult.outcome === 'KEEP') {
+        reasonCode = 'MAINTENANCE_IN_BAND';
+        suggestedCalories = currentCalories;
+        adjustmentKcal = 0;
+        headline = 'Recomposition on Track';
+        rationaleText = recompResult.reasoning;
+      } else {
+        // Consecutive check-in gate for RECOMP (Improvement 16 & 17)
+        const sixtyDaysAgo = new Date(today);
+        sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+        const priorCheckIns = await prisma.adaptiveCheckIn.findMany({
+          where: { userId, createdAt: { gte: sixtyDaysAgo } },
+          orderBy: { createdAt: 'desc' },
+          take: 4,
+        });
+        const consecutiveDeviations = priorCheckIns.filter(
+          (ci) => ci.reasonCode === 'TREND_BELOW_TARGET' || ci.reasonCode === 'TREND_ABOVE_TARGET'
+        ).length;
+
+        if (consecutiveDeviations >= 2) {
+          const diff = status.targets.adjustmentKcal;
+          suggestedCalories = status.targets.recommendedCalories;
+          adjustmentKcal = diff;
+          reasonCode = diff > 0 ? 'TREND_BELOW_TARGET' : 'TREND_ABOVE_TARGET';
+          headline = diff > 0 ? 'Recomp Adjustment: Calorie Increase' : 'Recomp Adjustment: Calorie Deficit';
+          rationaleText = recompResult.reasoning;
+        } else {
+          reasonCode = 'MAINTENANCE_IN_BAND';
+          suggestedCalories = currentCalories;
+          adjustmentKcal = 0;
+          headline = 'Monitoring Recomposition Drift';
+          rationaleText = `${recompResult.reasoning} Maintaining current intake until confirmed across consecutive check-ins.`;
+        }
+      }
+    } else if (profile.goal === 'MAINTAIN') {
+      // Maintenance Tolerance Band & Consecutive Check-in Gate (Improvements 16)
+      const isWithinMaintenanceBand = Math.abs(observedRate) <= MAINTENANCE_TOLERANCE_KG_PER_WEEK;
+      if (isWithinMaintenanceBand) {
+        reasonCode = 'MAINTENANCE_IN_BAND';
+        suggestedCalories = currentCalories;
+        adjustmentKcal = 0;
+        headline = 'Steady Maintenance';
+        rationaleText = 'Your weight trend is stable within the maintenance band (+/- 0.1 kg/week). Maintaining current targets.';
+      } else {
+        // Requires consecutive deviations before changing targets in maintenance mode
+        const sixtyDaysAgo = new Date(today);
+        sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+        const priorCheckIns = await prisma.adaptiveCheckIn.findMany({
+          where: { userId, createdAt: { gte: sixtyDaysAgo } },
+          orderBy: { createdAt: 'desc' },
+          take: 4,
+        });
+        const consecutiveDeviations = priorCheckIns.filter(
+          (ci) => ci.reasonCode === 'TREND_BELOW_TARGET' || ci.reasonCode === 'TREND_ABOVE_TARGET'
+        ).length;
+
+        if (consecutiveDeviations >= 2) {
+          const diff = status.targets.adjustmentKcal;
+          if (rateDeviation < -MAINTENANCE_TOLERANCE_KG_PER_WEEK || diff > 0) {
+            reasonCode = 'TREND_BELOW_TARGET';
+            headline = 'Expenditure Exceeds Expectations';
+            rationaleText = `Weight is trending downward in maintenance mode across consecutive check-ins. Increasing intake by +${diff} kcal.`;
+            suggestedCalories = status.targets.recommendedCalories;
+            adjustmentKcal = diff;
+          } else {
+            reasonCode = 'TREND_ABOVE_TARGET';
+            headline = 'Gradual Adjustment Recommended';
+            rationaleText = `Weight is trending upward in maintenance mode across consecutive check-ins. Adjusting intake by ${diff} kcal/day.`;
+            suggestedCalories = status.targets.recommendedCalories;
+            adjustmentKcal = diff;
+          }
+        } else {
+          reasonCode = 'MAINTENANCE_IN_BAND';
+          suggestedCalories = currentCalories;
+          adjustmentKcal = 0;
+          headline = 'Minor Weight Fluctuation';
+          rationaleText = `Observed rate of change (${observedRate > 0 ? '+' : ''}${observedRate.toFixed(2)} kg/week) slightly exceeds the maintenance band. Maintaining current targets until verified over consecutive check-ins.`;
+        }
+      }
+    } else {
+      // Standard Weight Loss or Gain goals
+      if (isWithinTolerance) {
+        reasonCode = 'TREND_ON_TARGET';
+        suggestedCalories = currentCalories;
+        adjustmentKcal = 0;
+        headline = 'Steady Progress';
+        rationaleText = 'Your calorie targets are currently well-aligned with your metabolic expenditure.';
+      } else {
+        const diff = status.targets.adjustmentKcal;
+        if (rateDeviation < -RATE_TOLERANCE_KG_PER_WEEK || diff > 0) {
+          reasonCode = 'TREND_BELOW_TARGET';
+          headline = 'Expenditure Exceeds Expectations';
+          rationaleText = `Your real-world expenditure (~${status.expenditure.effectiveTdee} kcal) is higher than estimated. We recommend increasing your intake by +${diff} kcal to fuel performance.`;
+          suggestedCalories = status.targets.recommendedCalories;
+          adjustmentKcal = diff;
+        } else {
+          reasonCode = 'TREND_ABOVE_TARGET';
+          headline = 'Gradual Adjustment Recommended';
+          rationaleText = `To maintain your target rate of change, we recommend a gentle adjustment of ${diff} kcal/day.`;
+          suggestedCalories = status.targets.recommendedCalories;
+          adjustmentKcal = diff;
+        }
       }
     }
-    const adherenceScore = daySums.size > 0 ? Math.round((adheredDays / Math.max(1, daySums.size)) * 100) : 0;
-
-    let headline = 'Steady Progress';
-    let rationaleText = 'Your calorie targets are currently well-aligned with your metabolic expenditure.';
-
-    const diff = status.targets.adjustmentKcal;
-    if (status.confidence.level === 'INSUFFICIENT') {
-      headline = 'Calibrating Baseline Data';
-      rationaleText = `We are still gathering data (${status.confidence.validFoodDays}/7 days). Keep logging your meals and weight consistently!`;
-    } else if (diff > 50) {
-      headline = 'Expenditure Exceeds Expectations';
-      rationaleText = `Your real-world expenditure (~${status.expenditure.effectiveTdee} kcal) is higher than estimated. We recommend increasing your intake by +${diff} kcal to fuel performance.`;
-    } else if (diff < -50) {
-      headline = 'Gradual Adjustment Recommended';
-      rationaleText = `To maintain your target rate of change, we recommend a gentle adjustment of ${diff} kcal/day.`;
-    }
-
-    checkIn = await prisma.adaptiveCheckIn.create({
-      data: {
-        userId,
-        date: today,
-        status: 'PENDING',
-        startWeightKg: status.weightTrend.latestTrendKg,
-        endWeightKg: status.weightTrend.latestRawKg,
-        trendChangeKg: status.weightTrend.velocityKgPerWeek,
-        avgIntakeKcal: status.expenditure.observedTdee || profile.targetCalories,
-        adherenceScore,
-        currentCalories: profile.targetCalories,
-        suggestedCalories: status.targets.recommendedCalories,
-        suggestedProtein: status.targets.recommendedMacros.proteinGrams,
-        suggestedCarbs: status.targets.recommendedMacros.carbsGrams,
-        suggestedFat: status.targets.recommendedMacros.fatGrams,
-        adjustmentKcal: diff,
-        headline,
-        rationaleText,
-        confidenceLevel: status.confidence.level,
-      },
-    });
   }
+
+  // Append activity context annotation to rationale if significant (Improvement 19 — Phase 11)
+  if (activityContext.annotation && evidenceStatus === 'READY') {
+    rationaleText = `${rationaleText} ${activityContext.annotation}`;
+  }
+
+  // Allocate macros for the determined suggestedCalories
+  const suggestedMacros = allocateMacros({
+    targetCalories: suggestedCalories,
+    bodyWeightKg: status.weightTrend.latestRawKg || profile.weightKg || 70,
+    macroPreset: profile.macroPreset || 'BALANCED',
+    proteinGramsPerKg: profile.proteinGramsPerKg || 2.0,
+    fatPercent: profile.fatPercent || 25.0,
+    fiberGrams: 30, // Default fiber target
+  });
+
+  checkIn = await prisma.adaptiveCheckIn.create({
+    data: {
+      userId,
+      date: today,
+      status: 'PENDING',
+      startWeightKg: status.weightTrend.latestTrendKg,
+      endWeightKg: status.weightTrend.latestRawKg,
+      trendChangeKg: status.weightTrend.velocityKgPerWeek,
+      avgIntakeKcal: status.expenditure.observedTdee || profile.targetCalories,
+      adherenceScore,
+      currentCalories,
+      suggestedCalories,
+      suggestedProtein: suggestedMacros.proteinGrams,
+      suggestedCarbs: suggestedMacros.carbsGrams,
+      suggestedFat: suggestedMacros.fatGrams,
+      adjustmentKcal,
+      headline,
+      rationaleText,
+      confidenceLevel: status.confidence.level,
+      // Phase 1 / Phase 4 fields
+      reasonCode,
+      observationStart,
+      observationEnd,
+      targetRateKgPerWeek: targetRate,
+      observedRateKgPerWeek: observedRate,
+      effectiveTdee: status.expenditure.effectiveTdee,
+      validFoodDays: status.confidence.validFoodDays,
+      validWeightDays: status.confidence.validWeightDays,
+      confidenceScore: status.confidence.score,
+      metabolicModelVersion: METABOLIC_MODEL_VERSION,
+      evidenceStatus,
+    },
+  });
 
   return checkIn;
 }
@@ -311,37 +491,93 @@ async function applyCheckIn({ checkInId, action = 'ACCEPT', customCalories }, us
     fatPercent: profile.fatPercent || 25.0,
   });
 
-  // Atomically update user profile targets
-  const updatedProfile = await prisma.userProfile.update({
+  return prisma.$transaction(async (tx) => {
+    // Atomically update user profile targets
+    const updatedProfile = await tx.userProfile.update({
+      where: { userId },
+      data: {
+        targetCalories: finalCalories,
+        targetProtein: macros.proteinGrams,
+        targetCarbs: macros.carbsGrams,
+        targetFat: macros.fatGrams,
+        targetFiber: macros.fiberGrams,
+        lastCheckInDate: new Date(),
+        lastAdjustmentAppliedAt: new Date(),
+      },
+    });
+
+    // Mark check-in as accepted/adjusted
+    await tx.adaptiveCheckIn.update({
+      where: { id: checkInId },
+      data: {
+        status: normalizedAction === 'ADJUST' ? 'ADJUSTED' : 'ACCEPTED',
+        appliedAt: new Date(),
+      },
+    });
+
+    // Close previous active GoalHistory entry (Improvement 11 & 20)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    await tx.goalHistory.updateMany({
+      where: { userId, effectiveTo: null },
+      data: { effectiveTo: today },
+    });
+
+    // Create new GoalHistory record (Improvement 11, 20, 21)
+    const previousCalories = profile.targetCalories;
+    await tx.goalHistory.create({
+      data: {
+        userId,
+        goal: profile.goal,
+        targetCalories: finalCalories,
+        previousCalories,
+        adjustmentKcal: finalCalories - previousCalories,
+        targetProtein: macros.proteinGrams,
+        targetCarbs: macros.carbsGrams,
+        targetFat: macros.fatGrams,
+        targetFiber: macros.fiberGrams,
+        effectiveFrom: today,
+        reasonCode: checkIn.reasonCode,
+        targetRateKgPerWeek: checkIn.targetRateKgPerWeek,
+        effectiveTdee: checkIn.effectiveTdee,
+        confidenceScore: checkIn.confidenceScore,
+        isSystemRecommended: true,
+        isUserConfirmed: true,
+        checkInId,
+        metabolicModelVersion: METABOLIC_MODEL_VERSION,
+      },
+    });
+
+    return {
+      success: true,
+      action: normalizedAction,
+      profile: updatedProfile,
+      newCalories: finalCalories,
+    };
+  });
+}
+
+/**
+ * Retrieves goal history for a user.
+ *
+ * @param {string} userId
+ * @param {Object} [options]
+ * @param {number} [options.limit=20] - Maximum number of history records to return
+ * @returns {Promise<Array>} Goal history records ordered by effectiveFrom (descending)
+ */
+async function getGoalHistory(userId = DEFAULT_USER_ID, { limit = 20 } = {}) {
+  const history = await prisma.goalHistory.findMany({
     where: { userId },
-    data: {
-      targetCalories: finalCalories,
-      targetProtein: macros.proteinGrams,
-      targetCarbs: macros.carbsGrams,
-      targetFat: macros.fatGrams,
-      targetFiber: macros.fiberGrams,
-      lastCheckInDate: new Date(),
-    },
+    orderBy: { effectiveFrom: 'desc' },
+    take: limit,
   });
 
-  // Mark check-in as accepted/adjusted
-  await prisma.adaptiveCheckIn.update({
-    where: { id: checkInId },
-    data: {
-      status: normalizedAction === 'ADJUST' ? 'ADJUSTED' : 'ACCEPTED',
-      appliedAt: new Date(),
-    },
-  });
-
-  return {
-    success: true,
-    action: normalizedAction,
-    profile: updatedProfile,
-  };
+  return history;
 }
 
 module.exports = {
   getAdaptiveStatus,
   getCheckIn,
   applyCheckIn,
+  getGoalHistory,
 };

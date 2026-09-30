@@ -16,6 +16,26 @@ enum Goal {
   WEIGHT_LOSS
   MAINTAIN
   BULK
+  RECOMP
+}
+
+enum ReasonCode {
+  TREND_BELOW_TARGET
+  TREND_ABOVE_TARGET
+  TREND_ON_TARGET
+  INSUFFICIENT_DATA
+  LOW_ADHERENCE
+  COOLDOWN_ACTIVE
+  KEEP_CURRENT_TARGET
+  MAINTENANCE_IN_BAND
+  RECOMP_INSUFFICIENT_SIGNALS
+}
+
+enum EvidenceStatus {
+  INSUFFICIENT
+  CALIBRATING
+  READY
+  LOW_ADHERENCE
 }
 
 enum MacroPreset {
@@ -77,8 +97,9 @@ model UserProfile {
   targetFiber    Float
 
   // Weekly Check-In Settings
-  checkInDayOfWeek Int       @default(1)
-  lastCheckInDate  DateTime? @db.Date
+  checkInDayOfWeek        Int       @default(1)
+  lastCheckInDate         DateTime? @db.Date
+  lastAdjustmentAppliedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -95,6 +116,21 @@ model GoalHistory {
   targetCarbs    Float
   targetFat      Float
   targetFiber    Float
+
+  // Improvement 11 — Richer history
+  previousCalories     Float?
+  adjustmentKcal       Float?
+  reason               String?
+  reasonCode           ReasonCode?
+  targetRateKgPerWeek  Float?
+  effectiveTdee        Float?
+  confidenceScore      Float?
+  isSystemRecommended  Boolean     @default(false)
+  isUserConfirmed      Boolean     @default(false)
+  checkInId            String?
+
+  // Improvement 24 — Version
+  metabolicModelVersion Int        @default(1)
 
   effectiveFrom DateTime  @db.Date
   effectiveTo   DateTime? @db.Date
@@ -135,6 +171,18 @@ model MetabolicSnapshot {
   confidenceScore   Float
   validLogDays      Int
 
+  // Improvement 8 — Richer confidence inputs
+  foodLogDensity       Float?
+  weightLogDensity     Float?
+  trendStabilityScore  Float?
+
+  // Improvement 24 — Version
+  metabolicModelVersion Int     @default(1)
+
+  // Improvement 3 — Multi-week trend window used
+  trendWindowDays      Int?
+  observedRateKgPerWeek Float?
+
   createdAt         DateTime        @default(now())
 
   @@unique([userId, date])
@@ -167,6 +215,27 @@ model AdaptiveCheckIn {
   headline           String
   rationaleText      String
   confidenceLevel    ConfidenceLevel
+
+  // Improvement 9 — Reason codes
+  reasonCode          ReasonCode?
+  
+  // Improvement 13 — Explicit observation window
+  observationStart    DateTime?    @db.Date
+  observationEnd      DateTime?    @db.Date
+
+  // Improvement 9 — Supporting metrics snapshot
+  targetRateKgPerWeek Float?
+  observedRateKgPerWeek Float?
+  effectiveTdee       Float?
+  validFoodDays       Int?
+  validWeightDays     Int?
+  confidenceScore     Float?
+
+  // Improvement 24 — Algorithm version
+  metabolicModelVersion Int        @default(1)
+
+  // Improvement 4 — Evidence status
+  evidenceStatus      EvidenceStatus?
 
   // User Action Tracking
   appliedAt          DateTime?

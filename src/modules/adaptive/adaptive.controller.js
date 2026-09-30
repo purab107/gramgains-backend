@@ -15,8 +15,21 @@ async function getStatus(req, res) {
 
 async function getCheckIn(req, res) {
   try {
-    const data = await AdaptiveService.getCheckIn(req.userId);
-    return res.json({ success: true, data });
+    const force = req.query.force === 'true';
+    const data = await AdaptiveService.getCheckIn(req.userId, { forceGenerate: force });
+    if (!data) {
+      return res.status(200).json({
+        success: true,
+        available: false,
+        message: 'No weekly check-in available today',
+        data: null,
+      });
+    }
+    return res.json({
+      success: true,
+      available: true,
+      data,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -54,8 +67,26 @@ async function applyCheckIn(req, res) {
   }
 }
 
+async function getGoalHistory(req, res) {
+  try {
+    const limit = req.query.limit ? parseInt(req.query.limit, 10) : 20;
+    const data = await AdaptiveService.getGoalHistory(req.userId, { limit });
+    return res.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error fetching goal history',
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   getStatus,
   getCheckIn,
   applyCheckIn,
+  getGoalHistory,
 };
