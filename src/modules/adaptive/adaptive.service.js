@@ -11,6 +11,7 @@ const {
   evaluateEvidenceSufficiency,
 } = require('./algorithms/confidenceModel');
 const { allocateMacros } = require('./algorithms/macroAllocator');
+const { computeAdherenceInWindow } = require('./algorithms/adherenceEvaluator');
 
 const EVALUATION_DAYS = 28;
 const TREND_WINDOW_DAYS = 21;
@@ -82,6 +83,23 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
     bmr: profile.bmr,
   });
 
+  // 3b. Evaluate dietary adherence in 21-day observation window (Improvement 5)
+  const trendWindowCutoff = new Date(now);
+  trendWindowCutoff.setDate(trendWindowCutoff.getDate() - TREND_WINDOW_DAYS);
+  trendWindowCutoff.setHours(0, 0, 0, 0);
+
+  const windowDailyIntakes = rawDailyIntakes.filter((d) => {
+    const intakeDate = new Date(d.date);
+    intakeDate.setHours(0, 0, 0, 0);
+    return intakeDate >= trendWindowCutoff;
+  });
+
+  const adherence = computeAdherenceInWindow({
+    dailyIntakes: windowDailyIntakes,
+    targetCalories: profile.targetCalories,
+    windowDays: TREND_WINDOW_DAYS,
+  });
+
   // 4. Bayesian confidence evaluation (now with density and stability inputs)
   const confidence = evaluateExpenditureConfidence({
     validFoodDays,
@@ -94,7 +112,7 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
     windowDays: EVALUATION_DAYS,
   });
 
-  // 4b. Evidence sufficiency gate (drives check-in recommendation decisions in later phases)
+  // 4b. Evidence sufficiency gate (drives check-in recommendation decisions)
   const evidenceSufficiency = evaluateEvidenceSufficiency({
     validFoodDays,
     validWeightDays,
@@ -103,6 +121,7 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
     weightLogDensity,
     trendStabilityScore,
     observedTdee,
+    adherence,
   });
 
   // 5. Calculate recommended calorie target
@@ -194,6 +213,14 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
       evidenceStatus: evidenceSufficiency.evidenceStatus,
       isReadyForRecommendation: evidenceSufficiency.isReadyForRecommendation,
       message: evidenceSufficiency.message,
+      adherence: evidenceSufficiency.adherence ? {
+        totalLoggedDays: evidenceSufficiency.adherence.totalLoggedDays,
+        adherentDays: evidenceSufficiency.adherence.adherentDays,
+        density: evidenceSufficiency.adherence.density,
+        adherenceRate: evidenceSufficiency.adherence.adherenceRate,
+        adherenceScore: evidenceSufficiency.adherence.adherenceScore,
+        isAdherent: evidenceSufficiency.adherence.isAdherent,
+      } : null,
     },
     expenditure: {
       formulaBaselineTdee: profile.tdee,
@@ -303,31 +330,9 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
 
   const currentCalories = profile.targetCalories;
 
-  // 5. Evaluate adherence in the last 7 days
-  const startDate = new Date(today);
-  startDate.setDate(startDate.getDate() - 7);
-
-  const weekLogs = await prisma.mealLog.findMany({
-    where: {
-      userId,
-      date: { gte: startDate },
-    },
-    select: { date: true, calories: true },
-  });
-
-  const daySums = new Map();
-  for (const l of weekLogs) {
-    const d = l.date.toISOString().split('T')[0];
-    daySums.set(d, (daySums.get(d) || 0) + l.calories);
-  }
-
-  let adheredDays = 0;
-  for (const [, kcal] of daySums.entries()) {
-    if (Math.abs(kcal - currentCalories) <= Math.max(100, currentCalories * 0.10)) {
-      adheredDays += 1;
-    }
-  }
-  const adherenceScore = daySums.size > 0 ? Math.round((adheredDays / Math.max(1, daySums.size)) * 100) : 0;
+  // 5. Use 21-day window adherence from getAdaptiveStatus (Improvement 5 — Phase 6)
+  const windowAdherence = status.evidenceSufficiency?.adherence || null;
+  const adherenceScore = windowAdherence ? windowAdherence.adherenceScore : 0;
 
   // 6. Recommendation and Reason Code Logic (Improvement 1, 15)
   const evidenceStatus = status.evidenceSufficiency?.evidenceStatus || 'INSUFFICIENT';
