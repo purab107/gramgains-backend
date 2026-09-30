@@ -33,6 +33,7 @@ describe('Adaptive Metabolic & Analytics End-to-End Test', () => {
             targetCarbs: 180,
             targetFat: 53,
             targetFiber: 25,
+            checkInDayOfWeek: new Date().getDay(),
           },
         },
       },

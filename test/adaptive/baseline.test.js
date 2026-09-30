@@ -38,7 +38,7 @@ describe('Phase 0: Adaptive System Baseline API Contract Tests', () => {
             targetCarbs: 180,
             targetFat: 55,
             targetFiber: 30,
-            checkInDayOfWeek: 1, // Monday
+            checkInDayOfWeek: new Date().getDay(),
           },
         },
       },
@@ -215,18 +215,15 @@ describe('Phase 0: Adaptive System Baseline API Contract Tests', () => {
     assert.equal(historyCount, 0, 'Baseline gap: GoalHistory should currently be 0 until Phase 8');
   });
 
-  it('4. getCheckIn creates another check-in immediately when no pending exists (documents Gap 1)', async () => {
-    // Since previous check-in is ACCEPTED, calling getCheckIn generates a brand new PENDING record
-    const newCheckIn = await getCheckIn(BASELINE_TEST_USER_ID);
-    assert.ok(newCheckIn.id);
-    assert.equal(newCheckIn.status, 'PENDING');
-
-    // Clean up this new pending check-in for next test
-    await prisma.adaptiveCheckIn.delete({ where: { id: newCheckIn.id } });
+  it('4. getCheckIn returns existing check-in for the period instead of generating duplicate (closes Gap 1)', async () => {
+    // Gap 1 resolved in Phase 4: getCheckIn is now idempotent and reuses existing record for the period
+    const existingCheckIn = await getCheckIn(BASELINE_TEST_USER_ID);
+    assert.ok(existingCheckIn.id);
+    assert.equal(existingCheckIn.status, 'ACCEPTED');
   });
 
   it('5. applyCheckIn ADJUST applies custom calorie override and recalculates macros', async () => {
-    const checkIn = await getCheckIn(BASELINE_TEST_USER_ID);
+    const checkIn = await getCheckIn(BASELINE_TEST_USER_ID, { forceGenerate: true });
     const customKcal = 2050;
 
     const result = await applyCheckIn(
@@ -253,7 +250,7 @@ describe('Phase 0: Adaptive System Baseline API Contract Tests', () => {
       where: { userId: BASELINE_TEST_USER_ID },
     });
 
-    const checkIn = await getCheckIn(BASELINE_TEST_USER_ID);
+    const checkIn = await getCheckIn(BASELINE_TEST_USER_ID, { forceGenerate: true });
 
     const result = await applyCheckIn(
       {
