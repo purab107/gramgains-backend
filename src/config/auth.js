@@ -9,6 +9,7 @@ const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
+    requireEmailVerification: false,
   },
   trustedOrigins: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -19,6 +20,10 @@ const auth = betterAuth({
     cookiePrefix: 'gramgains',
     crossSubDomainCookies: {
       enabled: false,
+    },
+    ipAddress: {
+      ipAddressHeaders: ['x-forwarded-for'],
+      trustedProxies: ['0.0.0.0/0'],
     },
   },
 });
