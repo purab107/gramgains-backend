@@ -15,8 +15,21 @@ async function getStatus(req, res) {
 
 async function getCheckIn(req, res) {
   try {
-    const data = await AdaptiveService.getCheckIn(req.userId);
-    return res.json({ success: true, data });
+    const force = req.query.force === 'true';
+    const data = await AdaptiveService.getCheckIn(req.userId, { forceGenerate: force });
+    if (!data) {
+      return res.status(200).json({
+        success: true,
+        available: false,
+        message: 'No weekly check-in available today',
+        data: null,
+      });
+    }
+    return res.json({
+      success: true,
+      available: true,
+      data,
+    });
   } catch (error) {
     return res.status(500).json({
       success: false,
