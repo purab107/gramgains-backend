@@ -128,6 +128,17 @@ Storing aliases as a `String[]` PostgreSQL array means individual element constr
 - **Nutritional validation** — plausibility checks for calorie and macro values
 - **Indian-specific rules** — validation for raw vs. cooked staple foods
 
+### Adaptive Metabolic System
+- **Intelligent calorie adjustments** — algorithmic TDEE estimation based on real-world weight change data
+- **Multi-week trend analysis** — 21-day observation windows with Holt's linear exponential smoothing
+- **Evidence-based recommendations** — adjusts targets only when sufficient data quality is achieved
+- **Proportional adjustments** — graduated calorie changes based on deviation magnitude (not binary ±150)
+- **Adjustment cooldown** — 14-day minimum gap between accepted calorie changes
+- **Reason code explanations** — structured reasoning for every recommendation decision
+- **Goal history tracking** — complete audit trail of calorie target evolution
+- **Maintenance tolerance band** — ±0.1 kg/week band for maintain goals
+- **RECOMP support** — body recomposition goal mode with multi-signal evaluation
+
 ## API Endpoints
 
 All endpoints are prefixed with `/api`.
@@ -175,6 +186,14 @@ GET /api/profile
 PUT /api/profile
 ```
 
+### Adaptive Metabolic System *(authenticated)*
+```
+GET    /api/adaptive/status
+GET    /api/adaptive/check-in?force={true|false}
+POST   /api/adaptive/check-in/apply
+GET    /api/adaptive/goal-history?limit={20}
+```
+
 ### Saved Meals *(authenticated)*
 ```
 GET    /api/saved-meals
@@ -215,6 +234,72 @@ POST   /api/saved-meals/:id/log    ← logs all items in a saved meal to the tra
   "data": [ ]
 }
 ```
+
+## Adaptive Metabolic System
+
+The adaptive metabolic system implements an 8-phase loop to intelligently adjust calorie targets based on real-world data.
+
+### Adaptive Loop Phases
+
+1. **Collect** — Gather raw data (weight logs, meal logs, activity logs, profile)
+2. **Validate** — Filter and validate data (valid food days, valid weight days, daily intakes)
+3. **Smooth** — Apply Holt's linear exponential smoothing to weight data
+4. **Measure** — Calculate observed TDEE and rate of change
+5. **Assess Evidence** — Evaluate evidence sufficiency and confidence
+6. **Calculate Recommendation** — Determine calorie target adjustment
+7. **Explain** — Build explanation/reasoning
+8. **Await Confirmation** — Return structured output for frontend
+
+### Reason Codes
+
+Structured reason codes explain why a specific recommendation was made:
+
+| Reason Code | Description |
+|-------------|-------------|
+| `TREND_BELOW_TARGET` | Weight loss exceeds target rate; calorie increase recommended |
+| `TREND_ABOVE_TARGET` | Weight gain exceeds target rate; calorie decrease recommended |
+| `TREND_ON_TARGET` | Progress is on track; no change needed |
+| `INSUFFICIENT_DATA` | Not enough data for recommendation (less than 7 days) |
+| `LOW_ADHERENCE` | Logging frequency too low for reliable adaptation |
+| `COOLDOWN_ACTIVE` | Recent adjustment applied; waiting 14-day cooldown |
+| `KEEP_CURRENT_TARGET` | Evidence not sufficient for change; maintaining current targets |
+| `MAINTENANCE_IN_BAND` | Weight stable within maintenance tolerance (±0.1 kg/week) |
+| `RECOMP_INSUFFICIENT_SIGNALS` | RECOMP mode lacks sufficient multi-signal data |
+
+### Evidence Status Levels
+
+Evidence status determines when recommendations are made:
+
+| Evidence Status | Criteria | Recommendation Ready |
+|-----------------|----------|---------------------|
+| `INSUFFICIENT` | < 7 food days or < 3 weight days | No |
+| `CALIBRATING` | 7-13 food days | No |
+| `LOW_ADHERENCE` | < 50% logging density | No |
+| `READY` | ≥ 21 food days, ≥ 10 weight days, ≥ 60% density | Yes |
+
+### Key Algorithm Constants
+
+- **CALORIES_PER_KG**: 7700 kcal/kg (tissue caloric equivalent)
+- **ADJUSTMENT_COOLDOWN_DAYS**: 14 days
+- **MAINTENANCE_TOLERANCE_KG_PER_WEEK**: 0.1 kg/week
+- **TREND_WINDOW_DAYS**: 21 days
+- **EVALUATION_DAYS**: 28 days
+- **MAX_WEEKLY_ADJUSTMENT_KCAL**: 150 kcal (proportional caps: 75/100/150 based on deviation)
+
+### Implementation Files
+
+| File | Purpose |
+|------|---------|
+| `src/modules/adaptive/adaptiveLoop.js` | Formalised 8-phase adaptive loop |
+| `src/modules/adaptive/adaptive.service.js` | Service layer (thin wrapper) |
+| `src/modules/adaptive/algorithms/energyBalance.js` | Weight-velocity to energy conversion |
+| `src/modules/adaptive/algorithms/calorieCalculator.js` | Centralised calorie calculations |
+| `src/modules/adaptive/algorithms/weightSmoothing.js` | Holt's linear exponential smoothing |
+| `src/modules/adaptive/algorithms/confidenceModel.js` | Bayesian confidence and evidence evaluation |
+| `src/modules/adaptive/algorithms/expenditureSolver.js` | TDEE calculation and safety floors |
+| `src/modules/adaptive/algorithms/adherenceEvaluator.js` | Logging adherence evaluation |
+| `src/modules/adaptive/algorithms/recompEvaluator.js` | RECOMP goal mode evaluation |
+| `src/modules/adaptive/algorithms/activityEvaluator.js` | Activity consistency evaluation |
 
 ## Environment Variables
 
