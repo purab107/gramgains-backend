@@ -130,11 +130,12 @@ function evaluateEvidenceSufficiency({
   weightLogDensity,
   trendStabilityScore = 0,
   observedTdee,
+  adherence,
 }) {
   const actualWindow = windowDays > 0 ? windowDays : 21;
   const foodDensity = typeof foodLogDensity === 'number'
     ? foodLogDensity
-    : Math.min(1.0, validFoodDays / actualWindow);
+    : (typeof adherence?.density === 'number' ? adherence.density : Math.min(1.0, validFoodDays / actualWindow));
   const weightDensity = typeof weightLogDensity === 'number'
     ? weightLogDensity
     : Math.min(1.0, validWeightDays / actualWindow);
@@ -143,14 +144,18 @@ function evaluateEvidenceSufficiency({
   let isReadyForRecommendation = false;
   let message = '';
 
-  if (validFoodDays < 14 || validWeightDays < 7 || !observedTdee) {
+  if (validFoodDays < 7 || validWeightDays < 3 || !observedTdee) {
     evidenceStatus = 'INSUFFICIENT';
     isReadyForRecommendation = false;
-    message = `Insufficient baseline data: Need at least 14 days of food logs and 7 weight logs (${validFoodDays}/14 food, ${validWeightDays}/7 weight).`;
-  } else if (foodDensity < 0.50) {
+    message = `Insufficient baseline data: Need at least 7 days of food logs and 3 weight logs (${validFoodDays}/7 food, ${validWeightDays}/3 weight).`;
+  } else if (foodDensity < 0.50 || (adherence && adherence.density < 0.43)) {
     evidenceStatus = 'LOW_ADHERENCE';
     isReadyForRecommendation = false;
-    message = `Low logging adherence: Only ${Math.round(foodDensity * 100)}% of days tracked. Minimum 50% density required for recommendations.`;
+    message = `Low logging adherence: Only ${Math.round(foodDensity * 100)}% of days tracked across the ${actualWindow}-day window. Consistent logging required for recommendations.`;
+  } else if (validFoodDays < 14 || validWeightDays < 7) {
+    evidenceStatus = 'INSUFFICIENT';
+    isReadyForRecommendation = false;
+    message = `Calibrating baseline data: Need at least 14 days of food logs and 7 weight logs (${validFoodDays}/14 food, ${validWeightDays}/7 weight).`;
   } else if (validFoodDays >= 21 && validWeightDays >= 10 && foodDensity >= 0.60) {
     evidenceStatus = 'READY';
     isReadyForRecommendation = true;
@@ -169,6 +174,7 @@ function evaluateEvidenceSufficiency({
     foodLogDensity: Math.round(foodDensity * 100) / 100,
     weightLogDensity: Math.round(weightDensity * 100) / 100,
     trendStabilityScore,
+    adherence: adherence || null,
   };
 }
 
