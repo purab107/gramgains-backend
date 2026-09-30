@@ -21,10 +21,7 @@ const auth = betterAuth({
     crossSubDomainCookies: {
       enabled: false,
     },
-    ipAddress: {
-      ipAddressHeaders: ['x-forwarded-for'],
-      trustedProxies: ['0.0.0.0/0'],
-    },
+    disableCSRF: false,
   },
 });
 
