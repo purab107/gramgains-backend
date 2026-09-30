@@ -4,6 +4,7 @@ const { calculateWeightTrend, calculateMultiWeekTrend } = require('./algorithms/
 const {
   solveObservedTdee,
   calculateRecommendedCalories,
+  calculateProportionalAdjustment,
   filterValidIntakeDays,
 } = require('./algorithms/expenditureSolver');
 const {
@@ -124,7 +125,7 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
     adherence,
   });
 
-  // 5. Calculate recommended calorie target
+  // 5. Calculate recommended calorie target (with proportional adjustment when READY — Improvement 14)
   const targetRate = typeof profile.targetRateKgPerWeek === 'number' ? profile.targetRateKgPerWeek : 0;
   const targetRecommendation = calculateRecommendedCalories({
     effectiveTdee: confidence.effectiveTdee,
@@ -133,6 +134,17 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
     gender: profile.gender,
     bodyWeightKg: latestWeight,
   });
+
+  if (evidenceSufficiency.evidenceStatus === 'READY' && profile.targetCalories) {
+    const proportionalCalories = calculateProportionalAdjustment({
+      currentCalories: profile.targetCalories,
+      rawTargetCalories: targetRecommendation.rawTargetCalories,
+      observedRateKgPerWeek: multiWeekTrend.observedRateKgPerWeek ?? trendResult.velocityKgPerWeek ?? 0,
+      targetRateKgPerWeek: targetRate,
+    });
+    targetRecommendation.recommendedCalories = proportionalCalories;
+    targetRecommendation.adjustmentKcal = proportionalCalories - profile.targetCalories;
+  }
 
   // 6. Allocate macros for the recommended target
   const recommendedMacros = allocateMacros({
