@@ -517,34 +517,70 @@ async function applyCheckIn({ checkInId, action = 'ACCEPT', customCalories }, us
     fatPercent: profile.fatPercent || 25.0,
   });
 
-  // Atomically update user profile targets
-  const updatedProfile = await prisma.userProfile.update({
-    where: { userId },
-    data: {
-      targetCalories: finalCalories,
-      targetProtein: macros.proteinGrams,
-      targetCarbs: macros.carbsGrams,
-      targetFat: macros.fatGrams,
-      targetFiber: macros.fiberGrams,
-      lastCheckInDate: new Date(),
-      lastAdjustmentAppliedAt: new Date(),
-    },
-  });
+  return prisma.$transaction(async (tx) => {
+    // Atomically update user profile targets
+    const updatedProfile = await tx.userProfile.update({
+      where: { userId },
+      data: {
+        targetCalories: finalCalories,
+        targetProtein: macros.proteinGrams,
+        targetCarbs: macros.carbsGrams,
+        targetFat: macros.fatGrams,
+        targetFiber: macros.fiberGrams,
+        lastCheckInDate: new Date(),
+        lastAdjustmentAppliedAt: new Date(),
+      },
+    });
 
-  // Mark check-in as accepted/adjusted
-  await prisma.adaptiveCheckIn.update({
-    where: { id: checkInId },
-    data: {
-      status: normalizedAction === 'ADJUST' ? 'ADJUSTED' : 'ACCEPTED',
-      appliedAt: new Date(),
-    },
-  });
+    // Mark check-in as accepted/adjusted
+    await tx.adaptiveCheckIn.update({
+      where: { id: checkInId },
+      data: {
+        status: normalizedAction === 'ADJUST' ? 'ADJUSTED' : 'ACCEPTED',
+        appliedAt: new Date(),
+      },
+    });
 
-  return {
-    success: true,
-    action: normalizedAction,
-    profile: updatedProfile,
-  };
+    // Close previous active GoalHistory entry (Improvement 11 & 20)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    await tx.goalHistory.updateMany({
+      where: { userId, effectiveTo: null },
+      data: { effectiveTo: today },
+    });
+
+    // Create new GoalHistory record (Improvement 11, 20, 21)
+    const previousCalories = profile.targetCalories;
+    await tx.goalHistory.create({
+      data: {
+        userId,
+        goal: profile.goal,
+        targetCalories: finalCalories,
+        previousCalories,
+        adjustmentKcal: finalCalories - previousCalories,
+        targetProtein: macros.proteinGrams,
+        targetCarbs: macros.carbsGrams,
+        targetFat: macros.fatGrams,
+        targetFiber: macros.fiberGrams,
+        effectiveFrom: today,
+        reasonCode: checkIn.reasonCode,
+        targetRateKgPerWeek: checkIn.targetRateKgPerWeek,
+        effectiveTdee: checkIn.effectiveTdee,
+        confidenceScore: checkIn.confidenceScore,
+        isSystemRecommended: true,
+        isUserConfirmed: true,
+        checkInId,
+        metabolicModelVersion: 1,
+      },
+    });
+
+    return {
+      success: true,
+      action: normalizedAction,
+      profile: updatedProfile,
+      newCalories: finalCalories,
+    };
+  });
 }
 
 module.exports = {
