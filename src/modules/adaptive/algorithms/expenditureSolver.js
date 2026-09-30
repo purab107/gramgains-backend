@@ -20,6 +20,7 @@ const MAX_WEEKLY_ADJUSTMENT_KCAL = 150; // Anti-whiplash adjustment clamp
 const MIN_CALORIES_FEMALE = SAFETY_FLOORS.FEMALE; // Clinical safety floor (1200)
 const MIN_CALORIES_MALE = SAFETY_FLOORS.MALE;   // Clinical safety floor (1500)
 const MIN_VALID_DAY_INTAKE = 500; // Exclude incomplete logging days (<500 kcal)
+const MAINTENANCE_TOLERANCE_KG_PER_WEEK = 0.1; // Maintenance band tolerance (kg/week)
 
 /**
  * Filters out incomplete/untracked days from meal log records.
@@ -184,4 +185,5 @@ module.exports = {
   MIN_CALORIES_FEMALE,
   MIN_CALORIES_MALE,
   MIN_VALID_DAY_INTAKE,
+  MAINTENANCE_TOLERANCE_KG_PER_WEEK,
 };
