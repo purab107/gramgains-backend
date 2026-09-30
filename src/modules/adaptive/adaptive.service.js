@@ -15,6 +15,7 @@ const {
 const { allocateMacros } = require('./algorithms/macroAllocator');
 const { computeAdherenceInWindow } = require('./algorithms/adherenceEvaluator');
 const { evaluateRecomp } = require('./algorithms/recompEvaluator');
+const { computeActivityConsistency } = require('./algorithms/activityEvaluator');
 const { METABOLIC_MODEL_VERSION } = require('../../config/metabolicModelVersion');
 
 const EVALUATION_DAYS = 28;
@@ -343,6 +344,19 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
   observationStart.setDate(observationStart.getDate() - TREND_WINDOW_DAYS);
   observationStart.setHours(0, 0, 0, 0);
 
+  // Fetch activity logs in observation window (Improvement 19 — Phase 11)
+  const activityLogs = await prisma.activityLog.findMany({
+    where: {
+      userId,
+      date: {
+        gte: observationStart,
+        lte: observationEnd,
+      },
+    },
+    orderBy: { date: 'asc' },
+  });
+  const activityContext = computeActivityConsistency(activityLogs, TREND_WINDOW_DAYS);
+
   const currentCalories = profile.targetCalories;
 
   // 5. Use 21-day window adherence from getAdaptiveStatus (Improvement 5 — Phase 6)
@@ -419,7 +433,7 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
       // RECOMP Goal Mode: Cross-reference multi-signal recomposition evaluation (Improvement 17)
       const recompResult = evaluateRecomp({
         observedRateKgPerWeek: observedRate,
-        activityLogs: [], // Connected to ActivityLog in Phase 11
+        activityLogs, // Phase 11: real activity logs from observation window
         waistLogs: null,
       });
 
@@ -527,6 +541,11 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
         }
       }
     }
+  }
+
+  // Append activity context annotation to rationale if significant (Improvement 19 — Phase 11)
+  if (activityContext.annotation && evidenceStatus === 'READY') {
+    rationaleText = `${rationaleText} ${activityContext.annotation}`;
   }
 
   // Allocate macros for the determined suggestedCalories
