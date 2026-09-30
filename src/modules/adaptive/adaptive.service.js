@@ -14,6 +14,7 @@ const { allocateMacros } = require('./algorithms/macroAllocator');
 
 const EVALUATION_DAYS = 28;
 const TREND_WINDOW_DAYS = 21;
+const ADJUSTMENT_COOLDOWN_DAYS = 14;
 
 /**
  * Computes and returns the complete adaptive metabolic status for a user.
@@ -248,7 +249,10 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
   });
 
   if (checkIn) {
-    return checkIn;
+    if (!forceGenerate) {
+      return checkIn;
+    }
+    await prisma.adaptiveCheckIn.delete({ where: { id: checkIn.id } });
   }
 
   const profile = await getProfile(userId);
@@ -336,13 +340,43 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
   const rateDeviation = observedRate - targetRate;
   const isWithinTolerance = Math.abs(rateDeviation) <= RATE_TOLERANCE_KG_PER_WEEK;
 
+  // Check 14-day adjustment cooldown (Improvement 2)
+  let isCooldownActive = false;
+  let cooldownDaysSince = 0;
+  if (profile.lastAdjustmentAppliedAt) {
+    const elapsedMs = today.getTime() - new Date(profile.lastAdjustmentAppliedAt).getTime();
+    cooldownDaysSince = Math.max(0, elapsedMs / (1000 * 60 * 60 * 24));
+    if (cooldownDaysSince < ADJUSTMENT_COOLDOWN_DAYS) {
+      isCooldownActive = true;
+    }
+  }
+
+  const safetyFloorKcal = status.targets.safetyFloorKcal || (profile.gender === 'FEMALE' ? 1200 : 1500);
+  const isCurrentBelowSafetyFloor = currentCalories < safetyFloorKcal;
+  const isBelowSafetyFloor = Boolean(status.targets.isBelowSafetyFloor) || isCurrentBelowSafetyFloor;
+
   let reasonCode = 'KEEP_CURRENT_TARGET';
   let suggestedCalories = currentCalories;
   let adjustmentKcal = 0;
   let headline = 'Steady Progress';
   let rationaleText = 'Your calorie targets are currently well-aligned with your metabolic expenditure.';
 
-  if (evidenceStatus === 'INSUFFICIENT') {
+  if (isBelowSafetyFloor) {
+    // Safety floor violation overrides cooldown and calibration gates
+    reasonCode = 'TREND_BELOW_TARGET';
+    headline = 'Safety Floor Adjustment';
+    suggestedCalories = Math.max(status.targets.recommendedCalories || safetyFloorKcal, safetyFloorKcal);
+    adjustmentKcal = suggestedCalories - currentCalories;
+    rationaleText = `Intake was below the clinical safety floor (${safetyFloorKcal} kcal). Target has been raised to protect metabolic health.`;
+  } else if (isCooldownActive) {
+    // 14-day cooldown active between adjustments (Improvement 2)
+    reasonCode = 'COOLDOWN_ACTIVE';
+    suggestedCalories = currentCalories;
+    adjustmentKcal = 0;
+    headline = 'Recent Adjustment Active';
+    const daysRemaining = Math.max(1, Math.ceil(ADJUSTMENT_COOLDOWN_DAYS - cooldownDaysSince));
+    rationaleText = `Your calories were adjusted ${Math.floor(cooldownDaysSince)} day${Math.floor(cooldownDaysSince) === 1 ? '' : 's'} ago. Maintaining current targets for ${daysRemaining} more day${daysRemaining === 1 ? '' : 's'} to observe metabolic adaptation before making further changes.`;
+  } else if (evidenceStatus === 'INSUFFICIENT') {
     reasonCode = 'INSUFFICIENT_DATA';
     suggestedCalories = currentCalories;
     adjustmentKcal = 0;
@@ -476,6 +510,7 @@ async function applyCheckIn({ checkInId, action = 'ACCEPT', customCalories }, us
       targetFat: macros.fatGrams,
       targetFiber: macros.fiberGrams,
       lastCheckInDate: new Date(),
+      lastAdjustmentAppliedAt: new Date(),
     },
   });
 
