@@ -557,8 +557,27 @@ async function applyCheckIn({ checkInId, action = 'ACCEPT', customCalories }, us
   });
 }
 
+/**
+ * Retrieves goal history for a user.
+ *
+ * @param {string} userId
+ * @param {Object} [options]
+ * @param {number} [options.limit=20] - Maximum number of history records to return
+ * @returns {Promise<Array>} Goal history records ordered by effectiveFrom (descending)
+ */
+async function getGoalHistory(userId = DEFAULT_USER_ID, { limit = 20 } = {}) {
+  const history = await prisma.goalHistory.findMany({
+    where: { userId },
+    orderBy: { effectiveFrom: 'desc' },
+    take: limit,
+  });
+
+  return history;
+}
+
 module.exports = {
   getAdaptiveStatus,
   getCheckIn,
   applyCheckIn,
+  getGoalHistory,
 };
