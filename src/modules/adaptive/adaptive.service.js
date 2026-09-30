@@ -6,6 +6,7 @@ const {
   calculateRecommendedCalories,
   calculateProportionalAdjustment,
   filterValidIntakeDays,
+  MAINTENANCE_TOLERANCE_KG_PER_WEEK,
 } = require('./algorithms/expenditureSolver');
 const {
   evaluateExpenditureConfidence,
@@ -13,6 +14,7 @@ const {
 } = require('./algorithms/confidenceModel');
 const { allocateMacros } = require('./algorithms/macroAllocator');
 const { computeAdherenceInWindow } = require('./algorithms/adherenceEvaluator');
+const { evaluateRecomp } = require('./algorithms/recompEvaluator');
 const { METABOLIC_MODEL_VERSION } = require('../../config/metabolicModelVersion');
 
 const EVALUATION_DAYS = 28;
@@ -413,26 +415,116 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
     headline = 'More Consistent Logging Needed';
     rationaleText = 'Logging frequency has been inconsistent. Aim for at least 14 days of complete meal tracking across the observation period for accurate adaptation.';
   } else if (evidenceStatus === 'READY') {
-    if (isWithinTolerance) {
-      reasonCode = profile.goal === 'MAINTAIN' ? 'MAINTENANCE_IN_BAND' : 'TREND_ON_TARGET';
-      suggestedCalories = currentCalories;
-      adjustmentKcal = 0;
-      headline = 'Steady Progress';
-      rationaleText = 'Your calorie targets are currently well-aligned with your metabolic expenditure.';
-    } else {
-      const diff = status.targets.adjustmentKcal;
-      if (rateDeviation < -RATE_TOLERANCE_KG_PER_WEEK || diff > 0) {
-        reasonCode = 'TREND_BELOW_TARGET';
-        headline = 'Expenditure Exceeds Expectations';
-        rationaleText = `Your real-world expenditure (~${status.expenditure.effectiveTdee} kcal) is higher than estimated. We recommend increasing your intake by +${diff} kcal to fuel performance.`;
-        suggestedCalories = status.targets.recommendedCalories;
-        adjustmentKcal = diff;
+    if (profile.goal === 'RECOMP') {
+      // RECOMP Goal Mode: Cross-reference multi-signal recomposition evaluation (Improvement 17)
+      const recompResult = evaluateRecomp({
+        observedRateKgPerWeek: observedRate,
+        activityLogs: [], // Connected to ActivityLog in Phase 11
+        waistLogs: null,
+      });
+
+      if (recompResult.outcome === 'KEEP') {
+        reasonCode = 'MAINTENANCE_IN_BAND';
+        suggestedCalories = currentCalories;
+        adjustmentKcal = 0;
+        headline = 'Recomposition on Track';
+        rationaleText = recompResult.reasoning;
       } else {
-        reasonCode = 'TREND_ABOVE_TARGET';
-        headline = 'Gradual Adjustment Recommended';
-        rationaleText = `To maintain your target rate of change, we recommend a gentle adjustment of ${diff} kcal/day.`;
-        suggestedCalories = status.targets.recommendedCalories;
-        adjustmentKcal = diff;
+        // Consecutive check-in gate for RECOMP (Improvement 16 & 17)
+        const sixtyDaysAgo = new Date(today);
+        sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+        const priorCheckIns = await prisma.adaptiveCheckIn.findMany({
+          where: { userId, createdAt: { gte: sixtyDaysAgo } },
+          orderBy: { createdAt: 'desc' },
+          take: 4,
+        });
+        const consecutiveDeviations = priorCheckIns.filter(
+          (ci) => ci.reasonCode === 'TREND_BELOW_TARGET' || ci.reasonCode === 'TREND_ABOVE_TARGET'
+        ).length;
+
+        if (consecutiveDeviations >= 2) {
+          const diff = status.targets.adjustmentKcal;
+          suggestedCalories = status.targets.recommendedCalories;
+          adjustmentKcal = diff;
+          reasonCode = diff > 0 ? 'TREND_BELOW_TARGET' : 'TREND_ABOVE_TARGET';
+          headline = diff > 0 ? 'Recomp Adjustment: Calorie Increase' : 'Recomp Adjustment: Calorie Deficit';
+          rationaleText = recompResult.reasoning;
+        } else {
+          reasonCode = 'MAINTENANCE_IN_BAND';
+          suggestedCalories = currentCalories;
+          adjustmentKcal = 0;
+          headline = 'Monitoring Recomposition Drift';
+          rationaleText = `${recompResult.reasoning} Maintaining current intake until confirmed across consecutive check-ins.`;
+        }
+      }
+    } else if (profile.goal === 'MAINTAIN') {
+      // Maintenance Tolerance Band & Consecutive Check-in Gate (Improvements 16)
+      const isWithinMaintenanceBand = Math.abs(observedRate) <= MAINTENANCE_TOLERANCE_KG_PER_WEEK;
+      if (isWithinMaintenanceBand) {
+        reasonCode = 'MAINTENANCE_IN_BAND';
+        suggestedCalories = currentCalories;
+        adjustmentKcal = 0;
+        headline = 'Steady Maintenance';
+        rationaleText = 'Your weight trend is stable within the maintenance band (+/- 0.1 kg/week). Maintaining current targets.';
+      } else {
+        // Requires consecutive deviations before changing targets in maintenance mode
+        const sixtyDaysAgo = new Date(today);
+        sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+        const priorCheckIns = await prisma.adaptiveCheckIn.findMany({
+          where: { userId, createdAt: { gte: sixtyDaysAgo } },
+          orderBy: { createdAt: 'desc' },
+          take: 4,
+        });
+        const consecutiveDeviations = priorCheckIns.filter(
+          (ci) => ci.reasonCode === 'TREND_BELOW_TARGET' || ci.reasonCode === 'TREND_ABOVE_TARGET'
+        ).length;
+
+        if (consecutiveDeviations >= 2) {
+          const diff = status.targets.adjustmentKcal;
+          if (rateDeviation < -MAINTENANCE_TOLERANCE_KG_PER_WEEK || diff > 0) {
+            reasonCode = 'TREND_BELOW_TARGET';
+            headline = 'Expenditure Exceeds Expectations';
+            rationaleText = `Weight is trending downward in maintenance mode across consecutive check-ins. Increasing intake by +${diff} kcal.`;
+            suggestedCalories = status.targets.recommendedCalories;
+            adjustmentKcal = diff;
+          } else {
+            reasonCode = 'TREND_ABOVE_TARGET';
+            headline = 'Gradual Adjustment Recommended';
+            rationaleText = `Weight is trending upward in maintenance mode across consecutive check-ins. Adjusting intake by ${diff} kcal/day.`;
+            suggestedCalories = status.targets.recommendedCalories;
+            adjustmentKcal = diff;
+          }
+        } else {
+          reasonCode = 'MAINTENANCE_IN_BAND';
+          suggestedCalories = currentCalories;
+          adjustmentKcal = 0;
+          headline = 'Minor Weight Fluctuation';
+          rationaleText = `Observed rate of change (${observedRate > 0 ? '+' : ''}${observedRate.toFixed(2)} kg/week) slightly exceeds the maintenance band. Maintaining current targets until verified over consecutive check-ins.`;
+        }
+      }
+    } else {
+      // Standard Weight Loss or Gain goals
+      if (isWithinTolerance) {
+        reasonCode = 'TREND_ON_TARGET';
+        suggestedCalories = currentCalories;
+        adjustmentKcal = 0;
+        headline = 'Steady Progress';
+        rationaleText = 'Your calorie targets are currently well-aligned with your metabolic expenditure.';
+      } else {
+        const diff = status.targets.adjustmentKcal;
+        if (rateDeviation < -RATE_TOLERANCE_KG_PER_WEEK || diff > 0) {
+          reasonCode = 'TREND_BELOW_TARGET';
+          headline = 'Expenditure Exceeds Expectations';
+          rationaleText = `Your real-world expenditure (~${status.expenditure.effectiveTdee} kcal) is higher than estimated. We recommend increasing your intake by +${diff} kcal to fuel performance.`;
+          suggestedCalories = status.targets.recommendedCalories;
+          adjustmentKcal = diff;
+        } else {
+          reasonCode = 'TREND_ABOVE_TARGET';
+          headline = 'Gradual Adjustment Recommended';
+          rationaleText = `To maintain your target rate of change, we recommend a gentle adjustment of ${diff} kcal/day.`;
+          suggestedCalories = status.targets.recommendedCalories;
+          adjustmentKcal = diff;
+        }
       }
     }
   }
