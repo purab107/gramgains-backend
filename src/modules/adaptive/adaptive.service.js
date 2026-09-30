@@ -1,19 +1,7 @@
 const { prisma } = require('../../config/db');
 const { getProfile, DEFAULT_USER_ID } = require('../profile/profile.service');
-const { calculateWeightTrend, calculateMultiWeekTrend } = require('./algorithms/weightSmoothing');
-const {
-  solveObservedTdee,
-  calculateRecommendedCalories,
-  calculateProportionalAdjustment,
-  filterValidIntakeDays,
-  MAINTENANCE_TOLERANCE_KG_PER_WEEK,
-} = require('./algorithms/expenditureSolver');
-const {
-  evaluateExpenditureConfidence,
-  evaluateEvidenceSufficiency,
-} = require('./algorithms/confidenceModel');
+const { runAdaptiveLoop } = require('./adaptiveLoop');
 const { allocateMacros } = require('./algorithms/macroAllocator');
-const { computeAdherenceInWindow } = require('./algorithms/adherenceEvaluator');
 const { evaluateRecomp } = require('./algorithms/recompEvaluator');
 const { computeActivityConsistency } = require('./algorithms/activityEvaluator');
 const { METABOLIC_MODEL_VERSION } = require('../../config/metabolicModelVersion');
@@ -21,155 +9,19 @@ const { METABOLIC_MODEL_VERSION } = require('../../config/metabolicModelVersion'
 const EVALUATION_DAYS = 28;
 const TREND_WINDOW_DAYS = 21;
 const ADJUSTMENT_COOLDOWN_DAYS = 14;
+const MAINTENANCE_TOLERANCE_KG_PER_WEEK = 0.1;
 
 /**
  * Computes and returns the complete adaptive metabolic status for a user.
+ * This is now a thin wrapper around the formalised adaptive loop.
  */
 async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
-  const profile = await getProfile(userId);
-  const now = new Date();
-  const cutoffDate = new Date(now);
-  cutoffDate.setDate(cutoffDate.getDate() - EVALUATION_DAYS);
-  cutoffDate.setHours(0, 0, 0, 0);
+  // Run the formalised adaptive loop
+  const loopOutput = await runAdaptiveLoop(userId, { windowDays: EVALUATION_DAYS });
 
-  // 1a. Fetch full weight history for multi-week trend calculation
-  const allWeightLogs = await prisma.weightLog.findMany({
-    where: { userId },
-    orderBy: { date: 'asc' },
-  });
+  const { profile, confidence, evidenceSufficiency, recommendedMacros, targetRecommendation, multiWeekTrend, trendResult, observedTdee, dailyEnergySurplusKcal, observedRateKgPerWeek, targetRate, foodLogDensity, weightLogDensity, trendStabilityScore, validFoodDays, validWeightDays, latestWeight, avgDailyIntake } = loopOutput;
 
-  // 1b. Window to 28 days for evaluation metrics
-  const weightLogs = allWeightLogs.filter((w) => w.date >= cutoffDate);
-
-  const trendResult = calculateWeightTrend(weightLogs);
-  const latestWeight = trendResult.latestRawKg || profile.weightKg || 70;
-
-  // 1c. Compute multi-week (21-day) trend rate and stability from full history
-  const fullTrendResult = calculateWeightTrend(allWeightLogs);
-  const multiWeekTrend = calculateMultiWeekTrend(fullTrendResult.smoothedLogs, { windowDays: TREND_WINDOW_DAYS });
-
-  // 2. Fetch meal logs over the last 28 days and aggregate by date
-  const mealLogs = await prisma.mealLog.findMany({
-    where: {
-      userId,
-      date: { gte: cutoffDate },
-    },
-    select: { date: true, calories: true },
-  });
-
-  const dailyIntakeMap = new Map();
-  for (const log of mealLogs) {
-    const dStr = log.date.toISOString().split('T')[0];
-    const curr = dailyIntakeMap.get(dStr) || 0;
-    dailyIntakeMap.set(dStr, curr + (log.calories || 0));
-  }
-
-  const rawDailyIntakes = Array.from(dailyIntakeMap.entries()).map(([date, calories]) => ({
-    date,
-    calories: Math.round(calories),
-  }));
-
-  const validDays = filterValidIntakeDays(rawDailyIntakes);
-  const validFoodDays = validDays.length;
-  const validWeightDays = weightLogs.filter((w) => !w.isExcluded).length;
-
-  // Compute log density metrics for composite confidence
-  const foodLogDensity = Math.min(1.0, validFoodDays / EVALUATION_DAYS);
-  const weightLogDensity = Math.min(1.0, validWeightDays / EVALUATION_DAYS);
-  const trendStabilityScore = multiWeekTrend.trendStabilityScore;
-
-  const totalValidCalories = validDays.reduce((acc, d) => acc + d.calories, 0);
-  const avgDailyIntake = validFoodDays > 0 ? Math.round(totalValidCalories / validFoodDays) : null;
-
-  // 3. Solve observed TDEE
-  const { observedTdee, dailyEnergySurplusKcal } = solveObservedTdee({
-    avgDailyIntake,
-    velocityKgPerDay: trendResult.velocityKgPerDay,
-    bmr: profile.bmr,
-  });
-
-  // 3b. Evaluate dietary adherence in 21-day observation window (Improvement 5)
-  const trendWindowCutoff = new Date(now);
-  trendWindowCutoff.setDate(trendWindowCutoff.getDate() - TREND_WINDOW_DAYS);
-  trendWindowCutoff.setHours(0, 0, 0, 0);
-
-  const windowDailyIntakes = rawDailyIntakes.filter((d) => {
-    const intakeDate = new Date(d.date);
-    intakeDate.setHours(0, 0, 0, 0);
-    return intakeDate >= trendWindowCutoff;
-  });
-
-  const adherence = computeAdherenceInWindow({
-    dailyIntakes: windowDailyIntakes,
-    targetCalories: profile.targetCalories,
-    windowDays: TREND_WINDOW_DAYS,
-  });
-
-  // 4. Bayesian confidence evaluation (now with density and stability inputs)
-  const confidence = evaluateExpenditureConfidence({
-    validFoodDays,
-    validWeightDays,
-    formulaTdee: profile.tdee,
-    observedTdee,
-    foodLogDensity,
-    weightLogDensity,
-    trendStabilityScore,
-    windowDays: EVALUATION_DAYS,
-  });
-
-  // 4b. Evidence sufficiency gate (drives check-in recommendation decisions)
-  const evidenceSufficiency = evaluateEvidenceSufficiency({
-    validFoodDays,
-    validWeightDays,
-    windowDays: TREND_WINDOW_DAYS,
-    foodLogDensity,
-    weightLogDensity,
-    trendStabilityScore,
-    observedTdee,
-    adherence,
-  });
-
-  // 5. Calculate recommended calorie target (with proportional adjustment when READY — Improvement 14)
-  const targetRate = typeof profile.targetRateKgPerWeek === 'number' ? profile.targetRateKgPerWeek : 0;
-  const targetRecommendation = calculateRecommendedCalories({
-    effectiveTdee: confidence.effectiveTdee,
-    targetRateKgPerWeek: targetRate,
-    currentCalories: profile.targetCalories,
-    gender: profile.gender,
-    bodyWeightKg: latestWeight,
-  });
-
-  if (evidenceSufficiency.evidenceStatus === 'READY' && profile.targetCalories) {
-    const proportionalCalories = calculateProportionalAdjustment({
-      currentCalories: profile.targetCalories,
-      rawTargetCalories: targetRecommendation.rawTargetCalories,
-      observedRateKgPerWeek: multiWeekTrend.observedRateKgPerWeek ?? trendResult.velocityKgPerWeek ?? 0,
-      targetRateKgPerWeek: targetRate,
-    });
-    targetRecommendation.recommendedCalories = proportionalCalories;
-    targetRecommendation.adjustmentKcal = proportionalCalories - profile.targetCalories;
-  }
-
-  // 6. Allocate macros for the recommended target
-  const recommendedMacros = allocateMacros({
-    targetCalories: targetRecommendation.recommendedCalories,
-    bodyWeightKg: latestWeight,
-    macroPreset: profile.macroPreset || 'BALANCED',
-    proteinGramsPerKg: profile.proteinGramsPerKg || 2.0,
-    fatPercent: profile.fatPercent || 25.0,
-  });
-
-  // Phase 14: Derivation chain enforcement — calorieTarget = effectiveTdee + goalAdjustment
-  // (NOT circular: effectiveTdee = calorieTarget - goalAdjustment)
-  // rawWeightKg and avgIntakeCalories are never derived from stored targets.
-  const dailyTargetDeltaKcal = targetRecommendation.dailyDeficitKcal ?? 0;
-  const expectedTarget = Math.round(confidence.effectiveTdee + dailyTargetDeltaKcal);
-  const targetDeviation = Math.abs((profile.targetCalories || 0) - expectedTarget);
-  if (targetDeviation > 300) {
-    console.warn(`[Adaptive] Target deviation detected: stored ${profile.targetCalories} vs expected ${expectedTarget} (δ=${targetDeviation} kcal). effectiveTdee=${confidence.effectiveTdee}`);
-  }
-
-  // 7. Persist or update MetabolicSnapshot for today
+  // Persist or update MetabolicSnapshot for today
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   try {
@@ -183,7 +35,6 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
       confidenceLevel: confidence.level,
       confidenceScore: confidence.score,
       validLogDays: validFoodDays,
-      // Phase 1 / Phase 3 new fields
       foodLogDensity,
       weightLogDensity,
       trendStabilityScore,
@@ -216,7 +67,7 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
     console.error('Failed to update metabolic snapshot cache:', err.message);
   }
 
-  // 8. Check for pending or available check-in
+  // Check for pending or available check-in
   const pendingCheckIn = await prisma.adaptiveCheckIn.findFirst({
     where: { userId, status: 'PENDING' },
     orderBy: { date: 'desc' },
@@ -565,6 +416,7 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
     macroPreset: profile.macroPreset || 'BALANCED',
     proteinGramsPerKg: profile.proteinGramsPerKg || 2.0,
     fatPercent: profile.fatPercent || 25.0,
+    fiberGrams: 30, // Default fiber target
   });
 
   checkIn = await prisma.adaptiveCheckIn.create({
