@@ -17,11 +17,7 @@ const analyticsRoutes  = require('./modules/analytics/analytics.routes');
 const app = express();
 
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL || 'http://localhost:3000',
-    'https://gramgains-frontend.vercel.app',
-    'https://gramgains.vercel.app',
-  ],
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true,
 }));
 
