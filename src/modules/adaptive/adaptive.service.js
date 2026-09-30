@@ -159,6 +159,16 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
     fatPercent: profile.fatPercent || 25.0,
   });
 
+  // Phase 14: Derivation chain enforcement — calorieTarget = effectiveTdee + goalAdjustment
+  // (NOT circular: effectiveTdee = calorieTarget - goalAdjustment)
+  // rawWeightKg and avgIntakeCalories are never derived from stored targets.
+  const dailyTargetDeltaKcal = targetRecommendation.dailyDeficitKcal ?? 0;
+  const expectedTarget = Math.round(confidence.effectiveTdee + dailyTargetDeltaKcal);
+  const targetDeviation = Math.abs((profile.targetCalories || 0) - expectedTarget);
+  if (targetDeviation > 300) {
+    console.warn(`[Adaptive] Target deviation detected: stored ${profile.targetCalories} vs expected ${expectedTarget} (δ=${targetDeviation} kcal). effectiveTdee=${confidence.effectiveTdee}`);
+  }
+
   // 7. Persist or update MetabolicSnapshot for today
   const today = new Date();
   today.setHours(0, 0, 0, 0);
