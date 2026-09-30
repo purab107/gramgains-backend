@@ -14,8 +14,8 @@ const {
   calculateGoalCalorieDelta,
   calculateSafetyFloor,
 } = require('./calorieCalculator');
+const { weightVelocityToEnergy } = require('./energyBalance');
 
-const CALORIES_PER_KG_WEIGHT = CALORIES_PER_KG; // Standard tissue caloric equivalent (7700)
 const MAX_WEEKLY_ADJUSTMENT_KCAL = 150; // Anti-whiplash adjustment clamp
 const MIN_CALORIES_FEMALE = SAFETY_FLOORS.FEMALE; // Clinical safety floor (1200)
 const MIN_CALORIES_MALE = SAFETY_FLOORS.MALE;   // Clinical safety floor (1500)
@@ -54,7 +54,7 @@ function solveObservedTdee({ avgDailyIntake, velocityKgPerDay, bmr }) {
     return { observedTdee: null, dailyEnergySurplusKcal: 0 };
   }
 
-  const dailyEnergySurplusKcal = Math.round(velocityKgPerDay * CALORIES_PER_KG_WEIGHT);
+  const dailyEnergySurplusKcal = weightVelocityToEnergy(velocityKgPerDay);
   let observedTdee = Math.round(avgDailyIntake - dailyEnergySurplusKcal);
 
   // Physiological bounds check if BMR is supplied
@@ -180,7 +180,6 @@ module.exports = {
   calculateRecommendedCalories,
   calculateProportionalAdjustment,
   filterValidIntakeDays,
-  CALORIES_PER_KG_WEIGHT,
   MAX_WEEKLY_ADJUSTMENT_KCAL,
   MIN_CALORIES_FEMALE,
   MIN_CALORIES_MALE,
