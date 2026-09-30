@@ -13,6 +13,7 @@ const {
 } = require('./algorithms/confidenceModel');
 const { allocateMacros } = require('./algorithms/macroAllocator');
 const { computeAdherenceInWindow } = require('./algorithms/adherenceEvaluator');
+const { METABOLIC_MODEL_VERSION } = require('../../config/metabolicModelVersion');
 
 const EVALUATION_DAYS = 28;
 const TREND_WINDOW_DAYS = 21;
@@ -175,7 +176,7 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
       trendStabilityScore,
       trendWindowDays: multiWeekTrend.windowDays,
       observedRateKgPerWeek: multiWeekTrend.observedRateKgPerWeek,
-      metabolicModelVersion: 1,
+      metabolicModelVersion: METABOLIC_MODEL_VERSION,
     };
     await prisma.metabolicSnapshot.upsert({
       where: {
@@ -474,7 +475,7 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
       validFoodDays: status.confidence.validFoodDays,
       validWeightDays: status.confidence.validWeightDays,
       confidenceScore: status.confidence.score,
-      metabolicModelVersion: 1,
+      metabolicModelVersion: METABOLIC_MODEL_VERSION,
       evidenceStatus,
     },
   });
@@ -570,7 +571,7 @@ async function applyCheckIn({ checkInId, action = 'ACCEPT', customCalories }, us
         isSystemRecommended: true,
         isUserConfirmed: true,
         checkInId,
-        metabolicModelVersion: 1,
+        metabolicModelVersion: METABOLIC_MODEL_VERSION,
       },
     });
 
