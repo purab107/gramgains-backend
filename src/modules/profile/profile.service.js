@@ -193,6 +193,39 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
     include: { user: true },
   });
 
+  // Track in GoalHistory if target calories or goal changed (Improvement 11 & 20)
+  if (
+    updatedProfile.targetCalories !== current.targetCalories ||
+    updatedProfile.goal !== current.goal
+  ) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    await prisma.goalHistory.updateMany({
+      where: { userId, effectiveTo: null },
+      data: { effectiveTo: today },
+    });
+
+    await prisma.goalHistory.create({
+      data: {
+        userId,
+        goal: updatedProfile.goal,
+        targetCalories: updatedProfile.targetCalories,
+        previousCalories: current.targetCalories,
+        adjustmentKcal: updatedProfile.targetCalories - current.targetCalories,
+        targetProtein: updatedProfile.targetProtein,
+        targetCarbs: updatedProfile.targetCarbs,
+        targetFat: updatedProfile.targetFat,
+        targetFiber: updatedProfile.targetFiber,
+        effectiveFrom: today,
+        targetRateKgPerWeek: updatedProfile.targetRateKgPerWeek,
+        isSystemRecommended: false,
+        isUserConfirmed: true,
+        metabolicModelVersion: 1,
+      },
+    });
+  }
+
   return {
     ...updatedProfile,
     name: input.name || updatedProfile.user?.name || 'Athlete',

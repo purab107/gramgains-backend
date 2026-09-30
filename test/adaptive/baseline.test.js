@@ -208,11 +208,11 @@ describe('Phase 0: Adaptive System Baseline API Contract Tests', () => {
     assert.equal(updatedCheckIn.status, 'ACCEPTED');
     assert.ok(updatedCheckIn.appliedAt instanceof Date);
 
-    // Baseline Gap Assertion: GoalHistory is currently NEVER written to (to be added in Phase 8)
+    // Phase 8 GoalHistory Assertion: GoalHistory is now recorded on applyCheckIn
     const historyCount = await prisma.goalHistory.count({
       where: { userId: BASELINE_TEST_USER_ID },
     });
-    assert.equal(historyCount, 0, 'Baseline gap: GoalHistory should currently be 0 until Phase 8');
+    assert.equal(historyCount, 1, 'Phase 8: GoalHistory should record the accepted recommendation');
   });
 
   it('4. getCheckIn returns existing check-in for the period instead of generating duplicate (closes Gap 1)', async () => {
