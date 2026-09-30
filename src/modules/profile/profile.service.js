@@ -1,5 +1,6 @@
 const { prisma } = require('../../config/db');
 const { calculateProfileMetrics } = require('../adaptive/algorithms/calorieCalculator');
+const { METABOLIC_MODEL_VERSION } = require('../../config/metabolicModelVersion');
 
 const DEFAULT_USER_ID = 'default-user';
 
@@ -221,7 +222,7 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
         targetRateKgPerWeek: updatedProfile.targetRateKgPerWeek,
         isSystemRecommended: false,
         isUserConfirmed: true,
-        metabolicModelVersion: 1,
+        metabolicModelVersion: METABOLIC_MODEL_VERSION,
       },
     });
   }
