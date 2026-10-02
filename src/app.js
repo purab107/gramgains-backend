@@ -16,8 +16,28 @@ const analyticsRoutes  = require('./modules/analytics/analytics.routes');
 
 const app = express();
 
+// Trust reverse proxy (Render load balancer / Cloudflare)
+app.set('trust proxy', 1);
+
+const configuredOrigins = (process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : [])
+  .map((o) => o.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Allow non-browser requests (Postman, server-to-server, curl)
+    if (!origin) return callback(null, true);
+
+    const cleanOrigin = origin.replace(/\/$/, '');
+    const isConfigured = configuredOrigins.includes(cleanOrigin);
+    const isLocalhost = /^https?:\/\/localhost(:\d+)?$/.test(cleanOrigin);
+    const isVercel = /^https:\/\/[a-zA-Z0-9_-]+\.vercel\.app$/.test(cleanOrigin);
+
+    if (isConfigured || isLocalhost || isVercel) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
   credentials: true,
 }));
 
