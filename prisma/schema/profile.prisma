@@ -71,6 +71,7 @@ model UserProfile {
   activityLevel ActivityLevel @default(MODERATE)
   goal          Goal          @default(MAINTAIN)
   timezone      String        @default("UTC")
+  onboardingCompleted Boolean @default(false)
 
   // Target goals
   targetWeightKg      Float?

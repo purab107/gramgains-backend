@@ -36,6 +36,7 @@ async function ensureDefaultUser() {
             targetCarbs: 250,
             targetFat: 65,
             targetFiber: 30,
+            onboardingCompleted: true,
           },
         },
       },
@@ -190,6 +191,7 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
       targetCarbs:    input.customTargetCarbs    !== undefined ? parseFloat(input.customTargetCarbs) : calculated.targetCarbs,
       targetFat:      input.customTargetFat      !== undefined ? parseFloat(input.customTargetFat) : calculated.targetFat,
       targetFiber:    input.customTargetFiber    !== undefined ? parseFloat(input.customTargetFiber) : calculated.targetFiber,
+      ...(input.onboardingCompleted !== undefined ? { onboardingCompleted: Boolean(input.onboardingCompleted) } : {}),
     },
     include: { user: true },
   });
