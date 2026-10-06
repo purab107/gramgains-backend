@@ -117,16 +117,26 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
     : (current.macroPreset || 'BALANCED');
   const proteinGramsPerKg = input.proteinGramsPerKg !== undefined
     ? parseFloat(input.proteinGramsPerKg)
-    : (current.proteinGramsPerKg || 2.0);
+    : (current.proteinGramsPerKg || 1.8);
   const fatPercent = input.fatPercent !== undefined
     ? parseFloat(input.fatPercent)
-    : (current.fatPercent || 25.0);
+    : (current.fatPercent || 28.0);
   const isAdaptiveEnabled = input.isAdaptiveEnabled !== undefined
     ? Boolean(input.isAdaptiveEnabled)
     : (current.isAdaptiveEnabled !== false);
   const checkInDayOfWeek = input.checkInDayOfWeek !== undefined
     ? parseInt(input.checkInDayOfWeek, 10)
     : (current.checkInDayOfWeek || 1);
+
+  const currentlyTracksFood = input.currentlyTracksFood !== undefined
+    ? Boolean(input.currentlyTracksFood)
+    : current.currentlyTracksFood;
+  const currentTrackedCalories = input.currentTrackedCalories !== undefined
+    ? (input.currentTrackedCalories ? parseFloat(input.currentTrackedCalories) : null)
+    : current.currentTrackedCalories;
+  const currentTrackedProtein = input.currentTrackedProtein !== undefined
+    ? (input.currentTrackedProtein ? parseFloat(input.currentTrackedProtein) : null)
+    : current.currentTrackedProtein;
 
   const calculated = calculateMetrics({
     age,
@@ -136,6 +146,7 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
     activityLevel,
     goal,
     targetRateKgPerWeek,
+    targetWeightKg,
     macroPreset,
     proteinGramsPerKg,
     fatPercent,
@@ -184,6 +195,9 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
       fatPercent,
       isAdaptiveEnabled,
       checkInDayOfWeek,
+      currentlyTracksFood,
+      currentTrackedCalories,
+      currentTrackedProtein,
       bmr:            calculated.bmr,
       tdee:           calculated.tdee,
       targetCalories: input.customTargetCalories !== undefined ? parseFloat(input.customTargetCalories) : calculated.targetCalories,
