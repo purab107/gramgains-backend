@@ -29,6 +29,7 @@ enum ReasonCode {
   KEEP_CURRENT_TARGET
   MAINTENANCE_IN_BAND
   RECOMP_INSUFFICIENT_SIGNALS
+  LEAD_UP_STEP_ADVANCE
 }
 
 enum EvidenceStatus {
@@ -94,6 +95,14 @@ model UserProfile {
   currentlyTracksFood    Boolean?        @default(false)
   currentTrackedCalories Float?
   currentTrackedProtein  Float?
+
+  // Calorie transition lead-up (populated when user tracks food at onboarding)
+  leadUpActive          Boolean   @default(false)
+  leadUpStartDate       DateTime? @db.Date
+  leadUpTotalSteps      Int?
+  leadUpCurrentStep     Int?      @default(0)
+  leadUpScheduleJson    Json?
+  calculatedGoalTarget  Float?
 
   // Current Active Targets
   targetCalories Float
