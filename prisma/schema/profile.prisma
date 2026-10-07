@@ -87,8 +87,13 @@ model UserProfile {
 
   // Calorie & Macro distribution settings
   macroPreset       MacroPreset     @default(BALANCED)
-  proteinGramsPerKg Float           @default(2.0)
-  fatPercent        Float           @default(25.0)
+  proteinGramsPerKg Float           @default(1.8)
+  fatPercent        Float           @default(28.0)
+
+  // Onboarding Prior Tracking Inputs (optional)
+  currentlyTracksFood    Boolean?        @default(false)
+  currentTrackedCalories Float?
+  currentTrackedProtein  Float?
 
   // Current Active Targets
   targetCalories Float

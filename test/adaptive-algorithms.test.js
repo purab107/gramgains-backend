@@ -134,9 +134,9 @@ describe('Flexible Macro Allocator', () => {
       bodyWeightKg: 70,
       macroPreset: 'BALANCED',
     });
-    assert.equal(macros.proteinGrams, 140); // 70 * 2.0g
-    assert.equal(macros.fatGrams, 56);      // (2000 * 0.25) / 9
-    assert.ok(macros.carbsGrams > 0);
+    assert.equal(macros.proteinGrams, 126); // 70 * 1.8g
+    assert.equal(macros.fatGrams, 62);      // (2000 * 0.28) / 9 = 62
+    assert.equal(macros.carbsGrams, 235);   // (2000 - 504 - 558) / 4 = 235
     assert.equal(macros.fiberGrams, 28);    // (2000 / 1000) * 14
   });
 
@@ -157,6 +157,7 @@ const {
   calculateGoalCalorieDelta,
   calculateGoalCalories,
   calculateSafetyFloor,
+  calculateReferenceWeightKg,
   calculateProfileMetrics,
   CALORIES_PER_KG,
   SAFETY_FLOORS,
@@ -197,8 +198,10 @@ describe('Centralised Calorie Calculator Service', () => {
   it('enforces clinical safety floor constants', () => {
     assert.equal(calculateSafetyFloor({ gender: 'MALE' }), SAFETY_FLOORS.MALE);
     assert.equal(calculateSafetyFloor({ gender: 'FEMALE' }), SAFETY_FLOORS.FEMALE);
+    assert.equal(calculateSafetyFloor({ gender: 'OTHER' }), SAFETY_FLOORS.OTHER);
     assert.equal(SAFETY_FLOORS.MALE, 1500);
     assert.equal(SAFETY_FLOORS.FEMALE, 1200);
+    assert.equal(SAFETY_FLOORS.OTHER, 1350);
     assert.equal(CALORIES_PER_KG, 7700);
   });
 
@@ -223,6 +226,98 @@ describe('Centralised Calorie Calculator Service', () => {
     assert.ok(metrics.targetCarbs > 0);
     assert.ok(metrics.targetFat > 0);
     assert.ok(metrics.targetFiber > 0);
+  });
+});
+
+describe('Canonical Macro Algorithm & Reference Weight', () => {
+  it('matches normative worked example (§1.6)', () => {
+    const metrics = calculateProfileMetrics({
+      age: 30,
+      gender: 'MALE',
+      heightCm: 180,
+      weightKg: 95,
+      activityLevel: 'MODERATE',
+      goal: 'WEIGHT_LOSS',
+      targetRateKgPerWeek: -0.5,
+      macroPreset: 'BALANCED',
+    });
+
+    // Reference weight: BMI = 95 / 1.8^2 = 29.3 > 25 -> 23.0 * 1.8^2 = 74.5 kg
+    assert.equal(metrics.referenceWeightKg, 74.5);
+    assert.equal(metrics.bmr, 1930);
+    assert.equal(metrics.tdee, 2992);
+    assert.equal(metrics.targetCalories, 2442); // 2992 - 550 = 2442
+    assert.equal(metrics.isFloorApplied, false);
+    assert.equal(metrics.effectiveRateKgPerWeek, -0.5);
+
+    // Protein: round(74.5 * 1.8) = 134 g (vs old 190 g with 2g * total weight)
+    assert.equal(metrics.targetProtein, 134);
+    // Fat: round(2442 * 0.28 / 9) = 76 g
+    assert.equal(metrics.targetFat, 76);
+    // Carbs: round((2442 - 134*4 - 76*9) / 4) = 306 g
+    assert.ok(Math.abs(metrics.targetCarbs - 305) <= 1);
+    // Fiber: clamp(round(2442/1000 * 14), 20, 38) = 34 g
+    assert.equal(metrics.targetFiber, 34);
+
+    // Caloric sum check
+    const totalMacroKcal = metrics.targetProtein * 4 + metrics.targetFat * 9 + metrics.targetCarbs * 4;
+    assert.ok(Math.abs(totalMacroKcal - metrics.targetCalories) <= 4);
+  });
+
+  it('uses targetWeightKg for reference weight when within normal BMI (18.5-25)', () => {
+    // 95 kg, 180 cm, target 75 kg (BMI = 75 / 1.8^2 = 23.15, normal)
+    const refWeight = calculateReferenceWeightKg({ heightCm: 180, weightKg: 95, targetWeightKg: 75 });
+    assert.equal(refWeight, 75);
+
+    const metrics = calculateProfileMetrics({
+      age: 30,
+      gender: 'MALE',
+      heightCm: 180,
+      weightKg: 95,
+      targetWeightKg: 75,
+      activityLevel: 'MODERATE',
+      goal: 'WEIGHT_LOSS',
+      targetRateKgPerWeek: -0.5,
+    });
+    assert.equal(metrics.referenceWeightKg, 75);
+    assert.equal(metrics.targetProtein, Math.round(75 * 1.8)); // 135 g
+  });
+
+  it('enforces clinical safety floor and updates effectiveRateKgPerWeek', () => {
+    const metrics = calculateProfileMetrics({
+      age: 40,
+      gender: 'FEMALE',
+      heightCm: 150,
+      weightKg: 45,
+      activityLevel: 'SEDENTARY',
+      goal: 'WEIGHT_LOSS',
+      targetRateKgPerWeek: -1.0,
+    });
+
+    assert.equal(metrics.isFloorApplied, true);
+    assert.equal(metrics.targetCalories, 1200);
+    assert.ok(metrics.effectiveRateKgPerWeek > -1.0);
+    assert.equal(metrics.effectiveRateKgPerWeek, -0.03);
+  });
+
+  it('enforces fiber clamp bounds (20g to 38g)', () => {
+    // Low calorie (1000 kcal) -> raw fiber 14g -> clamped to 20g
+    const lowMacros = allocateMacros({ targetCalories: 1000, bodyWeightKg: 60 });
+    assert.equal(lowMacros.fiberGrams, 20);
+
+    // High calorie (4000 kcal) -> raw fiber 56g -> clamped to 38g
+    const highMacros = allocateMacros({ targetCalories: 4000, bodyWeightKg: 90 });
+    assert.equal(highMacros.fiberGrams, 38);
+  });
+
+  it('enforces absolute minimum fat floor (0.6 g/kg of reference weight)', () => {
+    const macros = allocateMacros({
+      targetCalories: 1000,
+      bodyWeightKg: 80,
+      referenceWeightKg: 80,
+      fatPercent: 20.0,
+    });
+    assert.equal(macros.fatGrams, 48);
   });
 });
 

@@ -24,6 +24,7 @@ const ACTIVITY_MULTIPLIERS = {
 const SAFETY_FLOORS = {
   MALE: 1500,
   FEMALE: 1200,
+  OTHER: 1350,
 };
 
 /**
@@ -67,8 +68,35 @@ function calculateGoalCalories({ tdee, targetRateKgPerWeek = 0 }) {
  * Resolves clinical safety floor based on gender.
  */
 function calculateSafetyFloor({ gender = 'MALE' }) {
-  const isFemale = String(gender).toUpperCase() === 'FEMALE';
-  return isFemale ? SAFETY_FLOORS.FEMALE : SAFETY_FLOORS.MALE;
+  const norm = String(gender || 'MALE').toUpperCase();
+  if (norm === 'FEMALE') return SAFETY_FLOORS.FEMALE;
+  if (norm === 'OTHER') return SAFETY_FLOORS.OTHER;
+  return SAFETY_FLOORS.MALE;
+}
+
+/**
+ * Calculates reference body weight to avoid distorted protein targets at high BMI.
+ * BMI <= 25: actual weight.
+ * BMI > 25 with healthy targetWeightKg (18.5 <= BMI <= 25): targetWeightKg.
+ * Otherwise: BMI 23.0 fallback = round(23.0 * (heightCm/100)^2, 1).
+ */
+function calculateReferenceWeightKg({ heightCm, weightKg, targetWeightKg }) {
+  if (!heightCm || !weightKg) return weightKg || 70;
+  const heightM = heightCm / 100;
+  const bmi = weightKg / (heightM * heightM);
+
+  if (bmi <= 25) {
+    return weightKg;
+  }
+
+  if (targetWeightKg) {
+    const targetBmi = targetWeightKg / (heightM * heightM);
+    if (targetBmi >= 18.5 && targetBmi <= 25) {
+      return targetWeightKg;
+    }
+  }
+
+  return Math.round(23.0 * heightM * heightM * 10) / 10;
 }
 
 /**
@@ -83,9 +111,10 @@ function calculateProfileMetrics({
   activityLevel,
   goal,
   targetRateKgPerWeek,
+  targetWeightKg,
   macroPreset = 'BALANCED',
-  proteinGramsPerKg = 2.0,
-  fatPercent = 25.0,
+  proteinGramsPerKg = 1.8,
+  fatPercent = 28.0,
 }) {
   const bmr = calculateBmr({ age, gender, heightCm, weightKg });
   const tdee = calculateTdee({ bmr, activityLevel });
@@ -98,11 +127,20 @@ function calculateProfileMetrics({
     else rate = 0.0;
   }
 
-  const targetCalories = calculateGoalCalories({ tdee, targetRateKgPerWeek: rate });
+  const rawTargetCalories = calculateGoalCalories({ tdee, targetRateKgPerWeek: rate });
+  const safetyFloor = calculateSafetyFloor({ gender });
+  const targetCalories = Math.max(safetyFloor, rawTargetCalories);
+  const isFloorApplied = rawTargetCalories < safetyFloor;
+  const effectiveRateKgPerWeek = isFloorApplied
+    ? Math.round(((targetCalories - tdee) * 7 / CALORIES_PER_KG) * 100) / 100
+    : rate;
+
+  const referenceWeightKg = calculateReferenceWeightKg({ heightCm, weightKg, targetWeightKg });
 
   const macros = allocateMacros({
     targetCalories,
     bodyWeightKg: weightKg,
+    referenceWeightKg,
     macroPreset,
     proteinGramsPerKg,
     fatPercent,
@@ -117,6 +155,9 @@ function calculateProfileMetrics({
     targetFat: macros.fatGrams,
     targetFiber: macros.fiberGrams,
     targetRateKgPerWeek: rate,
+    effectiveRateKgPerWeek,
+    isFloorApplied,
+    referenceWeightKg,
   };
 }
 
@@ -129,5 +170,6 @@ module.exports = {
   calculateGoalCalorieDelta,
   calculateGoalCalories,
   calculateSafetyFloor,
+  calculateReferenceWeightKg,
   calculateProfileMetrics,
 };
