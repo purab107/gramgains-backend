@@ -1,5 +1,11 @@
 const { prisma } = require('../../config/db');
-const { calculateProfileMetrics } = require('../adaptive/algorithms/calorieCalculator');
+const {
+  calculateProfileMetrics,
+  calculateSafetyFloor,
+  calculateReferenceWeightKg,
+} = require('../adaptive/algorithms/calorieCalculator');
+const { allocateMacros } = require('../adaptive/algorithms/macroAllocator');
+const { buildLeadUpSchedule } = require('../adaptive/algorithms/calorieTransition');
 const { METABOLIC_MODEL_VERSION } = require('../../config/metabolicModelVersion');
 
 const DEFAULT_USER_ID = 'default-user';
@@ -162,8 +168,7 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
 
   // Record weight log if weightKg is updated
   if (input.weightKg !== undefined) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
     await prisma.weightLog.upsert({
       where: {
         userId_date: {
@@ -179,6 +184,68 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
       },
     });
   }
+
+  const safetyFloor = calculateSafetyFloor({ gender });
+  const referenceWeightKg = calculateReferenceWeightKg({ heightCm, weightKg, targetWeightKg });
+
+  let leadUpActive = false;
+  let leadUpStartDate = null;
+  let leadUpTotalSteps = null;
+  let leadUpCurrentStep = 0;
+  let leadUpScheduleJson = null;
+  const calculatedGoalTarget = calculated.targetCalories;
+  let activeTargetCalories = calculated.targetCalories;
+
+  if (input.skipLeadUp) {
+    leadUpActive = false;
+    leadUpStartDate = null;
+    leadUpTotalSteps = null;
+    leadUpCurrentStep = 0;
+    leadUpScheduleJson = null;
+    activeTargetCalories = current.calculatedGoalTarget || calculated.targetCalories;
+  } else if (input.customTargetCalories !== undefined) {
+    leadUpActive = false;
+    leadUpStartDate = null;
+    leadUpTotalSteps = null;
+    leadUpCurrentStep = 0;
+    leadUpScheduleJson = null;
+    activeTargetCalories = parseFloat(input.customTargetCalories);
+  } else {
+    const schedule = buildLeadUpSchedule({
+      currentIntake: currentTrackedCalories,
+      calculatedTarget: calculated.targetCalories,
+      estimatedMaintenance: calculated.tdee,
+      safetyFloor,
+      currentlyTracksFood,
+      daysSinceOnboarding: 0,
+    });
+
+    if (schedule.hasLeadUp) {
+      leadUpActive = true;
+      leadUpStartDate = current.leadUpStartDate || new Date();
+      leadUpTotalSteps = schedule.steps.length;
+      leadUpCurrentStep = 0;
+      leadUpScheduleJson = schedule;
+      activeTargetCalories = schedule.steps[0].targetCalories;
+    } else {
+      leadUpActive = false;
+      leadUpStartDate = null;
+      leadUpTotalSteps = null;
+      leadUpCurrentStep = 0;
+      leadUpScheduleJson = schedule;
+      activeTargetCalories = calculated.targetCalories;
+    }
+  }
+
+  // Allocate macros for active target calories
+  const activeMacros = allocateMacros({
+    targetCalories: activeTargetCalories,
+    bodyWeightKg: weightKg,
+    referenceWeightKg,
+    macroPreset,
+    proteinGramsPerKg,
+    fatPercent,
+  });
 
   const updatedProfile = await prisma.userProfile.update({
     where: { userId },
@@ -198,13 +265,19 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
       currentlyTracksFood,
       currentTrackedCalories,
       currentTrackedProtein,
+      leadUpActive,
+      leadUpStartDate,
+      leadUpTotalSteps,
+      leadUpCurrentStep,
+      leadUpScheduleJson,
+      calculatedGoalTarget,
       bmr:            calculated.bmr,
       tdee:           calculated.tdee,
-      targetCalories: input.customTargetCalories !== undefined ? parseFloat(input.customTargetCalories) : calculated.targetCalories,
-      targetProtein:  input.customTargetProtein  !== undefined ? parseFloat(input.customTargetProtein) : calculated.targetProtein,
-      targetCarbs:    input.customTargetCarbs    !== undefined ? parseFloat(input.customTargetCarbs) : calculated.targetCarbs,
-      targetFat:      input.customTargetFat      !== undefined ? parseFloat(input.customTargetFat) : calculated.targetFat,
-      targetFiber:    input.customTargetFiber    !== undefined ? parseFloat(input.customTargetFiber) : calculated.targetFiber,
+      targetCalories: activeTargetCalories,
+      targetProtein:  input.customTargetProtein  !== undefined ? parseFloat(input.customTargetProtein) : activeMacros.proteinGrams,
+      targetCarbs:    input.customTargetCarbs    !== undefined ? parseFloat(input.customTargetCarbs) : activeMacros.carbsGrams,
+      targetFat:      input.customTargetFat      !== undefined ? parseFloat(input.customTargetFat) : activeMacros.fatGrams,
+      targetFiber:    input.customTargetFiber    !== undefined ? parseFloat(input.customTargetFiber) : activeMacros.fiberGrams,
       ...(input.onboardingCompleted !== undefined ? { onboardingCompleted: Boolean(input.onboardingCompleted) } : {}),
     },
     include: { user: true },
@@ -236,7 +309,11 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
         targetFiber: updatedProfile.targetFiber,
         effectiveFrom: today,
         targetRateKgPerWeek: updatedProfile.targetRateKgPerWeek,
-        isSystemRecommended: false,
+        reason: leadUpActive
+          ? `Starting calorie lead-up (Step 1 of ${leadUpTotalSteps})`
+          : (input.skipLeadUp ? 'Skipped calorie lead-up to goal target' : 'Manual profile update'),
+        reasonCode: leadUpActive ? 'LEAD_UP_STEP_ADVANCE' : 'KEEP_CURRENT_TARGET',
+        isSystemRecommended: leadUpActive,
         isUserConfirmed: true,
         metabolicModelVersion: METABOLIC_MODEL_VERSION,
       },
@@ -250,4 +327,102 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
   };
 }
 
-module.exports = { getProfile, updateProfile, calculateMetrics, DEFAULT_USER_ID };
+/**
+ * Advances the user's active calorie lead-up to the next step.
+ * Called automatically during weekly check-in or when a step period concludes.
+ */
+async function advanceLeadUpStep(userId = DEFAULT_USER_ID) {
+  const profile = await prisma.userProfile.findUnique({
+    where: { userId },
+    include: { user: true },
+  });
+
+  if (!profile || !profile.leadUpActive || !profile.leadUpScheduleJson) {
+    return profile;
+  }
+
+  const schedule = profile.leadUpScheduleJson;
+  const currentStep = profile.leadUpCurrentStep ?? 0;
+  const nextStepIndex = currentStep + 1;
+  const totalSteps = schedule.steps ? schedule.steps.length : (profile.leadUpTotalSteps || 1);
+
+  const latestWeight = await prisma.weightLog.findFirst({
+    where: { userId },
+    orderBy: { date: 'desc' },
+  });
+  const bodyWeightKg = latestWeight ? latestWeight.weightKg : 70;
+  const referenceWeightKg = calculateReferenceWeightKg({
+    heightCm: profile.heightCm,
+    weightKg: bodyWeightKg,
+    targetWeightKg: profile.targetWeightKg,
+  });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const isCompleted = nextStepIndex >= totalSteps;
+  const nextTarget = isCompleted
+    ? (profile.calculatedGoalTarget || profile.targetCalories)
+    : schedule.steps[nextStepIndex].targetCalories;
+
+  const macros = allocateMacros({
+    targetCalories: nextTarget,
+    bodyWeightKg,
+    referenceWeightKg,
+    macroPreset: profile.macroPreset,
+    proteinGramsPerKg: profile.proteinGramsPerKg,
+    fatPercent: profile.fatPercent,
+  });
+
+  const updatedProfile = await prisma.userProfile.update({
+    where: { userId },
+    data: {
+      leadUpActive: !isCompleted,
+      leadUpCurrentStep: isCompleted ? totalSteps - 1 : nextStepIndex,
+      targetCalories: nextTarget,
+      targetProtein: macros.proteinGrams,
+      targetCarbs: macros.carbsGrams,
+      targetFat: macros.fatGrams,
+      targetFiber: macros.fiberGrams,
+    },
+    include: { user: true },
+  });
+
+  await prisma.goalHistory.updateMany({
+    where: { userId, effectiveTo: null },
+    data: { effectiveTo: today },
+  });
+
+  await prisma.goalHistory.create({
+    data: {
+      userId,
+      goal: profile.goal,
+      targetCalories: nextTarget,
+      previousCalories: profile.targetCalories,
+      adjustmentKcal: nextTarget - profile.targetCalories,
+      targetProtein: macros.proteinGrams,
+      targetCarbs: macros.carbsGrams,
+      targetFat: macros.fatGrams,
+      targetFiber: macros.fiberGrams,
+      effectiveFrom: today,
+      targetRateKgPerWeek: profile.targetRateKgPerWeek,
+      reason: isCompleted
+        ? 'Completed calorie lead-up to final goal target'
+        : `Advanced to lead-up step ${schedule.steps[nextStepIndex].weekNumber}`,
+      reasonCode: 'LEAD_UP_STEP_ADVANCE',
+      isSystemRecommended: true,
+      isUserConfirmed: true,
+      metabolicModelVersion: METABOLIC_MODEL_VERSION,
+    },
+  });
+
+  return updatedProfile;
+}
+
+module.exports = {
+  getProfile,
+  updateProfile,
+  calculateMetrics,
+  advanceLeadUpStep,
+  DEFAULT_USER_ID,
+};

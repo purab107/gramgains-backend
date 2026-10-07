@@ -19,7 +19,27 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
   // Run the formalised adaptive loop
   const loopOutput = await runAdaptiveLoop(userId, { windowDays: EVALUATION_DAYS });
 
-  const { profile, confidence, evidenceSufficiency, recommendedMacros, targetRecommendation, multiWeekTrend, trendResult, observedTdee, dailyEnergySurplusKcal, observedRateKgPerWeek, targetRate, foodLogDensity, weightLogDensity, trendStabilityScore, validFoodDays, validWeightDays, latestWeight, avgDailyIntake } = loopOutput;
+  const {
+    profile,
+    confidence,
+    evidenceSufficiency,
+    recommendedMacros,
+    targetRecommendation,
+    multiWeekTrend,
+    trendResult,
+    observedTdee,
+    dailyEnergySurplusKcal,
+    observedRateKgPerWeek,
+    targetRate,
+    foodLogDensity,
+    weightLogDensity,
+    trendStabilityScore,
+    validFoodDays,
+    validWeightDays,
+    latestWeight,
+    avgDailyIntake,
+    leadUpStatus,
+  } = loopOutput;
 
   // Persist or update MetabolicSnapshot for today
   const today = new Date();
@@ -126,6 +146,15 @@ async function getAdaptiveStatus(userId = DEFAULT_USER_ID) {
       recommendedMacros,
       isCheckInAvailable: Boolean(pendingCheckIn) || validFoodDays >= 7,
       pendingCheckInId: pendingCheckIn?.id || null,
+    },
+    leadUpStatus: leadUpStatus || {
+      isActive: Boolean(profile.leadUpActive),
+      currentStep: profile.leadUpCurrentStep ?? 0,
+      totalSteps: profile.leadUpTotalSteps ?? 0,
+      startDate: profile.leadUpStartDate,
+      calculatedGoalTarget: profile.calculatedGoalTarget ?? profile.targetCalories,
+      schedule: profile.leadUpScheduleJson,
+      isSuppressed: Boolean(profile.leadUpActive && confidence.level === 'INSUFFICIENT'),
     },
   };
 }
@@ -263,6 +292,24 @@ async function getCheckIn(userId = DEFAULT_USER_ID, { forceGenerate = false } = 
     suggestedCalories = Math.max(status.targets.recommendedCalories || safetyFloorKcal, safetyFloorKcal);
     adjustmentKcal = suggestedCalories - currentCalories;
     rationaleText = `Intake was below the clinical safety floor (${safetyFloorKcal} kcal). Target has been raised to protect metabolic health.`;
+  } else if (profile.leadUpActive && profile.leadUpScheduleJson) {
+    const schedule = profile.leadUpScheduleJson;
+    const currentStep = profile.leadUpCurrentStep ?? 0;
+    const nextStepIndex = currentStep + 1;
+    const totalSteps = schedule.steps ? schedule.steps.length : (profile.leadUpTotalSteps || 1);
+    const isCompleted = nextStepIndex >= totalSteps;
+
+    reasonCode = 'LEAD_UP_STEP_ADVANCE';
+    suggestedCalories = isCompleted
+      ? (profile.calculatedGoalTarget || schedule.calculatedTarget || currentCalories)
+      : schedule.steps[nextStepIndex].targetCalories;
+    adjustmentKcal = suggestedCalories - currentCalories;
+    headline = isCompleted
+      ? 'Goal Target Reached'
+      : `Transition Step ${nextStepIndex + 1} of ${totalSteps}`;
+    rationaleText = isCompleted
+      ? `You have completed your gradual transition! Ready to adopt your full goal target of ${suggestedCalories} kcal.`
+      : `Moving to week ${nextStepIndex + 1} of your gradual calorie lead-up plan (${suggestedCalories} kcal/day).`;
   } else if (isCooldownActive) {
     // 14-day cooldown active between adjustments (Improvement 2)
     reasonCode = 'COOLDOWN_ACTIVE';
@@ -492,6 +539,20 @@ async function applyCheckIn({ checkInId, action = 'ACCEPT', customCalories }, us
   });
 
   return prisma.$transaction(async (tx) => {
+    // Calculate lead-up step progression if applicable
+    const isLeadUp = checkIn.reasonCode === 'LEAD_UP_STEP_ADVANCE';
+    let leadUpUpdate = {};
+    if (isLeadUp && profile.leadUpActive) {
+      const schedule = profile.leadUpScheduleJson;
+      const totalSteps = profile.leadUpTotalSteps || (schedule?.steps?.length ?? 1);
+      const nextStepIndex = (profile.leadUpCurrentStep ?? 0) + 1;
+      const isCompleted = nextStepIndex >= totalSteps;
+      leadUpUpdate = {
+        leadUpActive: !isCompleted,
+        leadUpCurrentStep: isCompleted ? totalSteps - 1 : nextStepIndex,
+      };
+    }
+
     // Atomically update user profile targets
     const updatedProfile = await tx.userProfile.update({
       where: { userId },
@@ -503,6 +564,7 @@ async function applyCheckIn({ checkInId, action = 'ACCEPT', customCalories }, us
         targetFiber: macros.fiberGrams,
         lastCheckInDate: new Date(),
         lastAdjustmentAppliedAt: new Date(),
+        ...leadUpUpdate,
       },
     });
 
