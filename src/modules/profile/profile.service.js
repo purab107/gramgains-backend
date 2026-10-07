@@ -168,8 +168,7 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
 
   // Record weight log if weightKg is updated
   if (input.weightKg !== undefined) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
     await prisma.weightLog.upsert({
       where: {
         userId_date: {
