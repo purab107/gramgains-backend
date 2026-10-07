@@ -382,6 +382,17 @@ async function runAdaptiveLoop(userId, { windowDays = EVALUATION_DAYS } = {}) {
     // Explanation data
     explanation: explanationData,
 
+    // Lead-Up status & suppression
+    leadUpStatus: {
+      isActive: Boolean(rawData.profile.leadUpActive),
+      currentStep: rawData.profile.leadUpCurrentStep ?? 0,
+      totalSteps: rawData.profile.leadUpTotalSteps ?? 0,
+      startDate: rawData.profile.leadUpStartDate,
+      calculatedGoalTarget: rawData.profile.calculatedGoalTarget ?? rawData.profile.targetCalories,
+      schedule: rawData.profile.leadUpScheduleJson,
+      isSuppressed: Boolean(rawData.profile.leadUpActive && evidenceData.confidence.level === 'INSUFFICIENT'),
+    },
+
     // Metadata
     metabolicModelVersion: METABOLIC_MODEL_VERSION,
     evaluationWindowDays: EVALUATION_DAYS,
