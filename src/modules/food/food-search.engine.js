@@ -297,6 +297,11 @@ function evaluateFood(food, rawQuery, queryTokens, normalizedQuery) {
     score += 800;
   }
 
+  // 8. High Priority / Staple Food Boost (Indian staples like roti, rice, dal, etc.)
+  if (food.isHighPriority) {
+    score += 1800;
+  }
+
   // Name conciseness & coverage:
   // - High ratio of name words matching query = simple/direct item
   // - Many unmatched words in name = composite recipe or verbose branded product
