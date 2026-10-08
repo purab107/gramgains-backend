@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { importINDB } = require('./indb-import');
 const { importOpenFoodFacts } = require('./openfoodfacts-import');
+const { seedIndianFoodMacros } = require('./seed-indian-macros');
 
 const prisma = new PrismaClient();
 
@@ -183,6 +184,10 @@ async function main() {
   // Layer 3 — OpenFoodFacts Curated Dataset (13,020 branded & packaged items)
   console.log('\n📥 Starting OpenFoodFacts import...');
   await importOpenFoodFacts();
+
+  // High-Priority Indian Food Macros (53 essential staples)
+  console.log('\n🌾 Starting High-Priority Indian Food Macros Seeding...');
+  await seedIndianFoodMacros();
 
   const total = await prisma.food.count();
   console.log(`\n🎉 Total foods in database: ${total}`);
