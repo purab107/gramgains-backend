@@ -13,6 +13,7 @@ const profileRoutes    = require('./modules/profile/profile.routes');
 const savedMealsRoutes = require('./modules/saved-meals/saved-meals.routes');
 const adaptiveRoutes   = require('./modules/adaptive/adaptive.routes');
 const analyticsRoutes  = require('./modules/analytics/analytics.routes');
+const uploadRoutes     = require('./modules/upload/upload.routes');
 
 const app = express();
 
@@ -70,9 +71,10 @@ app.get('/api/health', (req, res) => {
 app.use('/api/food',        foodRoutes);
 app.use('/api/tracker',     requireAuth, trackerRoutes);
 app.use('/api/dashboard',   requireAuth, dashboardRoutes);
-app.use('/api/profile',     requireAuth, profileRoutes);
+app.use('/api/profile',     profileRoutes);
 app.use('/api/saved-meals', requireAuth, savedMealsRoutes);
 app.use('/api/adaptive',    requireAuth, adaptiveRoutes);
 app.use('/api/analytics',   requireAuth, analyticsRoutes);
+app.use('/api/upload',      uploadRoutes);
 
 module.exports = app;

@@ -4,11 +4,28 @@ const { normalizeText, tokenize, evaluateFood, scoreFood } = require('./food-sea
 function formatFoodWithServings(food) {
   if (!food) return null;
   const defaultServing = food.servings?.find((s) => s.isDefault) || food.servings?.[0];
+  const formattedServings = (food.servings || []).map((s) => ({
+    id: s.id,
+    unitLabel: s.unitLabel,
+    unitType: s.unitType || 'WEIGHT',
+    displayQuantity: s.displayQuantity !== undefined && s.displayQuantity !== null
+      ? s.displayQuantity
+      : (s.unitType === 'WEIGHT' || !s.unitType ? s.weightGrams : null),
+    weightGrams: s.weightGrams,
+    isDefault: s.isDefault,
+  }));
+
+  const defaultDisplayQty = defaultServing?.displayQuantity !== undefined && defaultServing?.displayQuantity !== null
+    ? defaultServing.displayQuantity
+    : (defaultServing?.unitType === 'WEIGHT' || !defaultServing?.unitType ? (defaultServing?.weightGrams || 100) : null);
+
   return {
     ...food,
-    servings: food.servings || [],
+    servings: formattedServings,
     servingUnit: defaultServing?.unitLabel || 'g',
     servingWeight: defaultServing?.weightGrams || 100,
+    servingUnitType: defaultServing?.unitType || 'WEIGHT',
+    servingDisplayQuantity: defaultDisplayQty,
   };
 }
 
@@ -97,12 +114,12 @@ async function searchFoods(query, layer, category, limit = 50, page = 1, barcode
 
     // Retrieve broad candidate set without paginating in DB to allow global relevance ranking
     const candidateSql = `
-      SELECT f.id, f.name, f.brand, f."genericName", f.aliases, f.layer, f.category
+      SELECT f.id, f.name, f.brand, f."genericName", f.aliases, f.layer, f.category, f."isHighPriority"
       FROM "Food" f
       WHERE f."deletedAt" IS NULL
         AND (${anyTokenClause})
         ${extraFilterClause}
-      ORDER BY (CASE WHEN (${allTokensClause}) THEN 0 ELSE 1 END) ASC, f.layer ASC, f.name ASC
+      ORDER BY (CASE WHEN (${allTokensClause}) THEN 0 ELSE 1 END) ASC, f."isHighPriority" DESC, f.layer ASC, f.name ASC
       LIMIT 2000
     `;
 
@@ -179,7 +196,7 @@ async function searchFoods(query, layer, category, limit = 50, page = 1, barcode
   const foods = await prisma.food.findMany({
     where: whereClause,
     include: { servings: true },
-    orderBy: [{ layer: 'asc' }, { name: 'asc' }],
+    orderBy: [{ isHighPriority: 'desc' }, { layer: 'asc' }, { name: 'asc' }],
     take: browseTake,
     skip,
   });

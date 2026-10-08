@@ -68,6 +68,9 @@ async function buildItems(items) {
     itemsToCreate.push({
       foodId: item.foodId,
       weightGrams: parseFloat(item.weightGrams || 100),
+      displayQuantity: item.displayQuantity !== undefined && item.displayQuantity !== null ? parseFloat(item.displayQuantity) : null,
+      displayUnit: item.displayUnit ?? item.unitLabel ?? null,
+      unitLabel: item.unitLabel ?? item.displayUnit ?? null,
       calories,
       protein,
       carbohydrates: carbs,
@@ -89,13 +92,15 @@ async function buildItems(items) {
   };
 }
 
-async function create({ name, description, items }, userId = DEFAULT_USER_ID) {
+async function create({ name, description, imageUrl, imagePublicId, items }, userId = DEFAULT_USER_ID) {
   const { totals, itemsToCreate } = await buildItems(items);
   return await prisma.savedMeal.create({
     data: {
       userId,
       name,
       description,
+      imageUrl: imageUrl || null,
+      imagePublicId: imagePublicId || null,
       ...totals,
       items: { create: itemsToCreate },
     },
@@ -123,6 +128,8 @@ async function update(id, input, userId = DEFAULT_USER_ID) {
       data: {
         name: input.name ?? existing.name,
         description: input.description ?? existing.description,
+        imageUrl: input.imageUrl !== undefined ? input.imageUrl : existing.imageUrl,
+        imagePublicId: input.imagePublicId !== undefined ? input.imagePublicId : existing.imagePublicId,
         ...totals,
         items: { create: itemsToCreate },
       },
@@ -143,6 +150,8 @@ async function update(id, input, userId = DEFAULT_USER_ID) {
     data: {
       name: input.name ?? existing.name,
       description: input.description ?? existing.description,
+      imageUrl: input.imageUrl !== undefined ? input.imageUrl : existing.imageUrl,
+      imagePublicId: input.imagePublicId !== undefined ? input.imagePublicId : existing.imagePublicId,
     },
     include: {
       items: {
@@ -184,7 +193,7 @@ async function logToTracker(savedMealId, date, mealType, userId = DEFAULT_USER_I
   for (const item of savedMeal.items) {
     const servingWeight = getServingWeight(item.food);
     const servingsCount = Math.round((item.weightGrams / servingWeight) * 10) / 10;
-    const defaultUnit = item.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g';
+    const defaultUnit = item.displayUnit || item.unitLabel || item.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g';
 
     const log = await prisma.mealLog.create({
       data: {
@@ -194,6 +203,8 @@ async function logToTracker(savedMealId, date, mealType, userId = DEFAULT_USER_I
         foodId: item.foodId,
         servings: servingsCount,
         weightGrams: item.weightGrams,
+        displayQuantity: item.displayQuantity ?? (defaultUnit === 'g' ? item.weightGrams : null),
+        displayUnit: defaultUnit,
         unitLabel: defaultUnit,
         calories: item.calories,
         protein: item.protein,

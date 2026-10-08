@@ -18,9 +18,32 @@ function formatDateOutput(dateObj) {
   return dateObj.toISOString().split('T')[0];
 }
 
-function getServingWeight(food) {
+function formatFoodForLog(food) {
+  if (!food) return null;
   const defaultServing = food.servings?.find((s) => s.isDefault) || food.servings?.[0];
-  return defaultServing?.weightGrams || 100;
+  const formattedServings = (food.servings || []).map((s) => ({
+    id: s.id,
+    unitLabel: s.unitLabel,
+    unitType: s.unitType || 'WEIGHT',
+    displayQuantity: s.displayQuantity !== undefined && s.displayQuantity !== null
+      ? s.displayQuantity
+      : (s.unitType === 'WEIGHT' || !s.unitType ? s.weightGrams : null),
+    weightGrams: s.weightGrams,
+    isDefault: s.isDefault,
+  }));
+
+  const defaultDisplayQty = defaultServing?.displayQuantity !== undefined && defaultServing?.displayQuantity !== null
+    ? defaultServing.displayQuantity
+    : (defaultServing?.unitType === 'WEIGHT' || !defaultServing?.unitType ? (defaultServing?.weightGrams || 100) : null);
+
+  return {
+    ...food,
+    servings: formattedServings,
+    servingUnit: defaultServing?.unitLabel || 'g',
+    servingWeight: defaultServing?.weightGrams || 100,
+    servingUnitType: defaultServing?.unitType || 'WEIGHT',
+    servingDisplayQuantity: defaultDisplayQty,
+  };
 }
 
 async function getDailyLogs(date, userId = DEFAULT_USER_ID) {
@@ -43,12 +66,7 @@ async function getDailyLogs(date, userId = DEFAULT_USER_ID) {
   const formattedLogs = logs.map((log) => ({
     ...log,
     date: dateStr,
-    food: {
-      ...log.food,
-      servings: log.food.servings || [],
-      servingUnit: log.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g',
-      servingWeight: getServingWeight(log.food),
-    },
+    food: formatFoodForLog(log.food),
   }));
 
   const summary = formattedLogs.reduce(
@@ -130,7 +148,12 @@ async function deleteWaterLog(id, userId = DEFAULT_USER_ID) {
   });
 }
 
-async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams, unitLabel }, userId = DEFAULT_USER_ID) {
+function getServingWeight(food) {
+  const defaultServing = food.servings?.find((s) => s.isDefault) || food.servings?.[0];
+  return defaultServing?.weightGrams || 100;
+}
+
+async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams, unitLabel, displayQuantity, displayUnit }, userId = DEFAULT_USER_ID) {
   const food = await prisma.food.findUnique({
     where: { id: foodId },
     include: { servings: true },
@@ -157,7 +180,9 @@ async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams
       foodId,
       servings: numServings,
       weightGrams: computedWeight,
-      unitLabel: unitLabel || null,
+      displayQuantity: displayQuantity !== undefined && displayQuantity !== null ? parseFloat(displayQuantity) : null,
+      displayUnit: displayUnit ?? unitLabel ?? null,
+      unitLabel: unitLabel || displayUnit || null,
       calories: Math.round(food.calories * multiplier * 10) / 10,
       protein: Math.round(food.protein * multiplier * 10) / 10,
       carbohydrates: Math.round(food.carbohydrates * multiplier * 10) / 10,
@@ -174,16 +199,11 @@ async function logMeal({ date, mealType, foodId, servings = 1, customWeightGrams
   return {
     ...created,
     date: formatDateOutput(created.date),
-    food: {
-      ...created.food,
-      servings: created.food.servings || [],
-      servingUnit: created.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g',
-      servingWeight: getServingWeight(created.food),
-    },
+    food: formatFoodForLog(created.food),
   };
 }
 
-async function updateLog(id, { servings, customWeightGrams, mealType, unitLabel }, userId = DEFAULT_USER_ID) {
+async function updateLog(id, { servings, customWeightGrams, mealType, unitLabel, displayQuantity, displayUnit }, userId = DEFAULT_USER_ID) {
   const existing = await prisma.mealLog.findFirst({
     where: { id, userId },
     include: {
@@ -217,6 +237,12 @@ async function updateLog(id, { servings, customWeightGrams, mealType, unitLabel 
   if (unitLabel !== undefined) {
     updateData.unitLabel = unitLabel || null;
   }
+  if (displayQuantity !== undefined) {
+    updateData.displayQuantity = displayQuantity !== null ? parseFloat(displayQuantity) : null;
+  }
+  if (displayUnit !== undefined) {
+    updateData.displayUnit = displayUnit || null;
+  }
 
   const updated = await prisma.mealLog.update({
     where: { id },
@@ -231,12 +257,7 @@ async function updateLog(id, { servings, customWeightGrams, mealType, unitLabel 
   return {
     ...updated,
     date: formatDateOutput(updated.date),
-    food: {
-      ...updated.food,
-      servings: updated.food.servings || [],
-      servingUnit: updated.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g',
-      servingWeight: getServingWeight(updated.food),
-    },
+    food: formatFoodForLog(updated.food),
   };
 }
 
@@ -260,9 +281,7 @@ async function getRecentFoods(userId = DEFAULT_USER_ID, limit = 30) {
   });
 
   return logs.map((log) => ({
-    ...log.food,
-    servingUnit: log.food.servings?.find((s) => s.isDefault)?.unitLabel || 'g',
-    servingWeight: getServingWeight(log.food),
+    ...formatFoodForLog(log.food),
     lastLoggedAt: log.createdAt,
     lastMealType: log.mealType,
   }));

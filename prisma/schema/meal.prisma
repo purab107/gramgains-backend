@@ -16,9 +16,11 @@ model MealLog {
   foodId String
   food   Food   @relation(fields: [foodId], references: [id], onDelete: Restrict)
 
-  servings    Float @default(1)
-  weightGrams Float
-  unitLabel   String?
+  servings        Float   @default(1)
+  weightGrams     Float
+  displayQuantity Float?
+  displayUnit     String?
+  unitLabel       String?
 
   calories      Float
   protein       Float
@@ -40,6 +42,8 @@ model SavedMeal {
 
   name        String
   description String?
+  imageUrl      String?
+  imagePublicId String?
 
   totalCalories Float @default(0)
   totalProtein  Float @default(0)
@@ -63,12 +67,15 @@ model SavedMealItem {
   foodId String
   food   Food   @relation(fields: [foodId], references: [id], onDelete: Restrict)
 
-  weightGrams   Float @default(100)
-  calories      Float
-  protein       Float
-  carbohydrates Float
-  fat           Float
-  fiber         Float
+  weightGrams     Float   @default(100)
+  displayQuantity Float?
+  displayUnit     String?
+  unitLabel       String?
+  calories        Float
+  protein         Float
+  carbohydrates   Float
+  fat             Float
+  fiber           Float
 
   @@index([savedMealId])
   @@index([foodId])

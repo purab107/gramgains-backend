@@ -24,6 +24,8 @@ model Food {
   source FoodSource
   layer  Int
 
+  isHighPriority Boolean @default(false)
+
   createdByUserId String?
   createdByUser   User?   @relation("FoodCreator", fields: [createdByUserId], references: [id], onDelete: SetNull)
 
@@ -41,18 +43,29 @@ model Food {
   @@index([brand])
   @@index([category])
   @@index([layer])
+  @@index([isHighPriority])
   @@index([deletedAt])
   @@index([createdByUserId])
 }
 
-model FoodServing {
-  id     String @id @default(cuid())
-  foodId String
-  food   Food   @relation(fields: [foodId], references: [id], onDelete: Cascade)
+enum ServingUnitType {
+  WEIGHT
+  VOLUME
+  COUNT
+  HOUSEHOLD
+}
 
-  unitLabel   String
-  weightGrams Float
-  isDefault   Boolean @default(false)
+model FoodServing {
+  id              String          @id @default(cuid())
+  foodId          String
+  food            Food            @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  unitLabel       String
+  unitType        ServingUnitType @default(WEIGHT)
+  displayQuantity Float?
+  weightGrams     Float
+  isDefault       Boolean         @default(false)
 
   @@index([foodId])
 }
+
