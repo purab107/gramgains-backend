@@ -1,0 +1,620 @@
+[
+  {
+    "id": "ref-apple-raw",
+    "canonicalName": "Apple",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["apple", "seb", "red delicious", "gala apple", "fuji apple", "green apple", "granny smith", "honeycrisp", "apple raw", "apples raw with skin"],
+    "standard100g": { "calories": 52.0, "carbohydrates": 13.8, "protein": 0.3, "fat": 0.2, "fiber": 2.4 },
+    "expectedServings": [
+      { "unitLabel": "1 medium (3\" dia)", "weightGrams": 182, "unitType": "COUNT" },
+      { "unitLabel": "1 small (2-3/4\" dia)", "weightGrams": 149, "unitType": "COUNT" },
+      { "unitLabel": "1 large (3-1/4\" dia)", "weightGrams": 223, "unitType": "COUNT" },
+      { "unitLabel": "1 cup sliced", "weightGrams": 125, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09003"
+  },
+  {
+    "id": "ref-banana-raw",
+    "canonicalName": "Banana",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["banana", "kela", "banana raw", "cavendish banana", "yelakki banana", "robusta banana", "ripe banana"],
+    "standard100g": { "calories": 89.0, "carbohydrates": 22.8, "protein": 1.1, "fat": 0.3, "fiber": 2.6 },
+    "expectedServings": [
+      { "unitLabel": "1 medium (7\" to 7-7/8\" long)", "weightGrams": 118, "unitType": "COUNT" },
+      { "unitLabel": "1 small (6\" to 6-7/8\" long)", "weightGrams": 101, "unitType": "COUNT" },
+      { "unitLabel": "1 large (8\" to 8-7/8\" long)", "weightGrams": 136, "unitType": "COUNT" },
+      { "unitLabel": "1 cup sliced", "weightGrams": 150, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09040"
+  },
+  {
+    "id": "ref-orange-raw",
+    "canonicalName": "Orange",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["orange", "santra", "orange raw", "valencia orange", "navel orange", "nagpur orange"],
+    "standard100g": { "calories": 47.0, "carbohydrates": 11.8, "protein": 0.9, "fat": 0.1, "fiber": 2.4 },
+    "expectedServings": [
+      { "unitLabel": "1 medium (2-5/8\" dia)", "weightGrams": 131, "unitType": "COUNT" },
+      { "unitLabel": "1 small", "weightGrams": 96, "unitType": "COUNT" },
+      { "unitLabel": "1 large", "weightGrams": 184, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09200"
+  },
+  {
+    "id": "ref-mango-raw",
+    "canonicalName": "Mango",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["mango", "aam", "mango raw", "alphonso mango", "kesar mango", "dasheri mango", "safeda mango", "ripe mango"],
+    "standard100g": { "calories": 60.0, "carbohydrates": 15.0, "protein": 0.8, "fat": 0.4, "fiber": 1.6 },
+    "expectedServings": [
+      { "unitLabel": "1 medium whole fruit", "weightGrams": 200, "unitType": "COUNT" },
+      { "unitLabel": "1 cup sliced", "weightGrams": 165, "unitType": "VOLUME" },
+      { "unitLabel": "1 piece / cheek", "weightGrams": 100, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09176"
+  },
+  {
+    "id": "ref-watermelon-raw",
+    "canonicalName": "Watermelon",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["watermelon", "tarbooj", "tarbuz", "watermelon raw"],
+    "standard100g": { "calories": 30.0, "carbohydrates": 7.6, "protein": 0.6, "fat": 0.2, "fiber": 0.4 },
+    "expectedServings": [
+      { "unitLabel": "1 wedge (1/16th of melon)", "weightGrams": 286, "unitType": "COUNT" },
+      { "unitLabel": "1 cup diced", "weightGrams": 152, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09326"
+  },
+  {
+    "id": "ref-pineapple-raw",
+    "canonicalName": "Pineapple",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["pineapple", "ananas", "pineapple raw", "fresh pineapple"],
+    "standard100g": { "calories": 50.0, "carbohydrates": 13.1, "protein": 0.5, "fat": 0.1, "fiber": 1.4 },
+    "expectedServings": [
+      { "unitLabel": "1 slice (3-1/2\" dia)", "weightGrams": 84, "unitType": "COUNT" },
+      { "unitLabel": "1 cup chunks", "weightGrams": 165, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09266"
+  },
+  {
+    "id": "ref-papaya-raw",
+    "canonicalName": "Papaya",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["papaya", "papita", "papaya raw", "ripe papaya"],
+    "standard100g": { "calories": 43.0, "carbohydrates": 10.8, "protein": 0.5, "fat": 0.3, "fiber": 1.7 },
+    "expectedServings": [
+      { "unitLabel": "1 medium papaya", "weightGrams": 304, "unitType": "COUNT" },
+      { "unitLabel": "1 cup 1\" pieces", "weightGrams": 145, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09226"
+  },
+  {
+    "id": "ref-guava-raw",
+    "canonicalName": "Guava",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["guava", "amrood", "amrud", "peru", "guava raw", "pink guava", "white guava"],
+    "standard100g": { "calories": 68.0, "carbohydrates": 14.3, "protein": 2.6, "fat": 1.0, "fiber": 5.4 },
+    "expectedServings": [
+      { "unitLabel": "1 medium fruit", "weightGrams": 100, "unitType": "COUNT" },
+      { "unitLabel": "1 cup", "weightGrams": 165, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09139"
+  },
+  {
+    "id": "ref-strawberry-raw",
+    "canonicalName": "Strawberry",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["strawberry", "strawberries", "fresh strawberry", "strawberries raw"],
+    "standard100g": { "calories": 32.0, "carbohydrates": 7.7, "protein": 0.7, "fat": 0.3, "fiber": 2.0 },
+    "expectedServings": [
+      { "unitLabel": "1 large (1-3/8\" dia)", "weightGrams": 18, "unitType": "COUNT" },
+      { "unitLabel": "1 medium (1-1/4\" dia)", "weightGrams": 12, "unitType": "COUNT" },
+      { "unitLabel": "1 cup whole", "weightGrams": 144, "unitType": "VOLUME" },
+      { "unitLabel": "1 cup sliced", "weightGrams": 166, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09316"
+  },
+  {
+    "id": "ref-blueberry-raw",
+    "canonicalName": "Blueberry",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["blueberry", "blueberries", "blueberries raw", "fresh blueberries"],
+    "standard100g": { "calories": 57.0, "carbohydrates": 14.5, "protein": 0.7, "fat": 0.3, "fiber": 2.4 },
+    "expectedServings": [
+      { "unitLabel": "1 cup", "weightGrams": 148, "unitType": "VOLUME" },
+      { "unitLabel": "50 berries", "weightGrams": 68, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09050"
+  },
+  {
+    "id": "ref-blackberry-raw",
+    "canonicalName": "Blackberry",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["blackberry", "blackberries", "blackberries raw"],
+    "standard100g": { "calories": 43.0, "carbohydrates": 9.6, "protein": 1.4, "fat": 0.5, "fiber": 5.3 },
+    "expectedServings": [
+      { "unitLabel": "1 cup", "weightGrams": 144, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09042"
+  },
+  {
+    "id": "ref-raspberry-raw",
+    "canonicalName": "Raspberry",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["raspberry", "raspberries", "raspberries raw"],
+    "standard100g": { "calories": 52.0, "carbohydrates": 11.9, "protein": 1.2, "fat": 0.7, "fiber": 6.5 },
+    "expectedServings": [
+      { "unitLabel": "1 cup", "weightGrams": 123, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09302"
+  },
+  {
+    "id": "ref-grapes-raw",
+    "canonicalName": "Grapes",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["grapes", "angur", "angoor", "green grapes", "red grapes", "black grapes", "grapes raw", "seedless grapes"],
+    "standard100g": { "calories": 69.0, "carbohydrates": 18.1, "protein": 0.7, "fat": 0.2, "fiber": 0.9 },
+    "expectedServings": [
+      { "unitLabel": "1 cup", "weightGrams": 151, "unitType": "VOLUME" },
+      { "unitLabel": "10 grapes", "weightGrams": 50, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09132"
+  },
+  {
+    "id": "ref-kiwi-raw",
+    "canonicalName": "Kiwi",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["kiwi", "kiwifruit", "kiwi raw", "green kiwi", "golden kiwi"],
+    "standard100g": { "calories": 61.0, "carbohydrates": 14.7, "protein": 1.1, "fat": 0.5, "fiber": 3.0 },
+    "expectedServings": [
+      { "unitLabel": "1 medium fruit", "weightGrams": 69, "unitType": "COUNT" },
+      { "unitLabel": "1 cup sliced", "weightGrams": 180, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09148"
+  },
+  {
+    "id": "ref-avocado-raw",
+    "canonicalName": "Avocado",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["avocado", "makhanphal", "butter fruit", "hass avocado", "avocado raw"],
+    "standard100g": { "calories": 160.0, "carbohydrates": 8.5, "protein": 2.0, "fat": 14.7, "fiber": 6.7 },
+    "expectedServings": [
+      { "unitLabel": "1 whole avocado (without skin & seed)", "weightGrams": 150, "unitType": "COUNT" },
+      { "unitLabel": "1/2 avocado", "weightGrams": 75, "unitType": "COUNT" },
+      { "unitLabel": "1 cup cubed", "weightGrams": 150, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09037"
+  },
+  {
+    "id": "ref-pomegranate-raw",
+    "canonicalName": "Pomegranate",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["pomegranate", "anaar", "anar", "dalim", "pomegranate raw", "pomegranate arils", "pomegranate seeds"],
+    "standard100g": { "calories": 83.0, "carbohydrates": 18.7, "protein": 1.7, "fat": 1.2, "fiber": 4.0 },
+    "expectedServings": [
+      { "unitLabel": "1 cup arils (seeds)", "weightGrams": 174, "unitType": "VOLUME" },
+      { "unitLabel": "1 medium pomegranate", "weightGrams": 282, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09286"
+  },
+  {
+    "id": "ref-sweet-lime-raw",
+    "canonicalName": "Sweet Lime",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["sweet lime", "mosambi", "mousambi", "musambi", "sweet lemon", "sweet lime raw"],
+    "standard100g": { "calories": 43.0, "carbohydrates": 10.5, "protein": 0.8, "fat": 0.3, "fiber": 1.5 },
+    "expectedServings": [
+      { "unitLabel": "1 medium fruit", "weightGrams": 120, "unitType": "COUNT" }
+    ],
+    "source": "IFCT_2017_E015"
+  },
+  {
+    "id": "ref-custard-apple-raw",
+    "canonicalName": "Custard Apple",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["custard apple", "sitaphal", "sharifa", "sugar apple", "sitaphal raw", "annona squamosa"],
+    "standard100g": { "calories": 94.0, "carbohydrates": 23.6, "protein": 2.1, "fat": 0.3, "fiber": 4.4 },
+    "expectedServings": [
+      { "unitLabel": "1 medium fruit (edible portion)", "weightGrams": 130, "unitType": "COUNT" }
+    ],
+    "source": "IFCT_2017_E007"
+  },
+  {
+    "id": "ref-sapota-raw",
+    "canonicalName": "Sapota (Chikoo)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["sapota", "chikoo", "chiku", "sapodilla", "chikoo raw", "chickoo"],
+    "standard100g": { "calories": 83.0, "carbohydrates": 20.0, "protein": 0.4, "fat": 1.1, "fiber": 5.3 },
+    "expectedServings": [
+      { "unitLabel": "1 medium fruit", "weightGrams": 75, "unitType": "COUNT" }
+    ],
+    "source": "IFCT_2017_E043"
+  },
+  {
+    "id": "ref-amla-raw",
+    "canonicalName": "Indian Gooseberry (Amla)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["amla", "indian gooseberry", "avla", "amla raw", "phyllanthus emblica"],
+    "standard100g": { "calories": 44.0, "carbohydrates": 10.1, "protein": 0.9, "fat": 0.6, "fiber": 4.3 },
+    "expectedServings": [
+      { "unitLabel": "1 piece / berry", "weightGrams": 25, "unitType": "COUNT" }
+    ],
+    "source": "IFCT_2017_E002"
+  },
+  {
+    "id": "ref-jamun-raw",
+    "canonicalName": "Jamun (Black Plum)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["jamun", "black plum", "java plum", "jambul", "jamun raw", "syzygium cumini"],
+    "standard100g": { "calories": 60.0, "carbohydrates": 15.6, "protein": 0.7, "fat": 0.2, "fiber": 0.9 },
+    "expectedServings": [
+      { "unitLabel": "1 cup", "weightGrams": 135, "unitType": "VOLUME" },
+      { "unitLabel": "10 fruits", "weightGrams": 60, "unitType": "COUNT" }
+    ],
+    "source": "IFCT_2017_E023"
+  },
+  {
+    "id": "ref-jackfruit-raw",
+    "canonicalName": "Jackfruit (Ripe)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["jackfruit", "kathal ripe", "ripe jackfruit", "kathal", "phanas", "jackfruit raw"],
+    "standard100g": { "calories": 95.0, "carbohydrates": 23.2, "protein": 1.7, "fat": 0.6, "fiber": 1.5 },
+    "expectedServings": [
+      { "unitLabel": "1 cup sliced bulbs", "weightGrams": 165, "unitType": "VOLUME" },
+      { "unitLabel": "3 bulbs / pods", "weightGrams": 100, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09144"
+  },
+  {
+    "id": "ref-litchi-raw",
+    "canonicalName": "Lychee",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["lychee", "litchi", "lichee", "lychee raw"],
+    "standard100g": { "calories": 66.0, "carbohydrates": 16.5, "protein": 0.8, "fat": 0.4, "fiber": 1.3 },
+    "expectedServings": [
+      { "unitLabel": "1 fruit without refuse", "weightGrams": 10, "unitType": "COUNT" },
+      { "unitLabel": "1 cup", "weightGrams": 190, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09164"
+  },
+  {
+    "id": "ref-peach-raw",
+    "canonicalName": "Peach",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["peach", "aadu", "peach raw", "yellow peach", "white peach"],
+    "standard100g": { "calories": 39.0, "carbohydrates": 9.5, "protein": 0.9, "fat": 0.3, "fiber": 1.5 },
+    "expectedServings": [
+      { "unitLabel": "1 medium (2-2/3\" dia)", "weightGrams": 150, "unitType": "COUNT" },
+      { "unitLabel": "1 cup slices", "weightGrams": 154, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09236"
+  },
+  {
+    "id": "ref-pear-raw",
+    "canonicalName": "Pear",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["pear", "nashpati", "pear raw", "bartlett pear", "bosc pear", "asian pear", "babugosha"],
+    "standard100g": { "calories": 57.0, "carbohydrates": 15.2, "protein": 0.4, "fat": 0.1, "fiber": 3.1 },
+    "expectedServings": [
+      { "unitLabel": "1 medium", "weightGrams": 178, "unitType": "COUNT" },
+      { "unitLabel": "1 cup slices", "weightGrams": 140, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09252"
+  },
+  {
+    "id": "ref-plum-raw",
+    "canonicalName": "Plum",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["plum", "aloo bukhara", "alubukhara", "plum raw"],
+    "standard100g": { "calories": 46.0, "carbohydrates": 11.4, "protein": 0.7, "fat": 0.3, "fiber": 1.4 },
+    "expectedServings": [
+      { "unitLabel": "1 medium (2-1/8\" dia)", "weightGrams": 66, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09279"
+  },
+  {
+    "id": "ref-cherry-raw",
+    "canonicalName": "Cherry",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["cherry", "cherries", "sweet cherries", "sweet cherries raw"],
+    "standard100g": { "calories": 63.0, "carbohydrates": 16.0, "protein": 1.1, "fat": 0.2, "fiber": 2.1 },
+    "expectedServings": [
+      { "unitLabel": "1 cup with pits", "weightGrams": 138, "unitType": "VOLUME" },
+      { "unitLabel": "1 cherry", "weightGrams": 8, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09070"
+  },
+  {
+    "id": "ref-apricot-raw",
+    "canonicalName": "Apricot",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["apricot", "khubani", "khumani", "apricots raw", "fresh apricot"],
+    "standard100g": { "calories": 48.0, "carbohydrates": 11.1, "protein": 1.4, "fat": 0.4, "fiber": 2.0 },
+    "expectedServings": [
+      { "unitLabel": "1 medium", "weightGrams": 35, "unitType": "COUNT" },
+      { "unitLabel": "1 cup halves", "weightGrams": 155, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09021"
+  },
+  {
+    "id": "ref-muskmelon-raw",
+    "canonicalName": "Muskmelon (Cantaloupe)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["muskmelon", "cantaloupe", "kharbuja", "kharbooja", "rockmelon", "cantaloupe raw"],
+    "standard100g": { "calories": 34.0, "carbohydrates": 8.2, "protein": 0.8, "fat": 0.2, "fiber": 0.9 },
+    "expectedServings": [
+      { "unitLabel": "1 medium wedge", "weightGrams": 69, "unitType": "COUNT" },
+      { "unitLabel": "1 cup diced", "weightGrams": 160, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09181"
+  },
+  {
+    "id": "ref-honeydew-raw",
+    "canonicalName": "Honeydew Melon",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["honeydew", "honeydew melon", "honeydew raw"],
+    "standard100g": { "calories": 36.0, "carbohydrates": 9.1, "protein": 0.5, "fat": 0.1, "fiber": 0.8 },
+    "expectedServings": [
+      { "unitLabel": "1 cup diced", "weightGrams": 170, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09184"
+  },
+  {
+    "id": "ref-grapefruit-raw",
+    "canonicalName": "Grapefruit",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["grapefruit", "pink grapefruit", "red grapefruit", "white grapefruit", "grapefruit raw"],
+    "standard100g": { "calories": 42.0, "carbohydrates": 10.7, "protein": 0.8, "fat": 0.1, "fiber": 1.6 },
+    "expectedServings": [
+      { "unitLabel": "1/2 medium", "weightGrams": 123, "unitType": "COUNT" },
+      { "unitLabel": "1 cup sections", "weightGrams": 230, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09112"
+  },
+  {
+    "id": "ref-lemon-raw",
+    "canonicalName": "Lemon",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["lemon", "nimbu", "neembu", "lemon raw", "lemon whole with peel"],
+    "standard100g": { "calories": 29.0, "carbohydrates": 9.3, "protein": 1.1, "fat": 0.3, "fiber": 2.8 },
+    "expectedServings": [
+      { "unitLabel": "1 medium (2-1/8\" dia)", "weightGrams": 58, "unitType": "COUNT" },
+      { "unitLabel": "1 wedge", "weightGrams": 15, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09150"
+  },
+  {
+    "id": "ref-lime-raw",
+    "canonicalName": "Lime",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["lime", "green lime", "lime raw", "fresh lime"],
+    "standard100g": { "calories": 30.0, "carbohydrates": 10.5, "protein": 0.7, "fat": 0.2, "fiber": 2.8 },
+    "expectedServings": [
+      { "unitLabel": "1 medium (2\" dia)", "weightGrams": 67, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09159"
+  },
+  {
+    "id": "ref-dragonfruit-raw",
+    "canonicalName": "Dragon Fruit (Pitaya)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["dragon fruit", "dragonfruit", "pitaya", "kamalam", "red dragon fruit", "white dragon fruit"],
+    "standard100g": { "calories": 60.0, "carbohydrates": 13.0, "protein": 1.2, "fat": 0.0, "fiber": 2.9 },
+    "expectedServings": [
+      { "unitLabel": "1 medium fruit", "weightGrams": 200, "unitType": "COUNT" },
+      { "unitLabel": "1 cup cubed", "weightGrams": 150, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_FDC_2344730"
+  },
+  {
+    "id": "ref-passion-fruit-raw",
+    "canonicalName": "Passion Fruit",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["passion fruit", "passionfruit", "purple granadilla", "passion fruit raw"],
+    "standard100g": { "calories": 97.0, "carbohydrates": 23.4, "protein": 2.2, "fat": 0.7, "fiber": 10.4 },
+    "expectedServings": [
+      { "unitLabel": "1 fruit", "weightGrams": 18, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09231"
+  },
+  {
+    "id": "ref-starfruit-raw",
+    "canonicalName": "Starfruit (Carambola)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["starfruit", "star fruit", "carambola", "kamrakh", "starfruit raw"],
+    "standard100g": { "calories": 31.0, "carbohydrates": 6.7, "protein": 1.0, "fat": 0.3, "fiber": 2.8 },
+    "expectedServings": [
+      { "unitLabel": "1 medium fruit", "weightGrams": 91, "unitType": "COUNT" },
+      { "unitLabel": "1 cup sliced", "weightGrams": 132, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09060"
+  },
+  {
+    "id": "ref-fig-fresh-raw",
+    "canonicalName": "Fig (Fresh)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["fig", "fresh fig", "anjeer fresh", "anjeer", "figs raw"],
+    "standard100g": { "calories": 74.0, "carbohydrates": 19.2, "protein": 0.8, "fat": 0.3, "fiber": 2.9 },
+    "expectedServings": [
+      { "unitLabel": "1 medium (2-1/4\" dia)", "weightGrams": 50, "unitType": "COUNT" },
+      { "unitLabel": "1 small (1-1/2\" dia)", "weightGrams": 40, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09089"
+  },
+  {
+    "id": "ref-coconut-meat-raw",
+    "canonicalName": "Coconut Meat (Fresh)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["fresh coconut", "nariyal", "coconut meat", "fresh coconut raw", "raw coconut kernel"],
+    "standard100g": { "calories": 354.0, "carbohydrates": 15.2, "protein": 3.3, "fat": 33.5, "fiber": 9.0 },
+    "expectedServings": [
+      { "unitLabel": "1 piece (2\" x 2\" x 1/2\")", "weightGrams": 45, "unitType": "COUNT" },
+      { "unitLabel": "1 cup shredded", "weightGrams": 80, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_12104"
+  },
+  {
+    "id": "ref-dates-fresh",
+    "canonicalName": "Dates (Deglet Noor / Fresh)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["dates", "khajoor", "khajur", "deglet noor dates", "fresh dates"],
+    "standard100g": { "calories": 282.0, "carbohydrates": 75.0, "protein": 2.5, "fat": 0.4, "fiber": 8.0 },
+    "expectedServings": [
+      { "unitLabel": "1 date", "weightGrams": 7.1, "unitType": "COUNT" },
+      { "unitLabel": "5 dates", "weightGrams": 35.5, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09087"
+  },
+  {
+    "id": "ref-dates-medjool",
+    "canonicalName": "Dates (Medjool)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["medjool dates", "medjool khajoor", "large medjool date"],
+    "standard100g": { "calories": 277.0, "carbohydrates": 75.0, "protein": 1.8, "fat": 0.2, "fiber": 6.7 },
+    "expectedServings": [
+      { "unitLabel": "1 date (pitted)", "weightGrams": 24, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09421"
+  },
+  {
+    "id": "ref-bael-raw",
+    "canonicalName": "Wood Apple (Bael)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["bael", "wood apple", "bel", "stone apple", "aegle marmelos", "bael fruit"],
+    "standard100g": { "calories": 134.0, "carbohydrates": 31.8, "protein": 1.8, "fat": 0.3, "fiber": 2.9 },
+    "expectedServings": [
+      { "unitLabel": "1 cup pulp", "weightGrams": 150, "unitType": "VOLUME" }
+    ],
+    "source": "IFCT_2017_E004"
+  },
+  {
+    "id": "ref-ber-raw",
+    "canonicalName": "Jujube (Indian Plum / Ber)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["ber", "jujube", "indian plum", "ziziphus", "bor"],
+    "standard100g": { "calories": 79.0, "carbohydrates": 20.2, "protein": 1.2, "fat": 0.2, "fiber": 1.7 },
+    "expectedServings": [
+      { "unitLabel": "1 fruit", "weightGrams": 15, "unitType": "COUNT" },
+      { "unitLabel": "1 cup", "weightGrams": 100, "unitType": "VOLUME" }
+    ],
+    "source": "IFCT_2017_E005"
+  },
+  {
+    "id": "ref-mulberry-raw",
+    "canonicalName": "Mulberry (Shahtoot)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["mulberry", "mulberries", "shahtoot", "shehtoot", "morus"],
+    "standard100g": { "calories": 43.0, "carbohydrates": 9.8, "protein": 1.4, "fat": 0.4, "fiber": 1.7 },
+    "expectedServings": [
+      { "unitLabel": "1 cup", "weightGrams": 140, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09191"
+  },
+  {
+    "id": "ref-tamarind-raw",
+    "canonicalName": "Tamarind (Pulp)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["tamarind", "imli", "tamarind pulp", "raw tamarind"],
+    "standard100g": { "calories": 239.0, "carbohydrates": 62.5, "protein": 2.8, "fat": 0.6, "fiber": 5.1 },
+    "expectedServings": [
+      { "unitLabel": "1 tbsp", "weightGrams": 15, "unitType": "VOLUME" },
+      { "unitLabel": "1 cup", "weightGrams": 120, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09325"
+  },
+  {
+    "id": "ref-raisins-seedless",
+    "canonicalName": "Raisins (Kishmish)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["raisins", "kishmish", "kismis", "golden raisins", "sultanas", "black raisins"],
+    "standard100g": { "calories": 299.0, "carbohydrates": 79.2, "protein": 3.1, "fat": 0.5, "fiber": 3.7 },
+    "expectedServings": [
+      { "unitLabel": "1 small box (1.5 oz)", "weightGrams": 43, "unitType": "COUNT" },
+      { "unitLabel": "1 tbsp", "weightGrams": 10, "unitType": "VOLUME" },
+      { "unitLabel": "1 cup packed", "weightGrams": 165, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09298"
+  },
+  {
+    "id": "ref-dried-fig",
+    "canonicalName": "Dried Fig (Sukha Anjeer)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["dried fig", "dried figs", "sukha anjeer", "anjeer dry"],
+    "standard100g": { "calories": 249.0, "carbohydrates": 63.9, "protein": 3.3, "fat": 0.9, "fiber": 9.8 },
+    "expectedServings": [
+      { "unitLabel": "1 dried fig", "weightGrams": 8.4, "unitType": "COUNT" },
+      { "unitLabel": "1 cup", "weightGrams": 149, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09094"
+  },
+  {
+    "id": "ref-dried-apricot",
+    "canonicalName": "Dried Apricot (Jardalu)",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["dried apricot", "jardalu", "khumani dry", "dried apricots"],
+    "standard100g": { "calories": 241.0, "carbohydrates": 62.6, "protein": 3.4, "fat": 0.5, "fiber": 7.3 },
+    "expectedServings": [
+      { "unitLabel": "1 piece", "weightGrams": 7, "unitType": "COUNT" },
+      { "unitLabel": "1 cup halves", "weightGrams": 130, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09032"
+  },
+  {
+    "id": "ref-tangerine-raw",
+    "canonicalName": "Tangerine / Mandarin",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["tangerine", "mandarin", "mandarin orange", "clementine", "kinnow", "kinoo"],
+    "standard100g": { "calories": 53.0, "carbohydrates": 13.3, "protein": 0.8, "fat": 0.3, "fiber": 1.8 },
+    "expectedServings": [
+      { "unitLabel": "1 medium (2-3/8\" dia)", "weightGrams": 88, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09383"
+  },
+  {
+    "id": "ref-persimmon-raw",
+    "canonicalName": "Persimmon",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["persimmon", "japanese persimmon", "fuyu persimmon", "hachiya persimmon", "persimmon raw"],
+    "standard100g": { "calories": 70.0, "carbohydrates": 18.6, "protein": 0.6, "fat": 0.2, "fiber": 3.6 },
+    "expectedServings": [
+      { "unitLabel": "1 fruit", "weightGrams": 168, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_09278"
+  },
+  {
+    "id": "ref-coconut-water",
+    "canonicalName": "Coconut Water (Fresh)",
+    "category": "BEVERAGES",
+    "aliases": ["coconut water", "nariyal pani", "daab", "fresh coconut water", "tender coconut water"],
+    "standard100g": { "calories": 19.0, "carbohydrates": 3.7, "protein": 0.7, "fat": 0.2, "fiber": 1.1 },
+    "expectedServings": [
+      { "unitLabel": "1 cup", "weightGrams": 240, "unitType": "VOLUME" },
+      { "unitLabel": "1 whole tender coconut (water only)", "weightGrams": 300, "unitType": "COUNT" }
+    ],
+    "source": "USDA_SR_LEGACY_12119"
+  },
+  {
+    "id": "ref-cranberry-raw",
+    "canonicalName": "Cranberry",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["cranberry", "cranberries", "fresh cranberries", "raw cranberries"],
+    "standard100g": { "calories": 46.0, "carbohydrates": 12.0, "protein": 0.4, "fat": 0.1, "fiber": 3.6 },
+    "expectedServings": [
+      { "unitLabel": "1 cup whole", "weightGrams": 100, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09078"
+  },
+  {
+    "id": "ref-pomelo-raw",
+    "canonicalName": "Pomelo",
+    "category": "FRUITS_AND_VEGETABLES",
+    "aliases": ["pomelo", "pummelo", "chakotra", "grapefruit chinese", "pomelo raw"],
+    "standard100g": { "calories": 38.0, "carbohydrates": 9.6, "protein": 0.8, "fat": 0.0, "fiber": 1.0 },
+    "expectedServings": [
+      { "unitLabel": "1 fruit (without peel/seeds)", "weightGrams": 609, "unitType": "COUNT" },
+      { "unitLabel": "1 cup sections", "weightGrams": 190, "unitType": "VOLUME" }
+    ],
+    "source": "USDA_SR_LEGACY_09294"
+  }
+]
