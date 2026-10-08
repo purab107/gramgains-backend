@@ -419,10 +419,20 @@ async function advanceLeadUpStep(userId = DEFAULT_USER_ID) {
   return updatedProfile;
 }
 
+async function checkEmailExists(email) {
+  if (!email || typeof email !== 'string') return false;
+  const user = await prisma.user.findUnique({
+    where: { email: email.trim().toLowerCase() },
+    select: { id: true, email: true },
+  });
+  return Boolean(user);
+}
+
 module.exports = {
   getProfile,
   updateProfile,
   calculateMetrics,
   advanceLeadUpStep,
+  checkEmailExists,
   DEFAULT_USER_ID,
 };

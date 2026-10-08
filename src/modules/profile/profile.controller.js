@@ -18,4 +18,17 @@ async function updateProfile(req, res) {
   }
 }
 
-module.exports = { getProfile, updateProfile };
+async function checkEmail(req, res) {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+    const exists = await ProfileService.checkEmailExists(email);
+    return res.json({ success: true, exists });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Error checking email', error: error.message });
+  }
+}
+
+module.exports = { checkEmail, getProfile, updateProfile };
