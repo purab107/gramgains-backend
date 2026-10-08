@@ -4,6 +4,7 @@ const path = require('path');
 const { importINDB } = require('./indb-import');
 const { importOpenFoodFacts } = require('./openfoodfacts-import');
 const { seedIndianFoodMacros } = require('./seed-indian-macros');
+const { seedFruitsMacros } = require('./seed-fruits-macros');
 
 const prisma = new PrismaClient();
 
@@ -188,6 +189,10 @@ async function main() {
   // High-Priority Indian Food Macros (53 essential staples)
   console.log('\n🌾 Starting High-Priority Indian Food Macros Seeding...');
   await seedIndianFoodMacros();
+
+  // High-Priority Fruits Macros (37 whole & dried fruits)
+  console.log('\n🍎 Starting High-Priority Fruits Macros Seeding...');
+  await seedFruitsMacros();
 
   const total = await prisma.food.count();
   console.log(`\n🎉 Total foods in database: ${total}`);
