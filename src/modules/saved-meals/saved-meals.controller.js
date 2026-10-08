@@ -21,11 +21,11 @@ async function getById(req, res) {
 
 async function create(req, res) {
   try {
-    const { name, description, items } = req.body;
+    const { name, description, imageUrl, imagePublicId, items } = req.body;
     if (!name || !items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ success: false, message: 'Missing required fields (name, non-empty items array)' });
     }
-    const savedMeal = await SavedMealsService.create({ name, description, items }, req.userId);
+    const savedMeal = await SavedMealsService.create({ name, description, imageUrl, imagePublicId, items }, req.userId);
     return res.status(201).json({ success: true, message: 'Saved meal created successfully', data: savedMeal });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Error creating saved meal', error: error.message });
