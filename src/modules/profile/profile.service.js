@@ -174,23 +174,47 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
     });
   }
 
-  // Record weight log if weightKg is updated
+  // Record baseline weight log if weightKg is updated
   if (input.weightKg !== undefined) {
     const today = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
-    await prisma.weightLog.upsert({
-      where: {
-        userId_date: {
+    const existingLogCount = await prisma.weightLog.count({
+      where: { userId },
+    });
+
+    if (existingLogCount === 0) {
+      // First baseline weight (e.g. from onboarding): record for yesterday so today's daily weigh-in is pending
+      const yesterday = new Date(today);
+      yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+      await prisma.weightLog.upsert({
+        where: {
+          userId_date: {
+            userId,
+            date: yesterday,
+          },
+        },
+        update: { weightKg },
+        create: {
           userId,
+          weightKg,
+          date: yesterday,
+        },
+      });
+    } else {
+      await prisma.weightLog.upsert({
+        where: {
+          userId_date: {
+            userId,
+            date: today,
+          },
+        },
+        update: { weightKg },
+        create: {
+          userId,
+          weightKg,
           date: today,
         },
-      },
-      update: { weightKg },
-      create: {
-        userId,
-        weightKg,
-        date: today,
-      },
-    });
+      });
+    }
   }
 
   const safetyFloor = calculateSafetyFloor({ gender });
