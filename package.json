@@ -16,14 +16,17 @@
     "test:search": "node --test test/food-search.test.js",
     "test:adaptive": "node --test test/weight-smoothing.test.js test/adaptive-algorithms.test.js test/adaptive-api.test.js test/adaptive/baseline.test.js test/adaptive/phase4.test.js test/adaptive/phase5.test.js test/adaptive/phase6.test.js test/adaptive/phase7.test.js test/adaptive/phase8.test.js test/adaptive/phase9.test.js test/adaptive/phase10.test.js test/adaptive/phase11.test.js test/adaptive/phase12.test.js",
     "test": "node --test test/weight-smoothing.test.js test/adaptive-algorithms.test.js test/adaptive-api.test.js test/adaptive/baseline.test.js test/adaptive/phase4.test.js test/adaptive/phase5.test.js test/adaptive/phase6.test.js test/adaptive/phase7.test.js test/adaptive/phase8.test.js test/adaptive/phase9.test.js test/adaptive/phase10.test.js test/adaptive/phase11.test.js test/adaptive/phase12.test.js",
-    "benchmark:search": "node scripts/benchmark-search.js"
+    "benchmark:search": "node scripts/benchmark-search.js",
+    "analyze:logging": "node scripts/analyze-logging-behavior.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "better-auth": "^1.7.4",
+    "cloudinary": "^2.11.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
+    "multer": "^2.4.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
