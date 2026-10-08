@@ -70,7 +70,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/food',        foodRoutes);
 app.use('/api/tracker',     requireAuth, trackerRoutes);
 app.use('/api/dashboard',   requireAuth, dashboardRoutes);
-app.use('/api/profile',     requireAuth, profileRoutes);
+app.use('/api/profile',     profileRoutes);
 app.use('/api/saved-meals', requireAuth, savedMealsRoutes);
 app.use('/api/adaptive',    requireAuth, adaptiveRoutes);
 app.use('/api/analytics',   requireAuth, analyticsRoutes);

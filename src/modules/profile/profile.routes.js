@@ -1,9 +1,11 @@
 const { Router } = require('express');
 const ProfileController = require('./profile.controller');
+const { requireAuth } = require('../../middlewares/auth');
 
 const router = Router();
 
-router.get('/', ProfileController.getProfile);
-router.put('/', ProfileController.updateProfile);
+router.post('/check-email', ProfileController.checkEmail);
+router.get('/', requireAuth, ProfileController.getProfile);
+router.put('/', requireAuth, ProfileController.updateProfile);
 
 module.exports = router;
