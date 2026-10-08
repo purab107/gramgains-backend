@@ -17,7 +17,8 @@
     "test:adaptive": "node --test test/weight-smoothing.test.js test/adaptive-algorithms.test.js test/adaptive-api.test.js test/adaptive/baseline.test.js test/adaptive/phase4.test.js test/adaptive/phase5.test.js test/adaptive/phase6.test.js test/adaptive/phase7.test.js test/adaptive/phase8.test.js test/adaptive/phase9.test.js test/adaptive/phase10.test.js test/adaptive/phase11.test.js test/adaptive/phase12.test.js",
     "test": "node --test test/weight-smoothing.test.js test/adaptive-algorithms.test.js test/adaptive-api.test.js test/adaptive/baseline.test.js test/adaptive/phase4.test.js test/adaptive/phase5.test.js test/adaptive/phase6.test.js test/adaptive/phase7.test.js test/adaptive/phase8.test.js test/adaptive/phase9.test.js test/adaptive/phase10.test.js test/adaptive/phase11.test.js test/adaptive/phase12.test.js",
     "benchmark:search": "node scripts/benchmark-search.js",
-    "analyze:logging": "node scripts/analyze-logging-behavior.js"
+    "analyze:logging": "node scripts/analyze-logging-behavior.js",
+    "investigate:liquids": "node scripts/investigate-liquid-units.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
