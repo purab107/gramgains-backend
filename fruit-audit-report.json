@@ -1,0 +1,4869 @@
+{
+  "timestamp": "2026-10-08T12:27:09.840Z",
+  "totalAudited": 52,
+  "results": [
+    {
+      "canonicalName": "Apple",
+      "reference": {
+        "id": "ref-apple-raw",
+        "canonicalName": "Apple",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "apple",
+          "seb",
+          "red delicious",
+          "gala apple",
+          "fuji apple",
+          "green apple",
+          "granny smith",
+          "honeycrisp",
+          "apple raw",
+          "apples raw with skin"
+        ],
+        "standard100g": {
+          "calories": 52,
+          "carbohydrates": 13.8,
+          "protein": 0.3,
+          "fat": 0.2,
+          "fiber": 2.4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium (3\" dia)",
+            "weightGrams": 182,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 small (2-3/4\" dia)",
+            "weightGrams": 149,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 large (3-1/4\" dia)",
+            "weightGrams": 223,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup sliced",
+            "weightGrams": 125,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09003"
+      },
+      "evaluation": {
+        "fruitId": "ref-apple-raw",
+        "canonicalName": "Apple",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 47.14285714285714,
+        "dbFood": {
+          "id": "cmudpw2mi00hb82c8w1u6sjl8",
+          "name": "Apple mousse",
+          "source": "INDB",
+          "category": "Indian Prepared Dish",
+          "brand": null,
+          "calories": 106.9,
+          "carbohydrates": 12.77,
+          "protein": 4.21,
+          "fat": 4.27,
+          "fiber": 1.6
+        },
+        "reference": {
+          "calories": 52,
+          "carbohydrates": 13.8,
+          "protein": 0.3,
+          "fat": 0.2,
+          "fiber": 2.4
+        },
+        "deltas": {
+          "calories": {
+            "delta": 54.9,
+            "relPercent": 105.6
+          },
+          "carbohydrates": {
+            "delta": 1.03,
+            "relPercent": 7.5
+          },
+          "protein": {
+            "delta": 3.91,
+            "relPercent": 1303.3
+          },
+          "fat": {
+            "delta": 4.07,
+            "relPercent": 2035
+          },
+          "fiber": {
+            "delta": 0.8,
+            "relPercent": 33.3
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 109.6,
+          "residual": 2.7,
+          "isConsistent": true,
+          "macroMassSum": 22.85,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "bowl",
+              "unitType": "HOUSEHOLD",
+              "weightGrams": 365,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Banana",
+      "reference": {
+        "id": "ref-banana-raw",
+        "canonicalName": "Banana",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "banana",
+          "kela",
+          "banana raw",
+          "cavendish banana",
+          "yelakki banana",
+          "robusta banana",
+          "ripe banana"
+        ],
+        "standard100g": {
+          "calories": 89,
+          "carbohydrates": 22.8,
+          "protein": 1.1,
+          "fat": 0.3,
+          "fiber": 2.6
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium (7\" to 7-7/8\" long)",
+            "weightGrams": 118,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 small (6\" to 6-7/8\" long)",
+            "weightGrams": 101,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 large (8\" to 8-7/8\" long)",
+            "weightGrams": 136,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup sliced",
+            "weightGrams": 150,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09040"
+      },
+      "evaluation": {
+        "fruitId": "ref-banana-raw",
+        "canonicalName": "Banana",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 48.75,
+        "dbFood": {
+          "id": "cmudq211001en82c83mzcar06",
+          "name": "Banana appam",
+          "source": "INDB",
+          "category": "Breads",
+          "brand": null,
+          "calories": 469.8,
+          "carbohydrates": 20.06,
+          "protein": 1.17,
+          "fat": 42.53,
+          "fiber": 0.67
+        },
+        "reference": {
+          "calories": 89,
+          "carbohydrates": 22.8,
+          "protein": 1.1,
+          "fat": 0.3,
+          "fiber": 2.6
+        },
+        "deltas": {
+          "calories": {
+            "delta": 380.8,
+            "relPercent": 427.9
+          },
+          "carbohydrates": {
+            "delta": 2.74,
+            "relPercent": 12
+          },
+          "protein": {
+            "delta": 0.07,
+            "relPercent": 6.4
+          },
+          "fat": {
+            "delta": 42.23,
+            "relPercent": 14076.7
+          },
+          "fiber": {
+            "delta": 1.93,
+            "relPercent": 74.2
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 469,
+          "residual": 0.8,
+          "isConsistent": true,
+          "macroMassSum": 64.43,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "appam",
+              "unitType": "WEIGHT",
+              "weightGrams": 290,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Excess fat reported: Ref 0.3g vs DB 42.53g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Orange",
+      "reference": {
+        "id": "ref-orange-raw",
+        "canonicalName": "Orange",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "orange",
+          "santra",
+          "orange raw",
+          "valencia orange",
+          "navel orange",
+          "nagpur orange"
+        ],
+        "standard100g": {
+          "calories": 47,
+          "carbohydrates": 11.8,
+          "protein": 0.9,
+          "fat": 0.1,
+          "fiber": 2.4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium (2-5/8\" dia)",
+            "weightGrams": 131,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 small",
+            "weightGrams": 96,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 large",
+            "weightGrams": 184,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09200"
+      },
+      "evaluation": {
+        "fruitId": "ref-orange-raw",
+        "canonicalName": "Orange",
+        "status": "FOUND",
+        "accuracyTier": "ACCEPTABLE",
+        "matchScore": 113,
+        "dbFood": {
+          "id": "35ee98e6-a352-423c-9a22-8effc3292267",
+          "name": "Orange",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Beverages",
+          "brand": "Tropicana",
+          "calories": 41,
+          "carbohydrates": 9.3,
+          "protein": 0.8,
+          "fat": 0,
+          "fiber": 0.8
+        },
+        "reference": {
+          "calories": 47,
+          "carbohydrates": 11.8,
+          "protein": 0.9,
+          "fat": 0.1,
+          "fiber": 2.4
+        },
+        "deltas": {
+          "calories": {
+            "delta": 6,
+            "relPercent": 12.8
+          },
+          "carbohydrates": {
+            "delta": 2.5,
+            "relPercent": 21.2
+          },
+          "protein": {
+            "delta": 0.1,
+            "relPercent": 11.1
+          },
+          "fat": {
+            "delta": 0.1,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 1.6,
+            "relPercent": 66.7
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 42,
+          "residual": 1,
+          "isConsistent": true,
+          "macroMassSum": 10.9,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 250,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": []
+      }
+    },
+    {
+      "canonicalName": "Mango",
+      "reference": {
+        "id": "ref-mango-raw",
+        "canonicalName": "Mango",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "mango",
+          "aam",
+          "mango raw",
+          "alphonso mango",
+          "kesar mango",
+          "dasheri mango",
+          "safeda mango",
+          "ripe mango"
+        ],
+        "standard100g": {
+          "calories": 60,
+          "carbohydrates": 15,
+          "protein": 0.8,
+          "fat": 0.4,
+          "fiber": 1.6
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium whole fruit",
+            "weightGrams": 200,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup sliced",
+            "weightGrams": 165,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "1 piece / cheek",
+            "weightGrams": 100,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09176"
+      },
+      "evaluation": {
+        "fruitId": "ref-mango-raw",
+        "canonicalName": "Mango",
+        "status": "FOUND",
+        "accuracyTier": "ACCEPTABLE",
+        "matchScore": 111.75,
+        "dbFood": {
+          "id": "20aab66a-3527-4f7c-bf25-90e8f542a418",
+          "name": "Mango",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Fruits & Vegetables",
+          "brand": "Maaza",
+          "calories": 47,
+          "carbohydrates": 11.2,
+          "protein": 0,
+          "fat": 0,
+          "fiber": 10
+        },
+        "reference": {
+          "calories": 60,
+          "carbohydrates": 15,
+          "protein": 0.8,
+          "fat": 0.4,
+          "fiber": 1.6
+        },
+        "deltas": {
+          "calories": {
+            "delta": 13,
+            "relPercent": 21.7
+          },
+          "carbohydrates": {
+            "delta": 3.8,
+            "relPercent": 25.3
+          },
+          "protein": {
+            "delta": 0.8,
+            "relPercent": 100
+          },
+          "fat": {
+            "delta": 0.4,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 8.4,
+            "relPercent": 525
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 64.8,
+          "residual": 17.8,
+          "isConsistent": false,
+          "macroMassSum": 21.2,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 330,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Atwater energy mismatch (Reported: 47 kcal, Computed: 64.8 kcal)"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Watermelon",
+      "reference": {
+        "id": "ref-watermelon-raw",
+        "canonicalName": "Watermelon",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "watermelon",
+          "tarbooj",
+          "tarbuz",
+          "watermelon raw"
+        ],
+        "standard100g": {
+          "calories": 30,
+          "carbohydrates": 7.6,
+          "protein": 0.6,
+          "fat": 0.2,
+          "fiber": 0.4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 wedge (1/16th of melon)",
+            "weightGrams": 286,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup diced",
+            "weightGrams": 152,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09326"
+      },
+      "evaluation": {
+        "fruitId": "ref-watermelon-raw",
+        "canonicalName": "Watermelon",
+        "status": "FOUND",
+        "accuracyTier": "EXACT",
+        "matchScore": 115.5,
+        "dbFood": {
+          "id": "d9a907f9-ecac-4f39-8852-33b6f26bd341",
+          "name": "Watermelon",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Other",
+          "brand": "Del Monte",
+          "calories": 33,
+          "carbohydrates": 6.9,
+          "protein": 0.4,
+          "fat": 0.3,
+          "fiber": 0.5
+        },
+        "reference": {
+          "calories": 30,
+          "carbohydrates": 7.6,
+          "protein": 0.6,
+          "fat": 0.2,
+          "fiber": 0.4
+        },
+        "deltas": {
+          "calories": {
+            "delta": 3,
+            "relPercent": 10
+          },
+          "carbohydrates": {
+            "delta": 0.7,
+            "relPercent": 9.2
+          },
+          "protein": {
+            "delta": 0.2,
+            "relPercent": 33.3
+          },
+          "fat": {
+            "delta": 0.1,
+            "relPercent": 50
+          },
+          "fiber": {
+            "delta": 0.1,
+            "relPercent": 25
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 32.9,
+          "residual": 0.1,
+          "isConsistent": true,
+          "macroMassSum": 8.1,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 300,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Pineapple",
+      "reference": {
+        "id": "ref-pineapple-raw",
+        "canonicalName": "Pineapple",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "pineapple",
+          "ananas",
+          "pineapple raw",
+          "fresh pineapple"
+        ],
+        "standard100g": {
+          "calories": 50,
+          "carbohydrates": 13.1,
+          "protein": 0.5,
+          "fat": 0.1,
+          "fiber": 1.4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 slice (3-1/2\" dia)",
+            "weightGrams": 84,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup chunks",
+            "weightGrams": 165,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09266"
+      },
+      "evaluation": {
+        "fruitId": "ref-pineapple-raw",
+        "canonicalName": "Pineapple",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 118,
+        "dbFood": {
+          "id": "11170684-f998-425f-86d1-a2d9eb42ee0d",
+          "name": "Pineapple",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Fruits & Vegetables",
+          "brand": "Del Monte",
+          "calories": 75,
+          "carbohydrates": 18,
+          "protein": 0.2,
+          "fat": 0,
+          "fiber": 18
+        },
+        "reference": {
+          "calories": 50,
+          "carbohydrates": 13.1,
+          "protein": 0.5,
+          "fat": 0.1,
+          "fiber": 1.4
+        },
+        "deltas": {
+          "calories": {
+            "delta": 25,
+            "relPercent": 50
+          },
+          "carbohydrates": {
+            "delta": 4.9,
+            "relPercent": 37.4
+          },
+          "protein": {
+            "delta": 0.3,
+            "relPercent": 60
+          },
+          "fat": {
+            "delta": 0.1,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 16.6,
+            "relPercent": 1185.7
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 108.8,
+          "residual": 33.8,
+          "isConsistent": false,
+          "macroMassSum": 36.2,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 140,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Atwater energy mismatch (Reported: 75 kcal, Computed: 108.8 kcal)",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Papaya",
+      "reference": {
+        "id": "ref-papaya-raw",
+        "canonicalName": "Papaya",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "papaya",
+          "papita",
+          "papaya raw",
+          "ripe papaya"
+        ],
+        "standard100g": {
+          "calories": 43,
+          "carbohydrates": 10.8,
+          "protein": 0.5,
+          "fat": 0.3,
+          "fiber": 1.7
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium papaya",
+            "weightGrams": 304,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup 1\" pieces",
+            "weightGrams": 145,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09226"
+      },
+      "evaluation": {
+        "fruitId": "ref-papaya-raw",
+        "canonicalName": "Papaya",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 22,
+        "dbFood": {
+          "id": "cmudputvn00ah82c8obzbd2iq",
+          "name": "Raw papaya with coconut (Papaya thoran)",
+          "source": "INDB",
+          "category": "Curries & Gravies",
+          "brand": null,
+          "calories": 132.8,
+          "carbohydrates": 5.58,
+          "protein": 1.54,
+          "fat": 11.42,
+          "fiber": 4.31
+        },
+        "reference": {
+          "calories": 43,
+          "carbohydrates": 10.8,
+          "protein": 0.5,
+          "fat": 0.3,
+          "fiber": 1.7
+        },
+        "deltas": {
+          "calories": {
+            "delta": 89.8,
+            "relPercent": 208.8
+          },
+          "carbohydrates": {
+            "delta": 5.22,
+            "relPercent": 48.3
+          },
+          "protein": {
+            "delta": 1.04,
+            "relPercent": 208
+          },
+          "fat": {
+            "delta": 11.12,
+            "relPercent": 3706.7
+          },
+          "fiber": {
+            "delta": 2.61,
+            "relPercent": 153.5
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 139.9,
+          "residual": 7.1,
+          "isConsistent": true,
+          "macroMassSum": 22.85,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "bowl",
+              "unitType": "HOUSEHOLD",
+              "weightGrams": 150,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Excess fat reported: Ref 0.3g vs DB 11.42g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Guava",
+      "reference": {
+        "id": "ref-guava-raw",
+        "canonicalName": "Guava",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "guava",
+          "amrood",
+          "amrud",
+          "peru",
+          "guava raw",
+          "pink guava",
+          "white guava"
+        ],
+        "standard100g": {
+          "calories": 68,
+          "carbohydrates": 14.3,
+          "protein": 2.6,
+          "fat": 1,
+          "fiber": 5.4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium fruit",
+            "weightGrams": 100,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 165,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09139"
+      },
+      "evaluation": {
+        "fruitId": "ref-guava-raw",
+        "canonicalName": "Guava",
+        "status": "FOUND",
+        "accuracyTier": "ACCEPTABLE",
+        "matchScore": 41.75,
+        "dbFood": {
+          "id": "33a55025-2da0-4202-ad20-a1b70e15712d",
+          "name": "Guava Nectar",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Spices & Staples",
+          "brand": "Del Monte",
+          "calories": 52,
+          "carbohydrates": 13.2,
+          "protein": 0,
+          "fat": 0,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 68,
+          "carbohydrates": 14.3,
+          "protein": 2.6,
+          "fat": 1,
+          "fiber": 5.4
+        },
+        "deltas": {
+          "calories": {
+            "delta": 16,
+            "relPercent": 23.5
+          },
+          "carbohydrates": {
+            "delta": 1.1,
+            "relPercent": 7.7
+          },
+          "protein": {
+            "delta": 2.6,
+            "relPercent": 100
+          },
+          "fat": {
+            "delta": 1,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 5.4,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 52.8,
+          "residual": 0.8,
+          "isConsistent": true,
+          "macroMassSum": 13.2,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 250,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 5.4g, DB: 0g)"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Strawberry",
+      "reference": {
+        "id": "ref-strawberry-raw",
+        "canonicalName": "Strawberry",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "strawberry",
+          "strawberries",
+          "fresh strawberry",
+          "strawberries raw"
+        ],
+        "standard100g": {
+          "calories": 32,
+          "carbohydrates": 7.7,
+          "protein": 0.7,
+          "fat": 0.3,
+          "fiber": 2
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 large (1-3/8\" dia)",
+            "weightGrams": 18,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 medium (1-1/4\" dia)",
+            "weightGrams": 12,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup whole",
+            "weightGrams": 144,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "1 cup sliced",
+            "weightGrams": 166,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09316"
+      },
+      "evaluation": {
+        "fruitId": "ref-strawberry-raw",
+        "canonicalName": "Strawberry",
+        "status": "FOUND",
+        "accuracyTier": "ACCEPTABLE",
+        "matchScore": 68,
+        "dbFood": {
+          "id": "abd85e05-2cd9-4edd-b963-c01a5e03f541",
+          "name": "Strawberries",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Other",
+          "brand": "Del Monte",
+          "calories": 39,
+          "carbohydrates": 6.1,
+          "protein": 0.6,
+          "fat": 0.5,
+          "fiber": 3.8
+        },
+        "reference": {
+          "calories": 32,
+          "carbohydrates": 7.7,
+          "protein": 0.7,
+          "fat": 0.3,
+          "fiber": 2
+        },
+        "deltas": {
+          "calories": {
+            "delta": 7,
+            "relPercent": 21.9
+          },
+          "carbohydrates": {
+            "delta": 1.6,
+            "relPercent": 20.8
+          },
+          "protein": {
+            "delta": 0.1,
+            "relPercent": 14.3
+          },
+          "fat": {
+            "delta": 0.2,
+            "relPercent": 66.7
+          },
+          "fiber": {
+            "delta": 1.8,
+            "relPercent": 90
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 38.9,
+          "residual": 0.1,
+          "isConsistent": true,
+          "macroMassSum": 11,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 100,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Blueberry",
+      "reference": {
+        "id": "ref-blueberry-raw",
+        "canonicalName": "Blueberry",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "blueberry",
+          "blueberries",
+          "blueberries raw",
+          "fresh blueberries"
+        ],
+        "standard100g": {
+          "calories": 57,
+          "carbohydrates": 14.5,
+          "protein": 0.7,
+          "fat": 0.3,
+          "fiber": 2.4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 148,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "50 berries",
+            "weightGrams": 68,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09050"
+      },
+      "evaluation": {
+        "fruitId": "ref-blueberry-raw",
+        "canonicalName": "Blueberry",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 45.5,
+        "dbFood": {
+          "id": "93e45646-8dce-4a71-96bf-911519761fd3",
+          "name": "Strawberry & blueberry",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Breakfast & Cereals",
+          "brand": "Quaker",
+          "calories": 435,
+          "carbohydrates": 48,
+          "protein": 8.7,
+          "fat": 19,
+          "fiber": 21
+        },
+        "reference": {
+          "calories": 57,
+          "carbohydrates": 14.5,
+          "protein": 0.7,
+          "fat": 0.3,
+          "fiber": 2.4
+        },
+        "deltas": {
+          "calories": {
+            "delta": 378,
+            "relPercent": 663.2
+          },
+          "carbohydrates": {
+            "delta": 33.5,
+            "relPercent": 231
+          },
+          "protein": {
+            "delta": 8,
+            "relPercent": 1142.9
+          },
+          "fat": {
+            "delta": 18.7,
+            "relPercent": 6233.3
+          },
+          "fiber": {
+            "delta": 18.6,
+            "relPercent": 775
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 439.8,
+          "residual": 4.8,
+          "isConsistent": true,
+          "macroMassSum": 96.7,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 45,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 14.5g vs DB 48g",
+          "Excess fat reported: Ref 0.3g vs DB 19g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Blackberry",
+      "reference": {
+        "id": "ref-blackberry-raw",
+        "canonicalName": "Blackberry",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "blackberry",
+          "blackberries",
+          "blackberries raw"
+        ],
+        "standard100g": {
+          "calories": 43,
+          "carbohydrates": 9.6,
+          "protein": 1.4,
+          "fat": 0.5,
+          "fiber": 5.3
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 144,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09042"
+      },
+      "evaluation": {
+        "fruitId": "ref-blackberry-raw",
+        "canonicalName": "Blackberry",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 45.5,
+        "dbFood": {
+          "id": "f53212bb-e211-4a2b-a99f-feea682e3e67",
+          "name": "Blueberry Blackberry",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Spices & Staples",
+          "brand": "Quaker",
+          "calories": 375,
+          "carbohydrates": 72.5,
+          "protein": 10,
+          "fat": 6.3,
+          "fiber": 7.5
+        },
+        "reference": {
+          "calories": 43,
+          "carbohydrates": 9.6,
+          "protein": 1.4,
+          "fat": 0.5,
+          "fiber": 5.3
+        },
+        "deltas": {
+          "calories": {
+            "delta": 332,
+            "relPercent": 772.1
+          },
+          "carbohydrates": {
+            "delta": 62.9,
+            "relPercent": 655.2
+          },
+          "protein": {
+            "delta": 8.6,
+            "relPercent": 614.3
+          },
+          "fat": {
+            "delta": 5.8,
+            "relPercent": 1160
+          },
+          "fiber": {
+            "delta": 2.2,
+            "relPercent": 41.5
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 401.7,
+          "residual": 26.7,
+          "isConsistent": true,
+          "macroMassSum": 96.3,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 40,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 9.6g vs DB 72.5g",
+          "Excess fat reported: Ref 0.5g vs DB 6.3g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Raspberry",
+      "reference": {
+        "id": "ref-raspberry-raw",
+        "canonicalName": "Raspberry",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "raspberry",
+          "raspberries",
+          "raspberries raw"
+        ],
+        "standard100g": {
+          "calories": 52,
+          "carbohydrates": 11.9,
+          "protein": 1.2,
+          "fat": 0.7,
+          "fiber": 6.5
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 123,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09302"
+      },
+      "evaluation": {
+        "fruitId": "ref-raspberry-raw",
+        "canonicalName": "Raspberry",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 11,
+        "dbFood": {
+          "id": "cmudpzj3g010f82c8vdxps4yc",
+          "name": "Raspberry bavarian cream",
+          "source": "INDB",
+          "category": "Indian Prepared Dish",
+          "brand": null,
+          "calories": 150.1,
+          "carbohydrates": 17.82,
+          "protein": 3.34,
+          "fat": 7.88,
+          "fiber": 2.19
+        },
+        "reference": {
+          "calories": 52,
+          "carbohydrates": 11.9,
+          "protein": 1.2,
+          "fat": 0.7,
+          "fiber": 6.5
+        },
+        "deltas": {
+          "calories": {
+            "delta": 98.1,
+            "relPercent": 188.7
+          },
+          "carbohydrates": {
+            "delta": 5.92,
+            "relPercent": 49.7
+          },
+          "protein": {
+            "delta": 2.14,
+            "relPercent": 178.3
+          },
+          "fat": {
+            "delta": 7.18,
+            "relPercent": 1025.7
+          },
+          "fiber": {
+            "delta": 4.31,
+            "relPercent": 66.3
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 159.9,
+          "residual": 9.8,
+          "isConsistent": true,
+          "macroMassSum": 31.23,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "small mould",
+              "unitType": "WEIGHT",
+              "weightGrams": 237,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": true,
+          "hasVolumeServing": false,
+          "issues": []
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Excess fat reported: Ref 0.7g vs DB 7.88g"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Grapes",
+      "reference": {
+        "id": "ref-grapes-raw",
+        "canonicalName": "Grapes",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "grapes",
+          "angur",
+          "angoor",
+          "green grapes",
+          "red grapes",
+          "black grapes",
+          "grapes raw",
+          "seedless grapes"
+        ],
+        "standard100g": {
+          "calories": 69,
+          "carbohydrates": 18.1,
+          "protein": 0.7,
+          "fat": 0.2,
+          "fiber": 0.9
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 151,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "10 grapes",
+            "weightGrams": 50,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09132"
+      },
+      "evaluation": {
+        "fruitId": "ref-grapes-raw",
+        "canonicalName": "Grapes",
+        "status": "FOUND",
+        "accuracyTier": "EXACT",
+        "matchScore": 65,
+        "dbFood": {
+          "id": "4d9c3e0a-e0e7-404e-b4b3-10536ae51cea",
+          "name": "6 oz. Red Seedless Grapes",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Other",
+          "brand": "Del Monte",
+          "calories": 70.6,
+          "carbohydrates": 18.2,
+          "protein": 0.6,
+          "fat": 0,
+          "fiber": 1.2
+        },
+        "reference": {
+          "calories": 69,
+          "carbohydrates": 18.1,
+          "protein": 0.7,
+          "fat": 0.2,
+          "fiber": 0.9
+        },
+        "deltas": {
+          "calories": {
+            "delta": 1.6,
+            "relPercent": 2.3
+          },
+          "carbohydrates": {
+            "delta": 0.1,
+            "relPercent": 0.6
+          },
+          "protein": {
+            "delta": 0.1,
+            "relPercent": 14.3
+          },
+          "fat": {
+            "delta": 0.2,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 0.3,
+            "relPercent": 33.3
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 77.6,
+          "residual": 7,
+          "isConsistent": true,
+          "macroMassSum": 20,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 170,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Kiwi",
+      "reference": {
+        "id": "ref-kiwi-raw",
+        "canonicalName": "Kiwi",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "kiwi",
+          "kiwifruit",
+          "kiwi raw",
+          "green kiwi",
+          "golden kiwi"
+        ],
+        "standard100g": {
+          "calories": 61,
+          "carbohydrates": 14.7,
+          "protein": 1.1,
+          "fat": 0.5,
+          "fiber": 3
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium fruit",
+            "weightGrams": 69,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup sliced",
+            "weightGrams": 180,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09148"
+      },
+      "evaluation": {
+        "fruitId": "ref-kiwi-raw",
+        "canonicalName": "Kiwi",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 49.285714285714285,
+        "dbFood": {
+          "id": "cmudq16dt019r82c88a3ios94",
+          "name": "Kiwi granola pudding",
+          "source": "INDB",
+          "category": "Desserts & Sweets",
+          "brand": null,
+          "calories": 281,
+          "carbohydrates": 32.33,
+          "protein": 5.6,
+          "fat": 15.36,
+          "fiber": 3.71
+        },
+        "reference": {
+          "calories": 61,
+          "carbohydrates": 14.7,
+          "protein": 1.1,
+          "fat": 0.5,
+          "fiber": 3
+        },
+        "deltas": {
+          "calories": {
+            "delta": 220,
+            "relPercent": 360.7
+          },
+          "carbohydrates": {
+            "delta": 17.63,
+            "relPercent": 119.9
+          },
+          "protein": {
+            "delta": 4.5,
+            "relPercent": 409.1
+          },
+          "fat": {
+            "delta": 14.86,
+            "relPercent": 2972
+          },
+          "fiber": {
+            "delta": 0.71,
+            "relPercent": 23.7
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 297.4,
+          "residual": 16.4,
+          "isConsistent": true,
+          "macroMassSum": 57,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "bowl",
+              "unitType": "HOUSEHOLD",
+              "weightGrams": 500,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 14.7g vs DB 32.33g",
+          "Excess fat reported: Ref 0.5g vs DB 15.36g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Avocado",
+      "reference": {
+        "id": "ref-avocado-raw",
+        "canonicalName": "Avocado",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "avocado",
+          "makhanphal",
+          "butter fruit",
+          "hass avocado",
+          "avocado raw"
+        ],
+        "standard100g": {
+          "calories": 160,
+          "carbohydrates": 8.5,
+          "protein": 2,
+          "fat": 14.7,
+          "fiber": 6.7
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 whole avocado (without skin & seed)",
+            "weightGrams": 150,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1/2 avocado",
+            "weightGrams": 75,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup cubed",
+            "weightGrams": 150,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09037"
+      },
+      "evaluation": {
+        "fruitId": "ref-avocado-raw",
+        "canonicalName": "Avocado",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Pomegranate",
+      "reference": {
+        "id": "ref-pomegranate-raw",
+        "canonicalName": "Pomegranate",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "pomegranate",
+          "anaar",
+          "anar",
+          "dalim",
+          "pomegranate raw",
+          "pomegranate arils",
+          "pomegranate seeds"
+        ],
+        "standard100g": {
+          "calories": 83,
+          "carbohydrates": 18.7,
+          "protein": 1.7,
+          "fat": 1.2,
+          "fiber": 4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup arils (seeds)",
+            "weightGrams": 174,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "1 medium pomegranate",
+            "weightGrams": 282,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09286"
+      },
+      "evaluation": {
+        "fruitId": "ref-pomegranate-raw",
+        "canonicalName": "Pomegranate",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 91.57142857142857,
+        "dbFood": {
+          "id": "6e4c97c4-4c24-4232-92e4-e8b8414f0934",
+          "name": "Pomegranate Seeds",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Other",
+          "brand": "Del Monte",
+          "calories": 55,
+          "carbohydrates": 11.8,
+          "protein": 1.3,
+          "fat": 0.2,
+          "fiber": 0.6
+        },
+        "reference": {
+          "calories": 83,
+          "carbohydrates": 18.7,
+          "protein": 1.7,
+          "fat": 1.2,
+          "fiber": 4
+        },
+        "deltas": {
+          "calories": {
+            "delta": 28,
+            "relPercent": 33.7
+          },
+          "carbohydrates": {
+            "delta": 6.9,
+            "relPercent": 36.9
+          },
+          "protein": {
+            "delta": 0.4,
+            "relPercent": 23.5
+          },
+          "fat": {
+            "delta": 1,
+            "relPercent": 83.3
+          },
+          "fiber": {
+            "delta": 3.4,
+            "relPercent": 85
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 55.4,
+          "residual": 0.4,
+          "isConsistent": true,
+          "macroMassSum": 13.9,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 100,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Sweet Lime",
+      "reference": {
+        "id": "ref-sweet-lime-raw",
+        "canonicalName": "Sweet Lime",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "sweet lime",
+          "mosambi",
+          "mousambi",
+          "musambi",
+          "sweet lemon",
+          "sweet lime raw"
+        ],
+        "standard100g": {
+          "calories": 43,
+          "carbohydrates": 10.5,
+          "protein": 0.8,
+          "fat": 0.3,
+          "fiber": 1.5
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium fruit",
+            "weightGrams": 120,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "IFCT_2017_E015"
+      },
+      "evaluation": {
+        "fruitId": "ref-sweet-lime-raw",
+        "canonicalName": "Sweet Lime",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 11,
+        "dbFood": {
+          "id": "9fa9f9d4-9e06-4ea4-a881-7f4084ad936e",
+          "name": "POPPIN' SWEET LIME & SEA SALT",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Spices & Staples",
+          "brand": "Lay's",
+          "calories": 540,
+          "carbohydrates": 56,
+          "protein": 6,
+          "fat": 34,
+          "fiber": 4
+        },
+        "reference": {
+          "calories": 43,
+          "carbohydrates": 10.5,
+          "protein": 0.8,
+          "fat": 0.3,
+          "fiber": 1.5
+        },
+        "deltas": {
+          "calories": {
+            "delta": 497,
+            "relPercent": 1155.8
+          },
+          "carbohydrates": {
+            "delta": 45.5,
+            "relPercent": 433.3
+          },
+          "protein": {
+            "delta": 5.2,
+            "relPercent": 650
+          },
+          "fat": {
+            "delta": 33.7,
+            "relPercent": 11233.3
+          },
+          "fiber": {
+            "delta": 2.5,
+            "relPercent": 166.7
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 562,
+          "residual": 22,
+          "isConsistent": true,
+          "macroMassSum": 100,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 50,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 10.5g vs DB 56g",
+          "Excess fat reported: Ref 0.3g vs DB 34g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Custard Apple",
+      "reference": {
+        "id": "ref-custard-apple-raw",
+        "canonicalName": "Custard Apple",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "custard apple",
+          "sitaphal",
+          "sharifa",
+          "sugar apple",
+          "sitaphal raw",
+          "annona squamosa"
+        ],
+        "standard100g": {
+          "calories": 94,
+          "carbohydrates": 23.6,
+          "protein": 2.1,
+          "fat": 0.3,
+          "fiber": 4.4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium fruit (edible portion)",
+            "weightGrams": 130,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "IFCT_2017_E007"
+      },
+      "evaluation": {
+        "fruitId": "ref-custard-apple-raw",
+        "canonicalName": "Custard Apple",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Sapota (Chikoo)",
+      "reference": {
+        "id": "ref-sapota-raw",
+        "canonicalName": "Sapota (Chikoo)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "sapota",
+          "chikoo",
+          "chiku",
+          "sapodilla",
+          "chikoo raw",
+          "chickoo"
+        ],
+        "standard100g": {
+          "calories": 83,
+          "carbohydrates": 20,
+          "protein": 0.4,
+          "fat": 1.1,
+          "fiber": 5.3
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium fruit",
+            "weightGrams": 75,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "IFCT_2017_E043"
+      },
+      "evaluation": {
+        "fruitId": "ref-sapota-raw",
+        "canonicalName": "Sapota (Chikoo)",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Indian Gooseberry (Amla)",
+      "reference": {
+        "id": "ref-amla-raw",
+        "canonicalName": "Indian Gooseberry (Amla)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "amla",
+          "indian gooseberry",
+          "avla",
+          "amla raw",
+          "phyllanthus emblica"
+        ],
+        "standard100g": {
+          "calories": 44,
+          "carbohydrates": 10.1,
+          "protein": 0.9,
+          "fat": 0.6,
+          "fiber": 4.3
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 piece / berry",
+            "weightGrams": 25,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "IFCT_2017_E002"
+      },
+      "evaluation": {
+        "fruitId": "ref-amla-raw",
+        "canonicalName": "Indian Gooseberry (Amla)",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 41.75,
+        "dbFood": {
+          "id": "58412ee2-0d31-468c-a88a-ee203573505e",
+          "name": "Amla Slices",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Other",
+          "brand": "Vadilal",
+          "calories": 56.3,
+          "carbohydrates": 10,
+          "protein": 1.3,
+          "fat": 1.3,
+          "fiber": 3.8
+        },
+        "reference": {
+          "calories": 44,
+          "carbohydrates": 10.1,
+          "protein": 0.9,
+          "fat": 0.6,
+          "fiber": 4.3
+        },
+        "deltas": {
+          "calories": {
+            "delta": 12.3,
+            "relPercent": 28
+          },
+          "carbohydrates": {
+            "delta": 0.1,
+            "relPercent": 1
+          },
+          "protein": {
+            "delta": 0.4,
+            "relPercent": 44.4
+          },
+          "fat": {
+            "delta": 0.7,
+            "relPercent": 116.7
+          },
+          "fiber": {
+            "delta": 0.5,
+            "relPercent": 11.6
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 64.5,
+          "residual": 8.2,
+          "isConsistent": true,
+          "macroMassSum": 16.4,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 80,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Jamun (Black Plum)",
+      "reference": {
+        "id": "ref-jamun-raw",
+        "canonicalName": "Jamun (Black Plum)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "jamun",
+          "black plum",
+          "java plum",
+          "jambul",
+          "jamun raw",
+          "syzygium cumini"
+        ],
+        "standard100g": {
+          "calories": 60,
+          "carbohydrates": 15.6,
+          "protein": 0.7,
+          "fat": 0.2,
+          "fiber": 0.9
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 135,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "10 fruits",
+            "weightGrams": 60,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "IFCT_2017_E023"
+      },
+      "evaluation": {
+        "fruitId": "ref-jamun-raw",
+        "canonicalName": "Jamun (Black Plum)",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Jackfruit (Ripe)",
+      "reference": {
+        "id": "ref-jackfruit-raw",
+        "canonicalName": "Jackfruit (Ripe)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "jackfruit",
+          "kathal ripe",
+          "ripe jackfruit",
+          "kathal",
+          "phanas",
+          "jackfruit raw"
+        ],
+        "standard100g": {
+          "calories": 95,
+          "carbohydrates": 23.2,
+          "protein": 1.7,
+          "fat": 0.6,
+          "fiber": 1.5
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup sliced bulbs",
+            "weightGrams": 165,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "3 bulbs / pods",
+            "weightGrams": 100,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09144"
+      },
+      "evaluation": {
+        "fruitId": "ref-jackfruit-raw",
+        "canonicalName": "Jackfruit (Ripe)",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 55,
+        "dbFood": {
+          "id": "cmudpyxvk00x582c8vzinmqw1",
+          "name": "Jackfruit/Kathal (dry)",
+          "source": "INDB",
+          "category": "Indian Prepared Dish",
+          "brand": null,
+          "calories": 489,
+          "carbohydrates": 4.56,
+          "protein": 0.93,
+          "fat": 51.78,
+          "fiber": 1.33
+        },
+        "reference": {
+          "calories": 95,
+          "carbohydrates": 23.2,
+          "protein": 1.7,
+          "fat": 0.6,
+          "fiber": 1.5
+        },
+        "deltas": {
+          "calories": {
+            "delta": 394,
+            "relPercent": 414.7
+          },
+          "carbohydrates": {
+            "delta": 18.64,
+            "relPercent": 80.3
+          },
+          "protein": {
+            "delta": 0.77,
+            "relPercent": 45.3
+          },
+          "fat": {
+            "delta": 51.18,
+            "relPercent": 8530
+          },
+          "fiber": {
+            "delta": 0.17,
+            "relPercent": 11.3
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 490.6,
+          "residual": 1.6,
+          "isConsistent": true,
+          "macroMassSum": 58.6,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "bowl",
+              "unitType": "HOUSEHOLD",
+              "weightGrams": 483,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 23.2g vs DB 4.56g",
+          "Excess fat reported: Ref 0.6g vs DB 51.78g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Lychee",
+      "reference": {
+        "id": "ref-litchi-raw",
+        "canonicalName": "Lychee",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "lychee",
+          "litchi",
+          "lichee",
+          "lychee raw"
+        ],
+        "standard100g": {
+          "calories": 66,
+          "carbohydrates": 16.5,
+          "protein": 0.8,
+          "fat": 0.4,
+          "fiber": 1.3
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 fruit without refuse",
+            "weightGrams": 10,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 190,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09164"
+      },
+      "evaluation": {
+        "fruitId": "ref-litchi-raw",
+        "canonicalName": "Lychee",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 115.5,
+        "dbFood": {
+          "id": "6b030882-f9e3-477f-9a60-fb4d6c9f1609",
+          "name": "lychee",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Fruits & Vegetables",
+          "brand": "Maaza",
+          "calories": 46,
+          "carbohydrates": 10.9,
+          "protein": 0.1,
+          "fat": 0,
+          "fiber": 0.1
+        },
+        "reference": {
+          "calories": 66,
+          "carbohydrates": 16.5,
+          "protein": 0.8,
+          "fat": 0.4,
+          "fiber": 1.3
+        },
+        "deltas": {
+          "calories": {
+            "delta": 20,
+            "relPercent": 30.3
+          },
+          "carbohydrates": {
+            "delta": 5.6,
+            "relPercent": 33.9
+          },
+          "protein": {
+            "delta": 0.7,
+            "relPercent": 87.5
+          },
+          "fat": {
+            "delta": 0.4,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 1.2,
+            "relPercent": 92.3
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 44.2,
+          "residual": 1.8,
+          "isConsistent": true,
+          "macroMassSum": 11.1,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 500,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": []
+      }
+    },
+    {
+      "canonicalName": "Peach",
+      "reference": {
+        "id": "ref-peach-raw",
+        "canonicalName": "Peach",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "peach",
+          "aadu",
+          "peach raw",
+          "yellow peach",
+          "white peach"
+        ],
+        "standard100g": {
+          "calories": 39,
+          "carbohydrates": 9.5,
+          "protein": 0.9,
+          "fat": 0.3,
+          "fiber": 1.5
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium (2-2/3\" dia)",
+            "weightGrams": 150,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup slices",
+            "weightGrams": 154,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09236"
+      },
+      "evaluation": {
+        "fruitId": "ref-peach-raw",
+        "canonicalName": "Peach",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 43,
+        "dbFood": {
+          "id": "30588c56-b1b4-4732-94f4-2fffede35583",
+          "name": "Rehab Peach",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Beverages",
+          "brand": "Monster",
+          "calories": 12,
+          "carbohydrates": 2.5,
+          "protein": 0,
+          "fat": 0,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 39,
+          "carbohydrates": 9.5,
+          "protein": 0.9,
+          "fat": 0.3,
+          "fiber": 1.5
+        },
+        "deltas": {
+          "calories": {
+            "delta": 27,
+            "relPercent": 69.2
+          },
+          "carbohydrates": {
+            "delta": 7,
+            "relPercent": 73.7
+          },
+          "protein": {
+            "delta": 0.9,
+            "relPercent": 100
+          },
+          "fat": {
+            "delta": 0.3,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 1.5,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 10,
+          "residual": 2,
+          "isConsistent": true,
+          "macroMassSum": 2.5,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 500,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 1.5g, DB: 0g)"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Pear",
+      "reference": {
+        "id": "ref-pear-raw",
+        "canonicalName": "Pear",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "pear",
+          "nashpati",
+          "pear raw",
+          "bartlett pear",
+          "bosc pear",
+          "asian pear",
+          "babugosha"
+        ],
+        "standard100g": {
+          "calories": 57,
+          "carbohydrates": 15.2,
+          "protein": 0.4,
+          "fat": 0.1,
+          "fiber": 3.1
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium",
+            "weightGrams": 178,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup slices",
+            "weightGrams": 140,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09252"
+      },
+      "evaluation": {
+        "fruitId": "ref-pear-raw",
+        "canonicalName": "Pear",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 48.33333333333333,
+        "dbFood": {
+          "id": "cmudpzfjk00zx82c8qlxut5ps",
+          "name": "Pear chocholate sunday",
+          "source": "INDB",
+          "category": "Indian Prepared Dish",
+          "brand": null,
+          "calories": 183.5,
+          "carbohydrates": 15.02,
+          "protein": 2.08,
+          "fat": 13.11,
+          "fiber": 0.07
+        },
+        "reference": {
+          "calories": 57,
+          "carbohydrates": 15.2,
+          "protein": 0.4,
+          "fat": 0.1,
+          "fiber": 3.1
+        },
+        "deltas": {
+          "calories": {
+            "delta": 126.5,
+            "relPercent": 221.9
+          },
+          "carbohydrates": {
+            "delta": 0.18,
+            "relPercent": 1.2
+          },
+          "protein": {
+            "delta": 1.68,
+            "relPercent": 420
+          },
+          "fat": {
+            "delta": 13.01,
+            "relPercent": 13010
+          },
+          "fiber": {
+            "delta": 3.03,
+            "relPercent": 97.7
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 186.5,
+          "residual": 3,
+          "isConsistent": true,
+          "macroMassSum": 30.28,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "sundae glass",
+              "unitType": "WEIGHT",
+              "weightGrams": 244,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Excess fat reported: Ref 0.1g vs DB 13.11g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Plum",
+      "reference": {
+        "id": "ref-plum-raw",
+        "canonicalName": "Plum",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "plum",
+          "aloo bukhara",
+          "alubukhara",
+          "plum raw"
+        ],
+        "standard100g": {
+          "calories": 46,
+          "carbohydrates": 11.4,
+          "protein": 0.7,
+          "fat": 0.3,
+          "fiber": 1.4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium (2-1/8\" dia)",
+            "weightGrams": 66,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09279"
+      },
+      "evaluation": {
+        "fruitId": "ref-plum-raw",
+        "canonicalName": "Plum",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 52,
+        "dbFood": {
+          "id": "cmudq34zi01l582c8jiaxnlf9",
+          "name": "Plum squash (Aloo bukhara squash)",
+          "source": "INDB",
+          "category": "Indian Prepared Dish",
+          "brand": null,
+          "calories": 211.2,
+          "carbohydrates": 55.51,
+          "protein": 0.16,
+          "fat": 0.1,
+          "fiber": 0.52
+        },
+        "reference": {
+          "calories": 46,
+          "carbohydrates": 11.4,
+          "protein": 0.7,
+          "fat": 0.3,
+          "fiber": 1.4
+        },
+        "deltas": {
+          "calories": {
+            "delta": 165.2,
+            "relPercent": 359.1
+          },
+          "carbohydrates": {
+            "delta": 44.11,
+            "relPercent": 386.9
+          },
+          "protein": {
+            "delta": 0.54,
+            "relPercent": 77.1
+          },
+          "fat": {
+            "delta": 0.2,
+            "relPercent": 66.7
+          },
+          "fiber": {
+            "delta": 0.88,
+            "relPercent": 62.9
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 224.6,
+          "residual": 13.4,
+          "isConsistent": true,
+          "macroMassSum": 56.29,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "100g",
+              "unitType": "WEIGHT",
+              "weightGrams": 100,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 11.4g vs DB 55.51g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Cherry",
+      "reference": {
+        "id": "ref-cherry-raw",
+        "canonicalName": "Cherry",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "cherry",
+          "cherries",
+          "sweet cherries",
+          "sweet cherries raw"
+        ],
+        "standard100g": {
+          "calories": 63,
+          "carbohydrates": 16,
+          "protein": 1.1,
+          "fat": 0.2,
+          "fiber": 2.1
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup with pits",
+            "weightGrams": 138,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "1 cherry",
+            "weightGrams": 8,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09070"
+      },
+      "evaluation": {
+        "fruitId": "ref-cherry-raw",
+        "canonicalName": "Cherry",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 115.5,
+        "dbFood": {
+          "id": "78b23713-5d60-4859-9133-1f195bc19427",
+          "name": "Cherry",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Beverages",
+          "brand": "Coca-Cola",
+          "calories": 43,
+          "carbohydrates": 10.7,
+          "protein": 0,
+          "fat": 0,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 63,
+          "carbohydrates": 16,
+          "protein": 1.1,
+          "fat": 0.2,
+          "fiber": 2.1
+        },
+        "deltas": {
+          "calories": {
+            "delta": 20,
+            "relPercent": 31.7
+          },
+          "carbohydrates": {
+            "delta": 5.3,
+            "relPercent": 33.1
+          },
+          "protein": {
+            "delta": 1.1,
+            "relPercent": 100
+          },
+          "fat": {
+            "delta": 0.2,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 2.1,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 42.8,
+          "residual": 0.2,
+          "isConsistent": true,
+          "macroMassSum": 10.7,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 330,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 2.1g, DB: 0g)"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Apricot",
+      "reference": {
+        "id": "ref-apricot-raw",
+        "canonicalName": "Apricot",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "apricot",
+          "khubani",
+          "khumani",
+          "apricots raw",
+          "fresh apricot"
+        ],
+        "standard100g": {
+          "calories": 48,
+          "carbohydrates": 11.1,
+          "protein": 1.4,
+          "fat": 0.4,
+          "fiber": 2
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium",
+            "weightGrams": 35,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup halves",
+            "weightGrams": 155,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09021"
+      },
+      "evaluation": {
+        "fruitId": "ref-apricot-raw",
+        "canonicalName": "Apricot",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 50,
+        "dbFood": {
+          "id": "cmudpzm7i010x82c8mrowldj2",
+          "name": "Apricot fool",
+          "source": "INDB",
+          "category": "Indian Prepared Dish",
+          "brand": null,
+          "calories": 240.8,
+          "carbohydrates": 33.64,
+          "protein": 1.54,
+          "fat": 11.35,
+          "fiber": 1
+        },
+        "reference": {
+          "calories": 48,
+          "carbohydrates": 11.1,
+          "protein": 1.4,
+          "fat": 0.4,
+          "fiber": 2
+        },
+        "deltas": {
+          "calories": {
+            "delta": 192.8,
+            "relPercent": 401.7
+          },
+          "carbohydrates": {
+            "delta": 22.54,
+            "relPercent": 203.1
+          },
+          "protein": {
+            "delta": 0.14,
+            "relPercent": 10
+          },
+          "fat": {
+            "delta": 10.95,
+            "relPercent": 2737.5
+          },
+          "fiber": {
+            "delta": 1,
+            "relPercent": 50
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 244.9,
+          "residual": 4.1,
+          "isConsistent": true,
+          "macroMassSum": 47.53,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "tall stemmed glass",
+              "unitType": "WEIGHT",
+              "weightGrams": 228,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 11.1g vs DB 33.64g",
+          "Excess fat reported: Ref 0.4g vs DB 11.35g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Muskmelon (Cantaloupe)",
+      "reference": {
+        "id": "ref-muskmelon-raw",
+        "canonicalName": "Muskmelon (Cantaloupe)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "muskmelon",
+          "cantaloupe",
+          "kharbuja",
+          "kharbooja",
+          "rockmelon",
+          "cantaloupe raw"
+        ],
+        "standard100g": {
+          "calories": 34,
+          "carbohydrates": 8.2,
+          "protein": 0.8,
+          "fat": 0.2,
+          "fiber": 0.9
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium wedge",
+            "weightGrams": 69,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup diced",
+            "weightGrams": 160,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09181"
+      },
+      "evaluation": {
+        "fruitId": "ref-muskmelon-raw",
+        "canonicalName": "Muskmelon (Cantaloupe)",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Honeydew Melon",
+      "reference": {
+        "id": "ref-honeydew-raw",
+        "canonicalName": "Honeydew Melon",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "honeydew",
+          "honeydew melon",
+          "honeydew raw"
+        ],
+        "standard100g": {
+          "calories": 36,
+          "carbohydrates": 9.1,
+          "protein": 0.5,
+          "fat": 0.1,
+          "fiber": 0.8
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup diced",
+            "weightGrams": 170,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09184"
+      },
+      "evaluation": {
+        "fruitId": "ref-honeydew-raw",
+        "canonicalName": "Honeydew Melon",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Grapefruit",
+      "reference": {
+        "id": "ref-grapefruit-raw",
+        "canonicalName": "Grapefruit",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "grapefruit",
+          "pink grapefruit",
+          "red grapefruit",
+          "white grapefruit",
+          "grapefruit raw"
+        ],
+        "standard100g": {
+          "calories": 42,
+          "carbohydrates": 10.7,
+          "protein": 0.8,
+          "fat": 0.1,
+          "fiber": 1.6
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1/2 medium",
+            "weightGrams": 123,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup sections",
+            "weightGrams": 230,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09112"
+      },
+      "evaluation": {
+        "fruitId": "ref-grapefruit-raw",
+        "canonicalName": "Grapefruit",
+        "status": "FOUND",
+        "accuracyTier": "ACCEPTABLE",
+        "matchScore": 95,
+        "dbFood": {
+          "id": "2a67d9c5-09c0-49d5-bc7f-c3ee4040cb39",
+          "name": "Pink Grapefruit",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Beverages",
+          "brand": "Tropicana",
+          "calories": 37,
+          "carbohydrates": 8.1,
+          "protein": 0,
+          "fat": 0,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 42,
+          "carbohydrates": 10.7,
+          "protein": 0.8,
+          "fat": 0.1,
+          "fiber": 1.6
+        },
+        "deltas": {
+          "calories": {
+            "delta": 5,
+            "relPercent": 11.9
+          },
+          "carbohydrates": {
+            "delta": 2.6,
+            "relPercent": 24.3
+          },
+          "protein": {
+            "delta": 0.8,
+            "relPercent": 100
+          },
+          "fat": {
+            "delta": 0.1,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 1.6,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 32.4,
+          "residual": 4.6,
+          "isConsistent": true,
+          "macroMassSum": 8.1,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 200,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 1.6g, DB: 0g)"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Lemon",
+      "reference": {
+        "id": "ref-lemon-raw",
+        "canonicalName": "Lemon",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "lemon",
+          "nimbu",
+          "neembu",
+          "lemon raw",
+          "lemon whole with peel"
+        ],
+        "standard100g": {
+          "calories": 29,
+          "carbohydrates": 9.3,
+          "protein": 1.1,
+          "fat": 0.3,
+          "fiber": 2.8
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium (2-1/8\" dia)",
+            "weightGrams": 58,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 wedge",
+            "weightGrams": 15,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09150"
+      },
+      "evaluation": {
+        "fruitId": "ref-lemon-raw",
+        "canonicalName": "Lemon",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 49.285714285714285,
+        "dbFood": {
+          "id": "cmudpw0y700h182c82fc3jk7b",
+          "name": "Lemon souffle",
+          "source": "INDB",
+          "category": "Indian Prepared Dish",
+          "brand": null,
+          "calories": 168.5,
+          "carbohydrates": 13.43,
+          "protein": 6.95,
+          "fat": 10.02,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 29,
+          "carbohydrates": 9.3,
+          "protein": 1.1,
+          "fat": 0.3,
+          "fiber": 2.8
+        },
+        "deltas": {
+          "calories": {
+            "delta": 139.5,
+            "relPercent": 481
+          },
+          "carbohydrates": {
+            "delta": 4.13,
+            "relPercent": 44.4
+          },
+          "protein": {
+            "delta": 5.85,
+            "relPercent": 531.8
+          },
+          "fat": {
+            "delta": 9.72,
+            "relPercent": 3240
+          },
+          "fiber": {
+            "delta": 2.8,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 171.7,
+          "residual": 3.2,
+          "isConsistent": true,
+          "macroMassSum": 30.4,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "souffle cup",
+              "unitType": "WEIGHT",
+              "weightGrams": 237,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 2.8g, DB: 0g)",
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Excess fat reported: Ref 0.3g vs DB 10.02g"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Lime",
+      "reference": {
+        "id": "ref-lime-raw",
+        "canonicalName": "Lime",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "lime",
+          "green lime",
+          "lime raw",
+          "fresh lime"
+        ],
+        "standard100g": {
+          "calories": 30,
+          "carbohydrates": 10.5,
+          "protein": 0.7,
+          "fat": 0.2,
+          "fiber": 2.8
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium (2\" dia)",
+            "weightGrams": 67,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09159"
+      },
+      "evaluation": {
+        "fruitId": "ref-lime-raw",
+        "canonicalName": "Lime",
+        "status": "FOUND",
+        "accuracyTier": "ACCEPTABLE",
+        "matchScore": 45.5,
+        "dbFood": {
+          "id": "12ad3008-cf50-4c5d-a36b-7e0104b51376",
+          "name": "Citrom-Lime",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Beverages",
+          "brand": "Sprite",
+          "calories": 33,
+          "carbohydrates": 7.9,
+          "protein": 0,
+          "fat": 0,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 30,
+          "carbohydrates": 10.5,
+          "protein": 0.7,
+          "fat": 0.2,
+          "fiber": 2.8
+        },
+        "deltas": {
+          "calories": {
+            "delta": 3,
+            "relPercent": 10
+          },
+          "carbohydrates": {
+            "delta": 2.6,
+            "relPercent": 24.8
+          },
+          "protein": {
+            "delta": 0.7,
+            "relPercent": 100
+          },
+          "fat": {
+            "delta": 0.2,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 2.8,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 31.6,
+          "residual": 1.4,
+          "isConsistent": true,
+          "macroMassSum": 7.9,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 100,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 2.8g, DB: 0g)"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Dragon Fruit (Pitaya)",
+      "reference": {
+        "id": "ref-dragonfruit-raw",
+        "canonicalName": "Dragon Fruit (Pitaya)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "dragon fruit",
+          "dragonfruit",
+          "pitaya",
+          "kamalam",
+          "red dragon fruit",
+          "white dragon fruit"
+        ],
+        "standard100g": {
+          "calories": 60,
+          "carbohydrates": 13,
+          "protein": 1.2,
+          "fat": 0,
+          "fiber": 2.9
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium fruit",
+            "weightGrams": 200,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup cubed",
+            "weightGrams": 150,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_FDC_2344730"
+      },
+      "evaluation": {
+        "fruitId": "ref-dragonfruit-raw",
+        "canonicalName": "Dragon Fruit (Pitaya)",
+        "status": "FOUND",
+        "accuracyTier": "ACCEPTABLE",
+        "matchScore": 44.666666666666664,
+        "dbFood": {
+          "id": "1e67acf8-2e25-4ee9-874b-b82900ecc89e",
+          "name": "Dragon Fruit Mtn Dew",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Snacks",
+          "brand": "Mountain Dew",
+          "calories": 47.4,
+          "carbohydrates": 12.4,
+          "protein": 0,
+          "fat": 0,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 60,
+          "carbohydrates": 13,
+          "protein": 1.2,
+          "fat": 0,
+          "fiber": 2.9
+        },
+        "deltas": {
+          "calories": {
+            "delta": 12.6,
+            "relPercent": 21
+          },
+          "carbohydrates": {
+            "delta": 0.6,
+            "relPercent": 4.6
+          },
+          "protein": {
+            "delta": 1.2,
+            "relPercent": 100
+          },
+          "fat": {
+            "delta": 0,
+            "relPercent": 0
+          },
+          "fiber": {
+            "delta": 2.9,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 49.6,
+          "residual": 2.2,
+          "isConsistent": true,
+          "macroMassSum": 12.4,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 591,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 2.9g, DB: 0g)"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Passion Fruit",
+      "reference": {
+        "id": "ref-passion-fruit-raw",
+        "canonicalName": "Passion Fruit",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "passion fruit",
+          "passionfruit",
+          "purple granadilla",
+          "passion fruit raw"
+        ],
+        "standard100g": {
+          "calories": 97,
+          "carbohydrates": 23.4,
+          "protein": 2.2,
+          "fat": 0.7,
+          "fiber": 10.4
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 fruit",
+            "weightGrams": 18,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09231"
+      },
+      "evaluation": {
+        "fruitId": "ref-passion-fruit-raw",
+        "canonicalName": "Passion Fruit",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 42.285714285714285,
+        "dbFood": {
+          "id": "22d03382-60df-4711-9885-0ca8c9d56082",
+          "name": "Powerade Passionfruit",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Beverages",
+          "brand": "Coca-Cola",
+          "calories": 18,
+          "carbohydrates": 4.1,
+          "protein": 0,
+          "fat": 0,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 97,
+          "carbohydrates": 23.4,
+          "protein": 2.2,
+          "fat": 0.7,
+          "fiber": 10.4
+        },
+        "deltas": {
+          "calories": {
+            "delta": 79,
+            "relPercent": 81.4
+          },
+          "carbohydrates": {
+            "delta": 19.3,
+            "relPercent": 82.5
+          },
+          "protein": {
+            "delta": 2.2,
+            "relPercent": 100
+          },
+          "fat": {
+            "delta": 0.7,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 10.4,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 16.4,
+          "residual": 1.6,
+          "isConsistent": true,
+          "macroMassSum": 4.1,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 250,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 10.4g, DB: 0g)",
+          "Carbohydrate divergence: Ref 23.4g vs DB 4.1g"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Starfruit (Carambola)",
+      "reference": {
+        "id": "ref-starfruit-raw",
+        "canonicalName": "Starfruit (Carambola)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "starfruit",
+          "star fruit",
+          "carambola",
+          "kamrakh",
+          "starfruit raw"
+        ],
+        "standard100g": {
+          "calories": 31,
+          "carbohydrates": 6.7,
+          "protein": 1,
+          "fat": 0.3,
+          "fiber": 2.8
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium fruit",
+            "weightGrams": 91,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup sliced",
+            "weightGrams": 132,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09060"
+      },
+      "evaluation": {
+        "fruitId": "ref-starfruit-raw",
+        "canonicalName": "Starfruit (Carambola)",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 49.285714285714285,
+        "dbFood": {
+          "id": "cmudq1g2p01bd82c8p3zfalcy",
+          "name": "Starfruit preserves",
+          "source": "INDB",
+          "category": "Indian Prepared Dish",
+          "brand": null,
+          "calories": 128.9,
+          "carbohydrates": 33.62,
+          "protein": 0.24,
+          "fat": 0.12,
+          "fiber": 0.78
+        },
+        "reference": {
+          "calories": 31,
+          "carbohydrates": 6.7,
+          "protein": 1,
+          "fat": 0.3,
+          "fiber": 2.8
+        },
+        "deltas": {
+          "calories": {
+            "delta": 97.9,
+            "relPercent": 315.8
+          },
+          "carbohydrates": {
+            "delta": 26.92,
+            "relPercent": 401.8
+          },
+          "protein": {
+            "delta": 0.76,
+            "relPercent": 76
+          },
+          "fat": {
+            "delta": 0.18,
+            "relPercent": 60
+          },
+          "fiber": {
+            "delta": 2.02,
+            "relPercent": 72.1
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 138.1,
+          "residual": 9.2,
+          "isConsistent": true,
+          "macroMassSum": 34.76,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "jar",
+              "unitType": "WEIGHT",
+              "weightGrams": 162,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 6.7g vs DB 33.62g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Fig (Fresh)",
+      "reference": {
+        "id": "ref-fig-fresh-raw",
+        "canonicalName": "Fig (Fresh)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "fig",
+          "fresh fig",
+          "anjeer fresh",
+          "anjeer",
+          "figs raw"
+        ],
+        "standard100g": {
+          "calories": 74,
+          "carbohydrates": 19.2,
+          "protein": 0.8,
+          "fat": 0.3,
+          "fiber": 2.9
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium (2-1/4\" dia)",
+            "weightGrams": 50,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 small (1-1/2\" dia)",
+            "weightGrams": 40,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09089"
+      },
+      "evaluation": {
+        "fruitId": "ref-fig-fresh-raw",
+        "canonicalName": "Fig (Fresh)",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 38,
+        "dbFood": {
+          "id": "507a754a-014c-41e9-b557-686d831ded7f",
+          "name": "Figues séchées bio",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Other",
+          "brand": "Vijaya",
+          "calories": 285,
+          "carbohydrates": 59.9,
+          "protein": 3.3,
+          "fat": 1,
+          "fiber": 11
+        },
+        "reference": {
+          "calories": 74,
+          "carbohydrates": 19.2,
+          "protein": 0.8,
+          "fat": 0.3,
+          "fiber": 2.9
+        },
+        "deltas": {
+          "calories": {
+            "delta": 211,
+            "relPercent": 285.1
+          },
+          "carbohydrates": {
+            "delta": 40.7,
+            "relPercent": 212
+          },
+          "protein": {
+            "delta": 2.5,
+            "relPercent": 312.5
+          },
+          "fat": {
+            "delta": 0.7,
+            "relPercent": 233.3
+          },
+          "fiber": {
+            "delta": 8.1,
+            "relPercent": 279.3
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 283.8,
+          "residual": 1.2,
+          "isConsistent": true,
+          "macroMassSum": 75.2,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 250,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 19.2g vs DB 59.9g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Coconut Meat (Fresh)",
+      "reference": {
+        "id": "ref-coconut-meat-raw",
+        "canonicalName": "Coconut Meat (Fresh)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "fresh coconut",
+          "nariyal",
+          "coconut meat",
+          "fresh coconut raw",
+          "raw coconut kernel"
+        ],
+        "standard100g": {
+          "calories": 354,
+          "carbohydrates": 15.2,
+          "protein": 3.3,
+          "fat": 33.5,
+          "fiber": 9
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 piece (2\" x 2\" x 1/2\")",
+            "weightGrams": 45,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup shredded",
+            "weightGrams": 80,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_12104"
+      },
+      "evaluation": {
+        "fruitId": "ref-coconut-meat-raw",
+        "canonicalName": "Coconut Meat (Fresh)",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 20.57142857142857,
+        "dbFood": {
+          "id": "cmudpwbev00ij82c8myqta43w",
+          "name": "Coconut burfi (Nariyal ki burfi)",
+          "source": "INDB",
+          "category": "Desserts & Sweets",
+          "brand": null,
+          "calories": 467.6,
+          "carbohydrates": 32.15,
+          "protein": 8.81,
+          "fat": 34.63,
+          "fiber": 3.5
+        },
+        "reference": {
+          "calories": 354,
+          "carbohydrates": 15.2,
+          "protein": 3.3,
+          "fat": 33.5,
+          "fiber": 9
+        },
+        "deltas": {
+          "calories": {
+            "delta": 113.6,
+            "relPercent": 32.1
+          },
+          "carbohydrates": {
+            "delta": 16.95,
+            "relPercent": 111.5
+          },
+          "protein": {
+            "delta": 5.51,
+            "relPercent": 167
+          },
+          "fat": {
+            "delta": 1.13,
+            "relPercent": 3.4
+          },
+          "fiber": {
+            "delta": 5.5,
+            "relPercent": 61.1
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 482.5,
+          "residual": 14.9,
+          "isConsistent": true,
+          "macroMassSum": 79.09,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "burfi",
+              "unitType": "WEIGHT",
+              "weightGrams": 57,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Carbohydrate divergence: Ref 15.2g vs DB 32.15g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Dates (Deglet Noor / Fresh)",
+      "reference": {
+        "id": "ref-dates-fresh",
+        "canonicalName": "Dates (Deglet Noor / Fresh)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "dates",
+          "khajoor",
+          "khajur",
+          "deglet noor dates",
+          "fresh dates"
+        ],
+        "standard100g": {
+          "calories": 282,
+          "carbohydrates": 75,
+          "protein": 2.5,
+          "fat": 0.4,
+          "fiber": 8
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 date",
+            "weightGrams": 7.1,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "5 dates",
+            "weightGrams": 35.5,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09087"
+      },
+      "evaluation": {
+        "fruitId": "ref-dates-fresh",
+        "canonicalName": "Dates (Deglet Noor / Fresh)",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Dates (Medjool)",
+      "reference": {
+        "id": "ref-dates-medjool",
+        "canonicalName": "Dates (Medjool)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "medjool dates",
+          "medjool khajoor",
+          "large medjool date"
+        ],
+        "standard100g": {
+          "calories": 277,
+          "carbohydrates": 75,
+          "protein": 1.8,
+          "fat": 0.2,
+          "fiber": 6.7
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 date (pitted)",
+            "weightGrams": 24,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09421"
+      },
+      "evaluation": {
+        "fruitId": "ref-dates-medjool",
+        "canonicalName": "Dates (Medjool)",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Wood Apple (Bael)",
+      "reference": {
+        "id": "ref-bael-raw",
+        "canonicalName": "Wood Apple (Bael)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "bael",
+          "wood apple",
+          "bel",
+          "stone apple",
+          "aegle marmelos",
+          "bael fruit"
+        ],
+        "standard100g": {
+          "calories": 134,
+          "carbohydrates": 31.8,
+          "protein": 1.8,
+          "fat": 0.3,
+          "fiber": 2.9
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup pulp",
+            "weightGrams": 150,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "IFCT_2017_E004"
+      },
+      "evaluation": {
+        "fruitId": "ref-bael-raw",
+        "canonicalName": "Wood Apple (Bael)",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 38,
+        "dbFood": {
+          "id": "08df233d-ea74-4c27-b7e6-7208feeeef89",
+          "name": "Té Negro Yellow Label",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Beverages",
+          "brand": "Lipton",
+          "calories": 107,
+          "carbohydrates": 2,
+          "protein": 24,
+          "fat": 0.2,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 134,
+          "carbohydrates": 31.8,
+          "protein": 1.8,
+          "fat": 0.3,
+          "fiber": 2.9
+        },
+        "deltas": {
+          "calories": {
+            "delta": 27,
+            "relPercent": 20.1
+          },
+          "carbohydrates": {
+            "delta": 29.8,
+            "relPercent": 93.7
+          },
+          "protein": {
+            "delta": 22.2,
+            "relPercent": 1233.3
+          },
+          "fat": {
+            "delta": 0.1,
+            "relPercent": 33.3
+          },
+          "fiber": {
+            "delta": 2.9,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 105.8,
+          "residual": 1.2,
+          "isConsistent": true,
+          "macroMassSum": 26.2,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 2,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 2.9g, DB: 0g)",
+          "Carbohydrate divergence: Ref 31.8g vs DB 2g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Jujube (Indian Plum / Ber)",
+      "reference": {
+        "id": "ref-ber-raw",
+        "canonicalName": "Jujube (Indian Plum / Ber)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "ber",
+          "jujube",
+          "indian plum",
+          "ziziphus",
+          "bor"
+        ],
+        "standard100g": {
+          "calories": 79,
+          "carbohydrates": 20.2,
+          "protein": 1.2,
+          "fat": 0.2,
+          "fiber": 1.7
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 fruit",
+            "weightGrams": 15,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 100,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "IFCT_2017_E005"
+      },
+      "evaluation": {
+        "fruitId": "ref-ber-raw",
+        "canonicalName": "Jujube (Indian Plum / Ber)",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 38,
+        "dbFood": {
+          "id": "0d48aa90-0251-42bd-851f-624f3a0f9789",
+          "name": "Borowikowa z grzankami",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Instant & Ready-to-Eat",
+          "brand": "Knorr",
+          "calories": 30,
+          "carbohydrates": 4,
+          "protein": 0.5,
+          "fat": 1.3,
+          "fiber": 0.3
+        },
+        "reference": {
+          "calories": 79,
+          "carbohydrates": 20.2,
+          "protein": 1.2,
+          "fat": 0.2,
+          "fiber": 1.7
+        },
+        "deltas": {
+          "calories": {
+            "delta": 49,
+            "relPercent": 62
+          },
+          "carbohydrates": {
+            "delta": 16.2,
+            "relPercent": 80.2
+          },
+          "protein": {
+            "delta": 0.7,
+            "relPercent": 58.3
+          },
+          "fat": {
+            "delta": 1.1,
+            "relPercent": 550
+          },
+          "fiber": {
+            "delta": 1.4,
+            "relPercent": 82.4
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 30.3,
+          "residual": 0.3,
+          "isConsistent": true,
+          "macroMassSum": 6.1,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 200,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Carbohydrate divergence: Ref 20.2g vs DB 4g"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Mulberry (Shahtoot)",
+      "reference": {
+        "id": "ref-mulberry-raw",
+        "canonicalName": "Mulberry (Shahtoot)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "mulberry",
+          "mulberries",
+          "shahtoot",
+          "shehtoot",
+          "morus"
+        ],
+        "standard100g": {
+          "calories": 43,
+          "carbohydrates": 9.8,
+          "protein": 1.4,
+          "fat": 0.4,
+          "fiber": 1.7
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 140,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09191"
+      },
+      "evaluation": {
+        "fruitId": "ref-mulberry-raw",
+        "canonicalName": "Mulberry (Shahtoot)",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Tamarind (Pulp)",
+      "reference": {
+        "id": "ref-tamarind-raw",
+        "canonicalName": "Tamarind (Pulp)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "tamarind",
+          "imli",
+          "tamarind pulp",
+          "raw tamarind"
+        ],
+        "standard100g": {
+          "calories": 239,
+          "carbohydrates": 62.5,
+          "protein": 2.8,
+          "fat": 0.6,
+          "fiber": 5.1
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 tbsp",
+            "weightGrams": 15,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 120,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09325"
+      },
+      "evaluation": {
+        "fruitId": "ref-tamarind-raw",
+        "canonicalName": "Tamarind (Pulp)",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 44,
+        "dbFood": {
+          "id": "070990cc-c89f-41fe-8b90-e3dd8113d409",
+          "name": "Tamarind Rice",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Spices & Staples",
+          "brand": "Vadilal",
+          "calories": 190.1,
+          "carbohydrates": 25.4,
+          "protein": 4.2,
+          "fat": 7.7,
+          "fiber": 1.4
+        },
+        "reference": {
+          "calories": 239,
+          "carbohydrates": 62.5,
+          "protein": 2.8,
+          "fat": 0.6,
+          "fiber": 5.1
+        },
+        "deltas": {
+          "calories": {
+            "delta": 48.9,
+            "relPercent": 20.5
+          },
+          "carbohydrates": {
+            "delta": 37.1,
+            "relPercent": 59.4
+          },
+          "protein": {
+            "delta": 1.4,
+            "relPercent": 50
+          },
+          "fat": {
+            "delta": 7.1,
+            "relPercent": 1183.3
+          },
+          "fiber": {
+            "delta": 3.7,
+            "relPercent": 72.5
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 190.5,
+          "residual": 0.4,
+          "isConsistent": true,
+          "macroMassSum": 38.7,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 142,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Carbohydrate divergence: Ref 62.5g vs DB 25.4g",
+          "Excess fat reported: Ref 0.6g vs DB 7.7g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Raisins (Kishmish)",
+      "reference": {
+        "id": "ref-raisins-seedless",
+        "canonicalName": "Raisins (Kishmish)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "raisins",
+          "kishmish",
+          "kismis",
+          "golden raisins",
+          "sultanas",
+          "black raisins"
+        ],
+        "standard100g": {
+          "calories": 299,
+          "carbohydrates": 79.2,
+          "protein": 3.1,
+          "fat": 0.5,
+          "fiber": 3.7
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 small box (1.5 oz)",
+            "weightGrams": 43,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 tbsp",
+            "weightGrams": 10,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "1 cup packed",
+            "weightGrams": 165,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09298"
+      },
+      "evaluation": {
+        "fruitId": "ref-raisins-seedless",
+        "canonicalName": "Raisins (Kishmish)",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 41.75,
+        "dbFood": {
+          "id": "d4302f76-6e1a-4bd1-8904-381aab904b3a",
+          "name": "Brunch Sweet Raisins",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Other",
+          "brand": "Cadbury",
+          "calories": 417.9,
+          "carbohydrates": 67,
+          "protein": 5.5,
+          "fat": 15,
+          "fiber": 4.3
+        },
+        "reference": {
+          "calories": 299,
+          "carbohydrates": 79.2,
+          "protein": 3.1,
+          "fat": 0.5,
+          "fiber": 3.7
+        },
+        "deltas": {
+          "calories": {
+            "delta": 118.9,
+            "relPercent": 39.8
+          },
+          "carbohydrates": {
+            "delta": 12.2,
+            "relPercent": 15.4
+          },
+          "protein": {
+            "delta": 2.4,
+            "relPercent": 77.4
+          },
+          "fat": {
+            "delta": 14.5,
+            "relPercent": 2900
+          },
+          "fiber": {
+            "delta": 0.6,
+            "relPercent": 16.2
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 433.6,
+          "residual": 15.7,
+          "isConsistent": true,
+          "macroMassSum": 91.8,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 28,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Carbohydrate divergence: Ref 79.2g vs DB 67g",
+          "Excess fat reported: Ref 0.5g vs DB 15g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Dried Fig (Sukha Anjeer)",
+      "reference": {
+        "id": "ref-dried-fig",
+        "canonicalName": "Dried Fig (Sukha Anjeer)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "dried fig",
+          "dried figs",
+          "sukha anjeer",
+          "anjeer dry"
+        ],
+        "standard100g": {
+          "calories": 249,
+          "carbohydrates": 63.9,
+          "protein": 3.3,
+          "fat": 0.9,
+          "fiber": 9.8
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 dried fig",
+            "weightGrams": 8.4,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 149,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09094"
+      },
+      "evaluation": {
+        "fruitId": "ref-dried-fig",
+        "canonicalName": "Dried Fig (Sukha Anjeer)",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Dried Apricot (Jardalu)",
+      "reference": {
+        "id": "ref-dried-apricot",
+        "canonicalName": "Dried Apricot (Jardalu)",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "dried apricot",
+          "jardalu",
+          "khumani dry",
+          "dried apricots"
+        ],
+        "standard100g": {
+          "calories": 241,
+          "carbohydrates": 62.6,
+          "protein": 3.4,
+          "fat": 0.5,
+          "fiber": 7.3
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 piece",
+            "weightGrams": 7,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup halves",
+            "weightGrams": 130,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09032"
+      },
+      "evaluation": {
+        "fruitId": "ref-dried-apricot",
+        "canonicalName": "Dried Apricot (Jardalu)",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Tangerine / Mandarin",
+      "reference": {
+        "id": "ref-tangerine-raw",
+        "canonicalName": "Tangerine / Mandarin",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "tangerine",
+          "mandarin",
+          "mandarin orange",
+          "clementine",
+          "kinnow",
+          "kinoo"
+        ],
+        "standard100g": {
+          "calories": 53,
+          "carbohydrates": 13.3,
+          "protein": 0.8,
+          "fat": 0.3,
+          "fiber": 1.8
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 medium (2-3/8\" dia)",
+            "weightGrams": 88,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09383"
+      },
+      "evaluation": {
+        "fruitId": "ref-tangerine-raw",
+        "canonicalName": "Tangerine / Mandarin",
+        "status": "FOUND",
+        "accuracyTier": "ACCEPTABLE",
+        "matchScore": 71.57142857142857,
+        "dbFood": {
+          "id": "32de1fc3-d0bf-4839-a9dc-8360e218a9fc",
+          "name": "Mandarin Orange Segments",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Fruits & Vegetables",
+          "brand": "Del Monte",
+          "calories": 59.9,
+          "carbohydrates": 15.6,
+          "protein": 0.6,
+          "fat": 0,
+          "fiber": 1.2
+        },
+        "reference": {
+          "calories": 53,
+          "carbohydrates": 13.3,
+          "protein": 0.8,
+          "fat": 0.3,
+          "fiber": 1.8
+        },
+        "deltas": {
+          "calories": {
+            "delta": 6.9,
+            "relPercent": 13
+          },
+          "carbohydrates": {
+            "delta": 2.3,
+            "relPercent": 17.3
+          },
+          "protein": {
+            "delta": 0.2,
+            "relPercent": 25
+          },
+          "fat": {
+            "delta": 0.3,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 0.6,
+            "relPercent": 33.3
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 67.2,
+          "residual": 7.3,
+          "isConsistent": true,
+          "macroMassSum": 17.4,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 167,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": []
+      }
+    },
+    {
+      "canonicalName": "Persimmon",
+      "reference": {
+        "id": "ref-persimmon-raw",
+        "canonicalName": "Persimmon",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "persimmon",
+          "japanese persimmon",
+          "fuyu persimmon",
+          "hachiya persimmon",
+          "persimmon raw"
+        ],
+        "standard100g": {
+          "calories": 70,
+          "carbohydrates": 18.6,
+          "protein": 0.6,
+          "fat": 0.2,
+          "fiber": 3.6
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 fruit",
+            "weightGrams": 168,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09278"
+      },
+      "evaluation": {
+        "fruitId": "ref-persimmon-raw",
+        "canonicalName": "Persimmon",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Coconut Water (Fresh)",
+      "reference": {
+        "id": "ref-coconut-water",
+        "canonicalName": "Coconut Water (Fresh)",
+        "category": "BEVERAGES",
+        "aliases": [
+          "coconut water",
+          "nariyal pani",
+          "daab",
+          "fresh coconut water",
+          "tender coconut water"
+        ],
+        "standard100g": {
+          "calories": 19,
+          "carbohydrates": 3.7,
+          "protein": 0.7,
+          "fat": 0.2,
+          "fiber": 1.1
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup",
+            "weightGrams": 240,
+            "unitType": "VOLUME"
+          },
+          {
+            "unitLabel": "1 whole tender coconut (water only)",
+            "weightGrams": 300,
+            "unitType": "COUNT"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_12119"
+      },
+      "evaluation": {
+        "fruitId": "ref-coconut-water",
+        "canonicalName": "Coconut Water (Fresh)",
+        "status": "FOUND",
+        "accuracyTier": "HIGH_DIVERGENCE",
+        "matchScore": 46.57142857142857,
+        "dbFood": {
+          "id": "4b90942b-cd3c-472a-bb6a-5b00003a8b45",
+          "name": "Swing Coconut Water",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Spices & Staples",
+          "brand": "Paper Boat",
+          "calories": 28.8,
+          "carbohydrates": 7.2,
+          "protein": 0,
+          "fat": 0,
+          "fiber": 0
+        },
+        "reference": {
+          "calories": 19,
+          "carbohydrates": 3.7,
+          "protein": 0.7,
+          "fat": 0.2,
+          "fiber": 1.1
+        },
+        "deltas": {
+          "calories": {
+            "delta": 9.8,
+            "relPercent": 51.6
+          },
+          "carbohydrates": {
+            "delta": 3.5,
+            "relPercent": 94.6
+          },
+          "protein": {
+            "delta": 0.7,
+            "relPercent": 100
+          },
+          "fat": {
+            "delta": 0.2,
+            "relPercent": 100
+          },
+          "fiber": {
+            "delta": 1.1,
+            "relPercent": 100
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 28.8,
+          "residual": 0,
+          "isConsistent": true,
+          "macroMassSum": 7.2,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "ml",
+              "unitType": "VOLUME",
+              "weightGrams": 270,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": true,
+          "issues": []
+        },
+        "issues": [
+          "Missing dietary fiber (Ref: 1.1g, DB: 0g)"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Cranberry",
+      "reference": {
+        "id": "ref-cranberry-raw",
+        "canonicalName": "Cranberry",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "cranberry",
+          "cranberries",
+          "fresh cranberries",
+          "raw cranberries"
+        ],
+        "standard100g": {
+          "calories": 46,
+          "carbohydrates": 12,
+          "protein": 0.4,
+          "fat": 0.1,
+          "fiber": 3.6
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 cup whole",
+            "weightGrams": 100,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09078"
+      },
+      "evaluation": {
+        "fruitId": "ref-cranberry-raw",
+        "canonicalName": "Cranberry",
+        "status": "FOUND",
+        "accuracyTier": "CRITICAL_ANOMALY",
+        "matchScore": 45.5,
+        "dbFood": {
+          "id": "59d50faf-3d7a-4eda-887e-80a6da152bc8",
+          "name": "Oatmeal With Cranberry",
+          "source": "OPEN_FOOD_FACTS",
+          "category": "Breakfast & Cereals",
+          "brand": "Dr. Oetker",
+          "calories": 380,
+          "carbohydrates": 62,
+          "protein": 12,
+          "fat": 7.7,
+          "fiber": 7.1
+        },
+        "reference": {
+          "calories": 46,
+          "carbohydrates": 12,
+          "protein": 0.4,
+          "fat": 0.1,
+          "fiber": 3.6
+        },
+        "deltas": {
+          "calories": {
+            "delta": 334,
+            "relPercent": 726.1
+          },
+          "carbohydrates": {
+            "delta": 50,
+            "relPercent": 416.7
+          },
+          "protein": {
+            "delta": 11.6,
+            "relPercent": 2900
+          },
+          "fat": {
+            "delta": 7.6,
+            "relPercent": 7600
+          },
+          "fiber": {
+            "delta": 3.5,
+            "relPercent": 97.2
+          }
+        },
+        "atwaterCheck": {
+          "expectedCal": 379.5,
+          "residual": 0.5,
+          "isConsistent": true,
+          "macroMassSum": 88.8,
+          "isMassPlausible": true
+        },
+        "servingCheck": {
+          "servingCount": 1,
+          "servings": [
+            {
+              "unitLabel": "g",
+              "unitType": "WEIGHT",
+              "weightGrams": 62,
+              "isDefault": true
+            }
+          ],
+          "hasCountServing": false,
+          "hasVolumeServing": false,
+          "issues": [
+            "Missing practical piece / cup serving sizes"
+          ]
+        },
+        "issues": [
+          "Suspicious high calorie scaling (Possible whole-piece base scaling error)",
+          "Carbohydrate divergence: Ref 12g vs DB 62g",
+          "Excess fat reported: Ref 0.1g vs DB 7.7g",
+          "Missing practical piece / cup serving sizes"
+        ]
+      }
+    },
+    {
+      "canonicalName": "Pomelo",
+      "reference": {
+        "id": "ref-pomelo-raw",
+        "canonicalName": "Pomelo",
+        "category": "FRUITS_AND_VEGETABLES",
+        "aliases": [
+          "pomelo",
+          "pummelo",
+          "chakotra",
+          "grapefruit chinese",
+          "pomelo raw"
+        ],
+        "standard100g": {
+          "calories": 38,
+          "carbohydrates": 9.6,
+          "protein": 0.8,
+          "fat": 0,
+          "fiber": 1
+        },
+        "expectedServings": [
+          {
+            "unitLabel": "1 fruit (without peel/seeds)",
+            "weightGrams": 609,
+            "unitType": "COUNT"
+          },
+          {
+            "unitLabel": "1 cup sections",
+            "weightGrams": 190,
+            "unitType": "VOLUME"
+          }
+        ],
+        "source": "USDA_SR_LEGACY_09294"
+      },
+      "evaluation": {
+        "fruitId": "ref-pomelo-raw",
+        "canonicalName": "Pomelo",
+        "status": "MISSING",
+        "accuracyTier": "MISSING",
+        "dbFood": null,
+        "deltas": null,
+        "atwaterCheck": null,
+        "servingCheck": null,
+        "issues": [
+          "Fruit not found in database"
+        ]
+      }
+    }
+  ]
+}
