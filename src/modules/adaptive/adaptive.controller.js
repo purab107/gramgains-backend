@@ -5,6 +5,7 @@ async function getStatus(req, res) {
     const data = await AdaptiveService.getAdaptiveStatus(req.userId);
     return res.json({ success: true, data });
   } catch (error) {
+    console.error('❌ [AdaptiveController.getStatus] Error:', error);
     return res.status(500).json({
       success: false,
       message: 'Error fetching adaptive metabolic status',
@@ -31,6 +32,7 @@ async function getCheckIn(req, res) {
       data,
     });
   } catch (error) {
+    console.error('❌ [AdaptiveController.getCheckIn] Error:', error);
     return res.status(500).json({
       success: false,
       message: 'Error fetching weekly check-in',

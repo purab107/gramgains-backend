@@ -6,6 +6,7 @@ async function getSummary(req, res) {
     const summary = await DashboardService.getSummary(date, req.userId);
     return res.json({ success: true, data: summary });
   } catch (error) {
+    console.error('❌ [DashboardController.getSummary] Error:', error);
     return res.status(500).json({ success: false, message: 'Error fetching dashboard summary', error: error.message });
   }
 }
@@ -16,6 +17,7 @@ async function getHeatmap(req, res) {
     const heatmap = await DashboardService.getHeatmap(days, req.userId);
     return res.json({ success: true, data: heatmap });
   } catch (error) {
+    console.error('❌ [DashboardController.getHeatmap] Error:', error);
     return res.status(500).json({ success: false, message: 'Error fetching heatmap data', error: error.message });
   }
 }
