@@ -5,6 +5,7 @@ async function getProfile(req, res) {
     const profile = await ProfileService.getProfile(req.userId);
     return res.json({ success: true, data: profile });
   } catch (error) {
+    console.error('❌ [ProfileController.getProfile] Error:', error);
     return res.status(500).json({ success: false, message: 'Error fetching profile', error: error.message });
   }
 }
@@ -14,6 +15,7 @@ async function updateProfile(req, res) {
     const updated = await ProfileService.updateProfile(req.body, req.userId);
     return res.json({ success: true, message: 'Profile and TDEE goals updated successfully', data: updated });
   } catch (error) {
+    console.error('❌ [ProfileController.updateProfile] Error:', error);
     return res.status(500).json({ success: false, message: 'Error updating profile', error: error.message });
   }
 }
@@ -27,6 +29,7 @@ async function checkEmail(req, res) {
     const exists = await ProfileService.checkEmailExists(email);
     return res.json({ success: true, exists });
   } catch (error) {
+    console.error('❌ [ProfileController.checkEmail] Error:', error);
     return res.status(500).json({ success: false, message: 'Error checking email', error: error.message });
   }
 }
