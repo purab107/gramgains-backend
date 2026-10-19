@@ -21,6 +21,13 @@ const ACTIVITY_MULTIPLIERS = {
   EXTRA_ACTIVE: 1.9,
 };
 
+/**
+ * Baseline calorie floors:
+ * - FEMALE: 1200 kcal (standard clinical guidance for adult females)
+ * - MALE: 1500 kcal (standard clinical guidance for adult males)
+ * - OTHER: 1350 kcal (exact arithmetic midpoint between female and male clinical floors;
+ *   acts as a conservative baseline for non-binary users without explicit sex markers)
+ */
 const SAFETY_FLOORS = {
   MALE: 1500,
   FEMALE: 1200,
@@ -125,6 +132,19 @@ function calculateProfileMetrics({
     if (normalizedGoal === 'WEIGHT_LOSS') rate = -0.5;
     else if (normalizedGoal === 'BULK') rate = 0.35;
     else rate = 0.0;
+  }
+
+  // Clinical safety guard 1: Hard-cap rate of loss to maximum 1.0% of body weight per week
+  const maxSafeLossRate = Math.round((weightKg * 0.010) * 100) / 100;
+  if (rate < -maxSafeLossRate) {
+    rate = -maxSafeLossRate;
+  }
+
+  // Clinical safety guard 2: Underweight BMI guard (block deficit when BMI <= 18.5)
+  const heightM = heightCm / 100;
+  const currentBmi = heightM > 0 ? weightKg / (heightM * heightM) : 22;
+  if (currentBmi <= 18.5 && rate < 0) {
+    rate = 0.0;
   }
 
   const rawTargetCalories = calculateGoalCalories({ tdee, targetRateKgPerWeek: rate });
