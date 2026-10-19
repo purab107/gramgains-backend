@@ -125,6 +125,29 @@ describe('Confidence & Bayesian Blending Model', () => {
     assert.ok(res.blendWeights.observed >= 0.80);
     assert.ok(res.effectiveTdee >= 2500);
   });
+
+  it('dual-gating prevents HIGH confidence when weight logs are sparse (< 12 weigh-ins)', () => {
+    // 25 food days but only 5 weight days -> must NOT be HIGH; falls back to CALIBRATING
+    const res = evaluateExpenditureConfidence({
+      validFoodDays: 25,
+      validWeightDays: 5,
+      formulaTdee: 2200,
+      observedTdee: 2600,
+    });
+    assert.equal(res.level, 'CALIBRATING');
+    assert.ok(res.blendWeights.observed < 0.50);
+  });
+
+  it('dual-gating remains INSUFFICIENT if weigh-ins < 4 even with 21+ food days', () => {
+    const res = evaluateExpenditureConfidence({
+      validFoodDays: 25,
+      validWeightDays: 3,
+      formulaTdee: 2200,
+      observedTdee: 2600,
+    });
+    assert.equal(res.level, 'INSUFFICIENT');
+    assert.equal(res.effectiveTdee, 2200);
+  });
 });
 
 describe('Flexible Macro Allocator', () => {
@@ -226,6 +249,36 @@ describe('Centralised Calorie Calculator Service', () => {
     assert.ok(metrics.targetCarbs > 0);
     assert.ok(metrics.targetFat > 0);
     assert.ok(metrics.targetFiber > 0);
+  });
+
+  it('clamps excessive loss rate to maximum 1.0% body weight per week', () => {
+    // 60 kg person attempting -1.0 kg/week (1.67% of body weight) -> capped at -0.6 kg/week
+    const metrics = calculateProfileMetrics({
+      age: 25,
+      gender: 'FEMALE',
+      heightCm: 165,
+      weightKg: 60,
+      activityLevel: 'SEDENTARY',
+      goal: 'WEIGHT_LOSS',
+      targetRateKgPerWeek: -1.0,
+    });
+    assert.equal(metrics.targetRateKgPerWeek, -0.6);
+  });
+
+  it('blocks deficit and sets rate to 0 when BMI <= 18.5', () => {
+    // 175 cm, 50 kg -> BMI = 50 / 1.75^2 = 16.3 (underweight)
+    const metrics = calculateProfileMetrics({
+      age: 22,
+      gender: 'FEMALE',
+      heightCm: 175,
+      weightKg: 50,
+      activityLevel: 'MODERATE',
+      goal: 'WEIGHT_LOSS',
+      targetRateKgPerWeek: -0.5,
+    });
+    // Rate must be forced to 0 (maintenance) to protect metabolic health
+    assert.equal(metrics.targetRateKgPerWeek, 0);
+    assert.equal(metrics.targetCalories, metrics.tdee);
   });
 });
 
