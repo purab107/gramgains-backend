@@ -7,8 +7,11 @@
 
 const EVALUATION_WINDOW_DAYS = 28;
 const MIN_DAYS_FOR_CALIBRATION = 7;
+const MIN_WEIGHT_DAYS_FOR_CALIBRATION = 4;
 const MIN_DAYS_FOR_MODERATE = 14;
+const MIN_WEIGHT_DAYS_FOR_MODERATE = 7;
 const MIN_DAYS_FOR_HIGH = 21;
+const MIN_WEIGHT_DAYS_FOR_HIGH = 12;
 
 /**
  * Calculates confidence score, tier, and Bayesian blended TDEE.
@@ -62,25 +65,26 @@ function evaluateExpenditureConfidence({
   let observedWeight = 0;
   let message = '';
 
-  if (validFoodDays < MIN_DAYS_FOR_CALIBRATION || validWeightDays < 3 || !observedTdee) {
+  // Dual-gating: Both food logging and weight scale frequency must satisfy minimums
+  if (validFoodDays < MIN_DAYS_FOR_CALIBRATION || validWeightDays < MIN_WEIGHT_DAYS_FOR_CALIBRATION || !observedTdee) {
     level = 'INSUFFICIENT';
     observedWeight = 0.0;
-    message = `Need at least ${MIN_DAYS_FOR_CALIBRATION} days of logs to start adaptive calibration (${validFoodDays}/${MIN_DAYS_FOR_CALIBRATION} logged).`;
-  } else if (validFoodDays < MIN_DAYS_FOR_MODERATE) {
+    message = `Need at least ${MIN_DAYS_FOR_CALIBRATION} days of food logs and ${MIN_WEIGHT_DAYS_FOR_CALIBRATION} weigh-ins to start adaptive calibration (${validFoodDays}/${MIN_DAYS_FOR_CALIBRATION} food, ${validWeightDays}/${MIN_WEIGHT_DAYS_FOR_CALIBRATION} weight).`;
+  } else if (validFoodDays < MIN_DAYS_FOR_MODERATE || validWeightDays < MIN_WEIGHT_DAYS_FOR_MODERATE) {
     level = 'CALIBRATING';
     // Smooth transition from 20% to 45% observed
     observedWeight = 0.20 + (score * 0.25);
-    message = `Calibrating: ${validFoodDays} days of intake logged. Initial adaptation in progress.`;
-  } else if (validFoodDays < MIN_DAYS_FOR_HIGH) {
+    message = `Calibrating: ${validFoodDays} food days, ${validWeightDays} weight logs. Initial adaptation in progress.`;
+  } else if (validFoodDays < MIN_DAYS_FOR_HIGH || validWeightDays < MIN_WEIGHT_DAYS_FOR_HIGH) {
     level = 'MODERATE';
     // Moderate confidence: 50% to 75% observed
     observedWeight = 0.50 + (score * 0.25);
-    message = `Moderate confidence: ${validFoodDays} days logged. Adaptive targets are active.`;
+    message = `Moderate confidence: ${validFoodDays} food days, ${validWeightDays} weight logs. Adaptive targets are active.`;
   } else {
     level = 'HIGH';
     // High confidence: 80% to 95% observed
     observedWeight = Math.min(0.95, 0.75 + (score * 0.20));
-    message = `High confidence: Consistent real-world data across ${validFoodDays} days.`;
+    message = `High confidence: Consistent real-world data across ${validFoodDays} food days and ${validWeightDays} weigh-ins.`;
   }
 
   const formulaWeight = Math.round((1 - observedWeight) * 100) / 100;
@@ -183,6 +187,9 @@ module.exports = {
   evaluateEvidenceSufficiency,
   EVALUATION_WINDOW_DAYS,
   MIN_DAYS_FOR_CALIBRATION,
+  MIN_WEIGHT_DAYS_FOR_CALIBRATION,
   MIN_DAYS_FOR_MODERATE,
+  MIN_WEIGHT_DAYS_FOR_MODERATE,
   MIN_DAYS_FOR_HIGH,
+  MIN_WEIGHT_DAYS_FOR_HIGH,
 };
