@@ -1,0 +1,1795 @@
+{
+  "rotis": [
+    {
+      "id": "d666743b-5c45-4ffd-8120-e3b8c01533a1",
+      "name": "4 Original bun's poulet roti et thym",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "McCain",
+      "calories": 272,
+      "protein": 9.5,
+      "carbs": 26.5,
+      "fat": 13.5,
+      "servings": [
+        {
+          "id": "3ce7e11d-eace-4203-8910-585eeafb76cb",
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT",
+          "displayQty": 100,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "f49b99d2-1d22-4fa6-8b15-859acc9e86e9",
+      "name": "Amul Roti",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Amul",
+      "calories": 370.8,
+      "protein": 30.8,
+      "carbs": 56.9,
+      "fat": 2.3,
+      "servings": [
+        {
+          "id": "a63f53ee-2c4c-4a01-a07c-3b248d24102d",
+          "label": "g",
+          "weight": 65,
+          "type": "WEIGHT",
+          "displayQty": 65,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "cmudpu06z005z82c88heg20pm",
+      "name": "Chapati/Roti",
+      "source": "INDB",
+      "brand": null,
+      "calories": 202.3,
+      "protein": 5.88,
+      "carbs": 35.65,
+      "fat": 3.56,
+      "servings": [
+        {
+          "id": "cmudpu06z006082c8l44rqlod",
+          "label": "chapati",
+          "weight": 36,
+          "type": "COUNT",
+          "displayQty": 1,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "181239bb-82aa-41d6-9548-0ed54200d75f",
+      "name": "Chickpea Rotini",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 339.3,
+      "protein": 21.4,
+      "carbs": 60.7,
+      "fat": 6.3,
+      "servings": [
+        {
+          "id": "ed4cf326-9072-4bd5-9345-846142683b7e",
+          "label": "g",
+          "weight": 56,
+          "type": "WEIGHT",
+          "displayQty": 56,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "99c8a8e7-6183-48a7-9793-989463da2d59",
+      "name": "Gf Rotini",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 339.3,
+      "protein": 7.1,
+      "carbs": 78.6,
+      "fat": 1.8,
+      "servings": [
+        {
+          "id": "f5484673-ad72-4955-8224-7695b2658940",
+          "label": "g",
+          "weight": 56,
+          "type": "WEIGHT",
+          "displayQty": 56,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "357acccf-08bc-48a4-bf71-7aaf24b4eced",
+      "name": "GLUTEN FREE ROTINI",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 339.3,
+      "protein": 7.1,
+      "carbs": 78.6,
+      "fat": 1.8,
+      "servings": [
+        {
+          "id": "6edb1663-5486-4a74-af0b-2315f8a16c0a",
+          "label": "g",
+          "weight": 56,
+          "type": "WEIGHT",
+          "displayQty": 56,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "e3d89d58-49e2-43b7-94e9-7959e79ac288",
+      "name": "High protien peanut butter",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Snickers",
+      "calories": 394.5,
+      "protein": 34.5,
+      "carbs": 35.5,
+      "fat": 14.9,
+      "servings": [
+        {
+          "id": "5c26d9da-a1da-4812-8786-4fff3aaa1b15",
+          "label": "g",
+          "weight": 55,
+          "type": "WEIGHT",
+          "displayQty": 55,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "cmudpuish008r82c8mrfch9x9",
+      "name": "Makki ki roti",
+      "source": "INDB",
+      "brand": null,
+      "calories": 264,
+      "protein": 3.49,
+      "carbs": 24.19,
+      "fat": 16.85,
+      "servings": [
+        {
+          "id": "cmudpuish008s82c85nzu5fra",
+          "label": "roti",
+          "weight": 85,
+          "type": "COUNT",
+          "displayQty": 1,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "cmuzjmead000tj17xxytxryrc",
+      "name": "Missi roti",
+      "source": "INDB",
+      "brand": null,
+      "calories": 280,
+      "protein": 10,
+      "carbs": 42,
+      "fat": 8,
+      "servings": [
+        {
+          "id": "cmuzjmeb6000vj17xo5uexire",
+          "label": "1 medium roti",
+          "weight": 50,
+          "type": "COUNT",
+          "displayQty": 1,
+          "isDefault": true
+        },
+        {
+          "id": "cmuzjmebv000xj17x7mz04iz2",
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT",
+          "displayQty": 100,
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "id": "e679fd03-4b2d-4ac9-b6d5-ec344b59e9c9",
+      "name": "Multigrain chapati",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Haldiram's",
+      "calories": 300,
+      "protein": 10,
+      "carbs": 50,
+      "fat": 6.7,
+      "servings": [
+        {
+          "id": "d9f0a606-8487-4670-95f5-35df3ca830dd",
+          "label": "g",
+          "weight": 60,
+          "type": "WEIGHT",
+          "displayQty": 60,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "cmudpxicp00p582c8sytc9ez8",
+      "name": "Paushtik roti",
+      "source": "INDB",
+      "brand": null,
+      "calories": 149.3,
+      "protein": 7.17,
+      "carbs": 26.59,
+      "fat": 1.51,
+      "servings": [
+        {
+          "id": "cmudpxicp00p682c83h38iigd",
+          "label": "roti",
+          "weight": 43,
+          "type": "COUNT",
+          "displayQty": 1,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "dc65cc4c-8c63-4585-b5be-4661de95fc7f",
+      "name": "PERK Clear Protien- Peach Mango",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "PERK",
+      "calories": 346.2,
+      "protein": 76.9,
+      "carbs": 3.8,
+      "fat": 0,
+      "servings": [
+        {
+          "id": "011dbef8-589a-495a-bc34-8385bb71f5ff",
+          "label": "g",
+          "weight": 26,
+          "type": "WEIGHT",
+          "displayQty": 26,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "cmuzjmdnb0004j17xdu58p3eb",
+      "name": "Phulka (plain)",
+      "source": "INDB",
+      "brand": null,
+      "calories": 336,
+      "protein": 11.6,
+      "carbs": 68.4,
+      "fat": 1.6,
+      "servings": [
+        {
+          "id": "cmuzjmdop0006j17x3zhj9pl6",
+          "label": "1 small phulka",
+          "weight": 25,
+          "type": "COUNT",
+          "displayQty": 1,
+          "isDefault": true
+        },
+        {
+          "id": "cmuzjmdpg0008j17x7usipe13",
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT",
+          "displayQty": 100,
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "id": "9aa9d4be-4292-4e63-b13a-79d23ea2fd7a",
+      "name": "PROTEIN+ PENNE/ROTINI",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 339.3,
+      "protein": 17.6,
+      "carbs": 67,
+      "fat": 1.8,
+      "servings": [
+        {
+          "id": "c069e499-d3a1-46de-8044-796ef21700ea",
+          "label": "g",
+          "weight": 56.699,
+          "type": "WEIGHT",
+          "displayQty": 56.699,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "a5d15024-3375-430c-b7bb-828168227709",
+      "name": "PROTEIN+ ROTINI",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 339.3,
+      "protein": 10,
+      "carbs": 38,
+      "fat": 1,
+      "servings": [
+        {
+          "id": "7b8155e2-90d4-4c88-b3b7-d5a2cfdb8100",
+          "label": "g",
+          "weight": 56,
+          "type": "WEIGHT",
+          "displayQty": 56,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "c3b2db47-adf5-4a00-82eb-53d78944c35c",
+      "name": "Red Lentil Rotini",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 339.3,
+      "protein": 25,
+      "carbs": 44.9,
+      "fat": 2.7,
+      "servings": [
+        {
+          "id": "f2a93ed5-e1a2-4297-812b-9ae92c214e7f",
+          "label": "g",
+          "weight": 56,
+          "type": "WEIGHT",
+          "displayQty": 56,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "cmudpszvr000982c870xzeczk",
+      "name": "Roti / Chapati (plain, no oil)",
+      "source": "INDB",
+      "brand": null,
+      "calories": 336.7,
+      "protein": 11.3,
+      "carbs": 68.3,
+      "fat": 2,
+      "servings": [
+        {
+          "id": "cmuzjmdj60001j17xjhu0783k",
+          "label": "1 medium roti",
+          "weight": 30,
+          "type": "COUNT",
+          "displayQty": 1,
+          "isDefault": true
+        },
+        {
+          "id": "cmuzjmdkr0003j17xs34a2ncv",
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT",
+          "displayQty": 100,
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "id": "0237380e-83a1-4f63-9ebf-f63218d453e0",
+      "name": "Roti chapati",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Vadilal",
+      "calories": 317,
+      "protein": 8.6,
+      "carbs": 49.1,
+      "fat": 9.6,
+      "servings": [
+        {
+          "id": "17284a18-4b86-4557-acc4-2348c0690dc2",
+          "label": "g",
+          "weight": 40,
+          "type": "WEIGHT",
+          "displayQty": 40,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "cmudpt02v000b82c8xci4ftzc",
+      "name": "Roti with ghee",
+      "source": "INDB",
+      "brand": null,
+      "calories": 417.1,
+      "protein": 9.7,
+      "carbs": 58.6,
+      "fat": 16,
+      "servings": [
+        {
+          "id": "cmuzjmdss000aj17x62myyr71",
+          "label": "1 medium roti + 1 tsp ghee",
+          "weight": 35,
+          "type": "COUNT",
+          "displayQty": 1,
+          "isDefault": true
+        },
+        {
+          "id": "cmuzjmdtj000cj17x3kcmstcc",
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT",
+          "displayQty": 100,
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "id": "446e346d-f58d-42e7-b511-5b79b7414310",
+      "name": "Rotini",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 352.9,
+      "protein": 5.9,
+      "carbs": 78.8,
+      "fat": 1.8,
+      "servings": [
+        {
+          "id": "fae43696-c4be-4988-80dd-aa88b5a418fe",
+          "label": "g",
+          "weight": 85,
+          "type": "WEIGHT",
+          "displayQty": 85,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "28494185-a049-4953-aaf3-7671bec8a5bd",
+      "name": "Rotini",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 357.1,
+      "protein": 12.5,
+      "carbs": 75,
+      "fat": 1.8,
+      "servings": [
+        {
+          "id": "e44897a8-6d99-4c3d-89b0-bfa83db963f9",
+          "label": "g",
+          "weight": 56,
+          "type": "WEIGHT",
+          "displayQty": 56,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "e36ac75f-705c-42a2-964a-bb41009fc84e",
+      "name": "Rotini",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 487.8,
+      "protein": 12.9,
+      "carbs": 74.1,
+      "fat": 1.8,
+      "servings": [
+        {
+          "id": "235f00bf-6529-4bcb-93bb-1ca54b436523",
+          "label": "g",
+          "weight": 85,
+          "type": "WEIGHT",
+          "displayQty": 85,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "1389b519-6317-441c-9b98-e850934344d1",
+      "name": "ROTINI Fully Cooked",
+      "source": "OPEN_FOOD_FACTS",
+      "brand": "Barilla",
+      "calories": 158.3,
+      "protein": 6.1,
+      "carbs": 34.3,
+      "fat": 1.3,
+      "servings": [
+        {
+          "id": "2260d21d-9212-46ff-a8a4-9b1b7b628849",
+          "label": "g",
+          "weight": 198,
+          "type": "WEIGHT",
+          "displayQty": 198,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "cmudq0vw4018782c8qghbxj7c",
+      "name": "Soya roti",
+      "source": "INDB",
+      "brand": null,
+      "calories": 284,
+      "protein": 9.18,
+      "carbs": 40.03,
+      "fat": 9.23,
+      "servings": [
+        {
+          "id": "cmudq0vw4018882c81msoh9no",
+          "label": "roti",
+          "weight": 50,
+          "type": "COUNT",
+          "displayQty": 1,
+          "isDefault": true
+        }
+      ]
+    },
+    {
+      "id": "cmudpxgm500ov82c8av2o7kx7",
+      "name": "Sweet split chickpea roti (Sweet channa dal roti/Puranpoli)",
+      "source": "INDB",
+      "brand": null,
+      "calories": 366.6,
+      "protein": 9.51,
+      "carbs": 62.66,
+      "fat": 7.93,
+      "servings": [
+        {
+          "id": "cmudpxgm500ow82c8nmn41djj",
+          "label": "roti",
+          "weight": 53,
+          "type": "COUNT",
+          "displayQty": 1,
+          "isDefault": true
+        }
+      ]
+    }
+  ],
+  "puris": [
+    {
+      "id": "cmudpu4fv006n82c8bh8vu3cy",
+      "name": "Spinach poori (Palak poori)",
+      "source": "INDB",
+      "calories": 684.3,
+      "servings": [
+        {
+          "label": "poori",
+          "weight": 135,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudpu4ry006p82c83is6h9zs",
+      "name": "Methi poori",
+      "source": "INDB",
+      "calories": 710,
+      "servings": [
+        {
+          "label": "poori",
+          "weight": 130,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudpu53u006r82c8hre1a88a",
+      "name": "Dal stuffed poori",
+      "source": "INDB",
+      "calories": 785.2,
+      "servings": [
+        {
+          "label": "poori",
+          "weight": 119,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudpu5fm006t82c87qwg6qgt",
+      "name": "Potato stuffed poori (Aloo ki poori)",
+      "source": "INDB",
+      "calories": 776.7,
+      "servings": [
+        {
+          "label": "poori",
+          "weight": 119,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudpxfen00op82c8id7vvzzr",
+      "name": "Sweet poori (Meethi poori)",
+      "source": "INDB",
+      "calories": 782.7,
+      "servings": [
+        {
+          "label": "poori",
+          "weight": 153,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudpy0zy00s182c87p2fzx57",
+      "name": "Bathua poori",
+      "source": "INDB",
+      "calories": 598.8,
+      "servings": [
+        {
+          "label": "poori",
+          "weight": 91,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudpy1bp00s382c842po4i3c",
+      "name": "Gram flour poori (Besan poori)",
+      "source": "INDB",
+      "calories": 697.7,
+      "servings": [
+        {
+          "label": "poori",
+          "weight": 75,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudpy1no00s582c810fa79la",
+      "name": "Beetroot poori (Chukandar ki poori)",
+      "source": "INDB",
+      "calories": 527.7,
+      "servings": [
+        {
+          "label": "poori",
+          "weight": 103,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudpy1zt00s782c8epn1ij2n",
+      "name": "Peas poori (Matar ki poori)",
+      "source": "INDB",
+      "calories": 592.8,
+      "servings": [
+        {
+          "label": "poori",
+          "weight": 84,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudq22hd01ev82c8hrcsx875",
+      "name": "Bhel puri",
+      "source": "INDB",
+      "calories": 509.9,
+      "servings": [
+        {
+          "label": "plate",
+          "weight": 500,
+          "type": "HOUSEHOLD"
+        }
+      ]
+    },
+    {
+      "id": "dfff54c2-b5e6-4c03-84ef-274dc917e0f4",
+      "name": "Bhel Puri",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 462,
+      "servings": [
+        {
+          "label": "g",
+          "weight": 50,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "0d914ae7-e12a-415d-8434-b57d44343334",
+      "name": "Pani Puri Masala",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 344.2,
+      "servings": [
+        {
+          "label": "g",
+          "weight": 5,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "8b3c8082-648e-4803-b972-11520f36e9b2",
+      "name": "Bhelpuri Mixture Хрустящая смесь с воздушным рисом",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 511.2,
+      "servings": [
+        {
+          "label": "g",
+          "weight": 30,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "f8b76177-4087-40af-bb4a-81744539e4a7",
+      "name": "Aquafina Purified Drinking Water",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 0,
+      "servings": [
+        {
+          "label": "ml",
+          "weight": 1000,
+          "type": "VOLUME"
+        }
+      ]
+    },
+    {
+      "id": "05326c23-4f3e-4f6a-9a9a-a55de148c326",
+      "name": "Purified Drinking Water",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 0,
+      "servings": [
+        {
+          "label": "ml",
+          "weight": 499.79215,
+          "type": "VOLUME"
+        }
+      ]
+    },
+    {
+      "id": "f03f4317-b3c3-4198-a1a6-a3d40ef98d34",
+      "name": "Strret Stlye Pani Puri",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 347.2,
+      "servings": [
+        {
+          "label": "g",
+          "weight": 72,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "8d337835-63b7-494f-851c-40e95b274c81",
+      "name": "PURIN fe... McCain Gastro TRIPLE COOKED CHIPS WITH",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 186,
+      "servings": [
+        {
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "d266fe99-e8f0-4ffa-b515-bb7ba0091a8c",
+      "name": "Wilkins Pure Purified Drinking Water",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 0,
+      "servings": [
+        {
+          "label": "ml",
+          "weight": 1000,
+          "type": "VOLUME"
+        }
+      ]
+    },
+    {
+      "id": "cmudpu443006l82c8oi6k21sm",
+      "name": "Puri (deep fried)",
+      "source": "INDB",
+      "calories": 383.3,
+      "servings": [
+        {
+          "label": "1 medium puri",
+          "weight": 30,
+          "type": "COUNT"
+        },
+        {
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT"
+        }
+      ]
+    }
+  ],
+  "dalsSample": [
+    {
+      "id": "cmudpyd5200tz82c8ewcbev9o",
+      "name": "Arhar with spinach (Arhar dal aur palak)",
+      "source": "INDB",
+      "calories": 52.8,
+      "servings": [
+        {
+          "label": "curry bowl",
+          "weight": 403,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudq0vij018582c8qnxsk72x",
+      "name": "Atta dal burfi",
+      "source": "INDB",
+      "calories": 298.8,
+      "servings": [
+        {
+          "label": "piece",
+          "weight": 39,
+          "type": "COUNT"
+        }
+      ]
+    },
+    {
+      "id": "c3c25e58-9ca6-4ff5-9920-492f3d94866c",
+      "name": "Chana Dal (Snack)",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 466.7,
+      "servings": [
+        {
+          "label": "g",
+          "weight": 30,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "a6a08a58-ac4b-4cf1-8be2-f9e2b408f5d3",
+      "name": "Chana dal (tadka)",
+      "source": "INDB",
+      "calories": 103.3,
+      "servings": [
+        {
+          "label": "1 katori",
+          "weight": 150,
+          "type": "HOUSEHOLD"
+        },
+        {
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudq2nxm01id82c8a0491tha",
+      "name": "Cracked wheat and green gram dal premix (Dalia moong dal premix)",
+      "source": "INDB",
+      "calories": 362.2,
+      "servings": [
+        {
+          "label": "100g",
+          "weight": 100,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudq2ri201ix82c8o78gmr90",
+      "name": "Cracked wheat khichri/khichdi (Dalia khichri/khichdi)",
+      "source": "INDB",
+      "calories": 167.5,
+      "servings": [
+        {
+          "label": "100g",
+          "weight": 100,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudptlr9003r82c88pv5zog2",
+      "name": "Cracked wheat porridge (Meetha daliya)",
+      "source": "INDB",
+      "calories": 81.6,
+      "servings": [
+        {
+          "label": "bowl",
+          "weight": 403,
+          "type": "HOUSEHOLD"
+        }
+      ]
+    },
+    {
+      "id": "3822db58-a751-4b14-a251-9bf86cd9ba59",
+      "name": "DAL BIJI Red Lentil Mixture",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 540,
+      "servings": [
+        {
+          "label": "g",
+          "weight": 50,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "cmudq2clr01gh82c82d0pmtrs",
+      "name": "Dal dhokli",
+      "source": "INDB",
+      "calories": 68.7,
+      "servings": [
+        {
+          "label": "bowl",
+          "weight": 337,
+          "type": "HOUSEHOLD"
+        }
+      ]
+    },
+    {
+      "id": "cmuzjmfcf0026j17x8holt21y",
+      "name": "Dal fry (restaurant style)",
+      "source": "INDB",
+      "calories": 126.7,
+      "servings": [
+        {
+          "label": "1 katori",
+          "weight": 150,
+          "type": "HOUSEHOLD"
+        },
+        {
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "7edf27af-6183-4535-a36d-ced4e8c5a4a6",
+      "name": "Dal kachori with sweet chutney",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 415.4,
+      "servings": [
+        {
+          "label": "g",
+          "weight": 52,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "327d42dd-b27f-4375-ac38-b0c6f3a361de",
+      "name": "Dal makhani",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 144,
+      "servings": [
+        {
+          "label": "ml",
+          "weight": 125,
+          "type": "VOLUME"
+        }
+      ]
+    },
+    {
+      "id": "cmudq2awm01g782c8at724jkn",
+      "name": "Dal makhani",
+      "source": "INDB",
+      "calories": 74,
+      "servings": [
+        {
+          "label": "bowl",
+          "weight": 353,
+          "type": "HOUSEHOLD"
+        }
+      ]
+    },
+    {
+      "id": "cmudpsz4n000382c850660t3z",
+      "name": "Dal makhani",
+      "source": "INDB",
+      "calories": 152.7,
+      "servings": [
+        {
+          "label": "1 katori",
+          "weight": 150,
+          "type": "HOUSEHOLD"
+        },
+        {
+          "label": "g",
+          "weight": 100,
+          "type": "WEIGHT"
+        }
+      ]
+    },
+    {
+      "id": "079258b1-172f-4acb-8b15-a98d2d69c88e",
+      "name": "Dal Makhani",
+      "source": "OPEN_FOOD_FACTS",
+      "calories": 86.7,
+      "servings": [
+        {
+          "label": "g",
+          "weight": 150,
+          "type": "WEIGHT"
+        }
+      ]
+    }
+  ],
+  "searchDuplicates": {
+    "roti": [
+      {
+        "id": "0237380e-83a1-4f63-9ebf-f63218d453e0",
+        "name": "Roti chapati",
+        "brand": "Vadilal",
+        "calories": 317,
+        "protein": 8.6,
+        "carbs": 49.1,
+        "fat": 9.6,
+        "servings": [
+          "g (40g, type:WEIGHT, dispQty:40)"
+        ]
+      },
+      {
+        "id": "1389b519-6317-441c-9b98-e850934344d1",
+        "name": "ROTINI Fully Cooked",
+        "brand": "Barilla",
+        "calories": 158.3,
+        "protein": 6.1,
+        "carbs": 34.3,
+        "fat": 1.3,
+        "servings": [
+          "g (198g, type:WEIGHT, dispQty:198)"
+        ]
+      },
+      {
+        "id": "181239bb-82aa-41d6-9548-0ed54200d75f",
+        "name": "Chickpea Rotini",
+        "brand": "Barilla",
+        "calories": 339.3,
+        "protein": 21.4,
+        "carbs": 60.7,
+        "fat": 6.3,
+        "servings": [
+          "g (56g, type:WEIGHT, dispQty:56)"
+        ]
+      },
+      {
+        "id": "28494185-a049-4953-aaf3-7671bec8a5bd",
+        "name": "Rotini",
+        "brand": "Barilla",
+        "calories": 357.1,
+        "protein": 12.5,
+        "carbs": 75,
+        "fat": 1.8,
+        "servings": [
+          "g (56g, type:WEIGHT, dispQty:56)"
+        ]
+      },
+      {
+        "id": "357acccf-08bc-48a4-bf71-7aaf24b4eced",
+        "name": "GLUTEN FREE ROTINI",
+        "brand": "Barilla",
+        "calories": 339.3,
+        "protein": 7.1,
+        "carbs": 78.6,
+        "fat": 1.8,
+        "servings": [
+          "g (56g, type:WEIGHT, dispQty:56)"
+        ]
+      },
+      {
+        "id": "446e346d-f58d-42e7-b511-5b79b7414310",
+        "name": "Rotini",
+        "brand": "Barilla",
+        "calories": 352.9,
+        "protein": 5.9,
+        "carbs": 78.8,
+        "fat": 1.8,
+        "servings": [
+          "g (85g, type:WEIGHT, dispQty:85)"
+        ]
+      },
+      {
+        "id": "99c8a8e7-6183-48a7-9793-989463da2d59",
+        "name": "Gf Rotini",
+        "brand": "Barilla",
+        "calories": 339.3,
+        "protein": 7.1,
+        "carbs": 78.6,
+        "fat": 1.8,
+        "servings": [
+          "g (56g, type:WEIGHT, dispQty:56)"
+        ]
+      },
+      {
+        "id": "9aa9d4be-4292-4e63-b13a-79d23ea2fd7a",
+        "name": "PROTEIN+ PENNE/ROTINI",
+        "brand": "Barilla",
+        "calories": 339.3,
+        "protein": 17.6,
+        "carbs": 67,
+        "fat": 1.8,
+        "servings": [
+          "g (56.699g, type:WEIGHT, dispQty:56.699)"
+        ]
+      },
+      {
+        "id": "a5d15024-3375-430c-b7bb-828168227709",
+        "name": "PROTEIN+ ROTINI",
+        "brand": "Barilla",
+        "calories": 339.3,
+        "protein": 10,
+        "carbs": 38,
+        "fat": 1,
+        "servings": [
+          "g (56g, type:WEIGHT, dispQty:56)"
+        ]
+      },
+      {
+        "id": "c3b2db47-adf5-4a00-82eb-53d78944c35c",
+        "name": "Red Lentil Rotini",
+        "brand": "Barilla",
+        "calories": 339.3,
+        "protein": 25,
+        "carbs": 44.9,
+        "fat": 2.7,
+        "servings": [
+          "g (56g, type:WEIGHT, dispQty:56)"
+        ]
+      }
+    ],
+    "chapati": [
+      {
+        "id": "0237380e-83a1-4f63-9ebf-f63218d453e0",
+        "name": "Roti chapati",
+        "brand": "Vadilal",
+        "calories": 317,
+        "protein": 8.6,
+        "carbs": 49.1,
+        "fat": 9.6,
+        "servings": [
+          "g (40g, type:WEIGHT, dispQty:40)"
+        ]
+      },
+      {
+        "id": "cmudpszvr000982c870xzeczk",
+        "name": "Roti / Chapati (plain, no oil)",
+        "brand": null,
+        "calories": 336.7,
+        "protein": 11.3,
+        "carbs": 68.3,
+        "fat": 2,
+        "servings": [
+          "1 medium roti (30g, type:COUNT, dispQty:1)",
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      },
+      {
+        "id": "cmudpu06z005z82c88heg20pm",
+        "name": "Chapati/Roti",
+        "brand": null,
+        "calories": 202.3,
+        "protein": 5.88,
+        "carbs": 35.65,
+        "fat": 3.56,
+        "servings": [
+          "chapati (36g, type:COUNT, dispQty:1)"
+        ]
+      },
+      {
+        "id": "e679fd03-4b2d-4ac9-b6d5-ec344b59e9c9",
+        "name": "Multigrain chapati",
+        "brand": "Haldiram's",
+        "calories": 300,
+        "protein": 10,
+        "carbs": 50,
+        "fat": 6.7,
+        "servings": [
+          "g (60g, type:WEIGHT, dispQty:60)"
+        ]
+      }
+    ],
+    "paneer": [
+      {
+        "id": "0b56b8ca-2f4e-49be-84a9-c54261353cc0",
+        "name": "Paneer (Tofu) Paratha",
+        "brand": "Haldiram’s",
+        "calories": 200,
+        "protein": 9,
+        "carbs": 29.8,
+        "fat": 5,
+        "servings": [
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      },
+      {
+        "id": "0fc7e43e-b9b9-4bf7-b61f-dada7bda1b99",
+        "name": "Everest Shahi Paneer Masala 100GM",
+        "brand": "Everest",
+        "calories": 20,
+        "protein": 0.7,
+        "carbs": 3.1,
+        "fat": 0.4,
+        "servings": [
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      },
+      {
+        "id": "25dad4f9-33b4-4298-be1b-67f11c96d91f",
+        "name": "Mutrar Paneer",
+        "brand": "MTR",
+        "calories": 133.3,
+        "protein": 4.7,
+        "carbs": 6,
+        "fat": 10,
+        "servings": [
+          "g (150g, type:WEIGHT, dispQty:150)"
+        ]
+      },
+      {
+        "id": "4bfaf84c-bb49-4a77-b2b8-e0325f1b7cd3",
+        "name": "Paneer",
+        "brand": "Namaste India",
+        "calories": 251,
+        "protein": 17,
+        "carbs": 5.3,
+        "fat": 18,
+        "servings": [
+          "g (200g, type:WEIGHT, dispQty:200)"
+        ]
+      },
+      {
+        "id": "4e95c742-3b48-412c-a394-2509c4b0adbf",
+        "name": "Palak paneer",
+        "brand": "Namaste India",
+        "calories": 102,
+        "protein": 4,
+        "carbs": 5,
+        "fat": 7,
+        "servings": [
+          "g (250g, type:WEIGHT, dispQty:250)"
+        ]
+      },
+      {
+        "id": "6539bbfa-54e8-48a8-afc8-d40c0d5e60c0",
+        "name": "Paneer Makhani",
+        "brand": "Haldiram's",
+        "calories": 220,
+        "protein": 4,
+        "carbs": 7.3,
+        "fat": 19.3,
+        "servings": [
+          "g (150g, type:WEIGHT, dispQty:150)"
+        ]
+      },
+      {
+        "id": "662d9dcf-b221-47c1-a6a9-7799ff3d4ce9",
+        "name": "Kathi Roll - Tandoori Paneer",
+        "brand": "Vadilal",
+        "calories": 252.5,
+        "protein": 6.5,
+        "carbs": 27,
+        "fat": 13,
+        "servings": [
+          "g (200g, type:WEIGHT, dispQty:200)"
+        ]
+      },
+      {
+        "id": "84c7f0eb-20a6-445b-8ca0-62eadbca5eff",
+        "name": "Suhana paneer chilli dry mix",
+        "brand": "Suhana",
+        "calories": 304,
+        "protein": 5.6,
+        "carbs": 68.7,
+        "fat": 0.8,
+        "servings": [
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      },
+      {
+        "id": "8570a78b-1a4e-4415-847d-b0eeeea4ebea",
+        "name": "Palak Paneer",
+        "brand": "Gits",
+        "calories": 154.4,
+        "protein": 4.2,
+        "carbs": 4.2,
+        "fat": 13.3,
+        "servings": [
+          "g (142.5g, type:WEIGHT, dispQty:142.5)"
+        ]
+      },
+      {
+        "id": "991b9a35-eb8a-47b9-98ef-bc182259224f",
+        "name": "Malai paneer",
+        "brand": "Mother dairy",
+        "calories": 324,
+        "protein": 15.5,
+        "carbs": 2.5,
+        "fat": 28,
+        "servings": [
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      }
+    ],
+    "milk": [
+      {
+        "id": "00975d1e-16ca-4cec-95ad-ac1b5a7ffb0b",
+        "name": "Milky Mist Cheese Slices 100 g (5 Slices)",
+        "brand": "Milky Mist",
+        "calories": 309,
+        "protein": 17,
+        "carbs": 4,
+        "fat": 25,
+        "servings": [
+          "g (20g, type:WEIGHT, dispQty:20)"
+        ]
+      },
+      {
+        "id": "00c51f07-8a7d-4e9d-84b3-de554bf49d34",
+        "name": "Milk Chocolate Dairymilk",
+        "brand": "Cadbury",
+        "calories": 526.3,
+        "protein": 7.9,
+        "carbs": 57.9,
+        "fat": 31.6,
+        "servings": [
+          "g (38g, type:WEIGHT, dispQty:38)"
+        ]
+      },
+      {
+        "id": "015cdc2a-2eaf-447a-99e2-ef546f4cae84",
+        "name": "3 in 1 milk",
+        "brand": "Nescafé",
+        "calories": 385,
+        "protein": 7,
+        "carbs": 70,
+        "fat": 9.5,
+        "servings": [
+          "ml (206g, type:VOLUME, dispQty:200)",
+          "g (20g, type:WEIGHT, dispQty:20)"
+        ]
+      },
+      {
+        "id": "0162b209-6cd5-41bd-8ffa-80a502056b5b",
+        "name": "Creamy Milk Chocolate Bar",
+        "brand": "Hershey's",
+        "calories": 488.9,
+        "protein": 8.9,
+        "carbs": 60,
+        "fat": 28.9,
+        "servings": [
+          "g (45g, type:WEIGHT, dispQty:45)"
+        ]
+      },
+      {
+        "id": "01737966-3725-41ea-8327-174d70f60c89",
+        "name": "dairy milk",
+        "brand": "Cadbury",
+        "calories": 534,
+        "protein": 7.3,
+        "carbs": 57,
+        "fat": 30,
+        "servings": [
+          "g (18g, type:WEIGHT, dispQty:18)"
+        ]
+      },
+      {
+        "id": "01eedb13-7d0b-4013-a413-b47033f0834c",
+        "name": "Milk Tray",
+        "brand": "Cadbury",
+        "calories": 524,
+        "protein": 3.8,
+        "carbs": 61,
+        "fat": 29,
+        "servings": [
+          "g (11g, type:WEIGHT, dispQty:11)"
+        ]
+      },
+      {
+        "id": "02012c6e-8301-4959-ba80-6a2e4c3f78b5",
+        "name": "Dairy Milk chocolate marvellous creations",
+        "brand": "Cadbury",
+        "calories": 516,
+        "protein": 6.6,
+        "carbs": 61.6,
+        "fat": 26.6,
+        "servings": [
+          "g (50g, type:WEIGHT, dispQty:50)"
+        ]
+      },
+      {
+        "id": "026bb4fd-4551-46fb-9d2f-0502cb64a3b2",
+        "name": "Cadbury Dairy Milk Ice Cream",
+        "brand": "Cadbury",
+        "calories": 252.4,
+        "protein": 2.9,
+        "carbs": 22,
+        "fat": 17,
+        "servings": [
+          "ml (90g, type:VOLUME, dispQty:90)"
+        ]
+      },
+      {
+        "id": "02d13c78-8c5e-4ed7-ac88-c1d9bc4d94a4",
+        "name": "Milkybar",
+        "brand": "Nestlé",
+        "calories": 543,
+        "protein": 10.6,
+        "carbs": 53.1,
+        "fat": 31.7,
+        "servings": [
+          "g (10.3g, type:WEIGHT, dispQty:10.3)"
+        ]
+      },
+      {
+        "id": "0397e5e7-5c97-4a45-8900-c6449c8a1eb4",
+        "name": "Dairy Milk",
+        "brand": "Cadbury",
+        "calories": 534.5,
+        "protein": 7.3,
+        "carbs": 57,
+        "fat": 30,
+        "servings": [
+          "g (27.5g, type:WEIGHT, dispQty:27.5)"
+        ]
+      }
+    ],
+    "white rice": [
+      {
+        "id": "98d5f87f-9fbb-4c1d-8b51-9e3017f06af7",
+        "name": "Organic White Rice",
+        "brand": "Taj Mahal",
+        "calories": 355.6,
+        "protein": 6.7,
+        "carbs": 80,
+        "fat": 1.1,
+        "servings": [
+          "g (45g, type:WEIGHT, dispQty:45)"
+        ]
+      },
+      {
+        "id": "cmudpszdu000582c8vxi7at2z",
+        "name": "Steamed white rice (chawal)",
+        "brand": null,
+        "calories": 128,
+        "protein": 2.7,
+        "carbs": 28.7,
+        "fat": 0.3,
+        "servings": [
+          "1 katori cooked (150g, type:HOUSEHOLD, dispQty:1)",
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      },
+      {
+        "id": "e828e769-6c24-4086-9325-fffc37377249",
+        "name": "Long Grain White Rice",
+        "brand": "Fortune",
+        "calories": 351,
+        "protein": 7.2,
+        "carbs": 78.5,
+        "fat": 0,
+        "servings": [
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      }
+    ],
+    "dal fry": [
+      {
+        "id": "cmuzjmfcf0026j17x8holt21y",
+        "name": "Dal fry (restaurant style)",
+        "brand": null,
+        "calories": 126.7,
+        "protein": 4.7,
+        "carbs": 12,
+        "fat": 6.7,
+        "servings": [
+          "1 katori (150g, type:HOUSEHOLD, dispQty:1)",
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      }
+    ],
+    "egg": [
+      {
+        "id": "015a1d33-2f2b-46a4-8029-6e384696a3da",
+        "name": "eggies",
+        "brand": "Hershey's",
+        "calories": 475,
+        "protein": 5,
+        "carbs": 72.5,
+        "fat": 20,
+        "servings": [
+          "g (40g, type:WEIGHT, dispQty:40)"
+        ]
+      },
+      {
+        "id": "027fdee9-d4a0-48da-a660-06bdb987c5aa",
+        "name": "Crème Egg Cake Bars",
+        "brand": "Cadbury",
+        "calories": 440,
+        "protein": 4.4,
+        "carbs": 60.8,
+        "fat": 18.8,
+        "servings": [
+          "g (25g, type:WEIGHT, dispQty:25)"
+        ]
+      },
+      {
+        "id": "02b85c3e-527f-4eb2-9579-97a946af730c",
+        "name": "La Lechera Veggie avena y arroz",
+        "brand": "Nestlé",
+        "calories": 332,
+        "protein": 1.6,
+        "carbs": 61.8,
+        "fat": 8.6,
+        "servings": [
+          "g (20g, type:WEIGHT, dispQty:20)"
+        ]
+      },
+      {
+        "id": "04cd3af5-671e-4e02-a232-55661801529c",
+        "name": "Salted Egg Chips",
+        "brand": "Lay's",
+        "calories": 533.3,
+        "protein": 6.7,
+        "carbs": 60,
+        "fat": 30,
+        "servings": [
+          "g (30g, type:WEIGHT, dispQty:30)"
+        ]
+      },
+      {
+        "id": "05c1a97e-1ed7-40bd-9abb-c9c684a6705b",
+        "name": "Cadbury chocolate egg",
+        "brand": "Cadbury",
+        "calories": 537,
+        "protein": 6,
+        "carbs": 56,
+        "fat": 26,
+        "servings": [
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      },
+      {
+        "id": "05eb8c2c-6071-48d7-a0a6-fdb4908f9010",
+        "name": "Cadbury mini eggs",
+        "brand": "cadbury",
+        "calories": 500,
+        "protein": 4.8,
+        "carbs": 69,
+        "fat": 23.8,
+        "servings": [
+          "g (42g, type:WEIGHT, dispQty:42)"
+        ]
+      },
+      {
+        "id": "06896817-a336-4e36-9a06-adc3d804d703",
+        "name": "Creme egg",
+        "brand": "Cadbury",
+        "calories": 536,
+        "protein": 7.6,
+        "carbs": 56,
+        "fat": 30.4,
+        "servings": [
+          "g (25g, type:WEIGHT, dispQty:25)"
+        ]
+      },
+      {
+        "id": "07499276-2b61-4973-a22b-567400b931cc",
+        "name": "Caramel Fudge Duo Egg",
+        "brand": "Nestlé",
+        "calories": 554.5,
+        "protein": 6.8,
+        "carbs": 55.6,
+        "fat": 33.6,
+        "servings": [
+          "g (25g, type:WEIGHT, dispQty:25)"
+        ]
+      },
+      {
+        "id": "0927d28a-5950-4276-b5ca-44459a859b37",
+        "name": "Bueno Eggs",
+        "brand": "Kinder",
+        "calories": 580,
+        "protein": 8,
+        "carbs": 52,
+        "fat": 37,
+        "servings": [
+          "g (10g, type:WEIGHT, dispQty:10)"
+        ]
+      },
+      {
+        "id": "0b17b26e-12bd-451e-90d7-27baee764782",
+        "name": "creme egg bar",
+        "brand": "Cadbury",
+        "calories": 459.4,
+        "protein": 4.4,
+        "carbs": 69,
+        "fat": 18,
+        "servings": [
+          "g (20.5g, type:WEIGHT, dispQty:20.5)"
+        ]
+      }
+    ],
+    "banana": [
+      {
+        "id": "1affd47b-acb0-4fa8-bcc0-ccd1dd2e2fa0",
+        "name": "Fitness choco banana",
+        "brand": "Nestlé",
+        "calories": 384.5,
+        "protein": 6.4,
+        "carbs": 69.8,
+        "fat": 7.2,
+        "servings": [
+          "g (23.5g, type:WEIGHT, dispQty:23.5)"
+        ]
+      },
+      {
+        "id": "21a6d38f-5d3e-40cc-bfda-6a5fd1b04d4a",
+        "name": "Bananas & Cream Instant Oatmeal",
+        "brand": "Quaker",
+        "calories": 366.7,
+        "protein": 10,
+        "carbs": 56.7,
+        "fat": 5,
+        "servings": [
+          "g (30g, type:WEIGHT, dispQty:30)"
+        ]
+      },
+      {
+        "id": "2e455814-eda8-4f65-ae07-9d6154d72e92",
+        "name": "Leche sabor a chocolate-banana",
+        "brand": "Hershey´s",
+        "calories": 54.6,
+        "protein": 2.8,
+        "carbs": 9.7,
+        "fat": 0.4,
+        "servings": [
+          "ml (200g, type:VOLUME, dispQty:200)"
+        ]
+      },
+      {
+        "id": "33dd415f-74d7-424d-a8cc-3c4ba84352a9",
+        "name": "Milkis Banana",
+        "brand": "Lotte",
+        "calories": 50,
+        "protein": 0,
+        "carbs": 12,
+        "fat": 0,
+        "servings": [
+          "ml (250g, type:VOLUME, dispQty:250)"
+        ]
+      },
+      {
+        "id": "33e101ef-965f-4b38-b05e-673e55054756",
+        "name": "Banana Nut Flavor Instant Oatmeal",
+        "brand": "Quaker",
+        "calories": 377,
+        "protein": 12,
+        "carbs": 38,
+        "fat": 5,
+        "servings": [
+          "g (61g, type:WEIGHT, dispQty:61)"
+        ]
+      },
+      {
+        "id": "36ce7a52-f505-4462-9416-cd67cc51573a",
+        "name": "Nesquik Banana Crush",
+        "brand": "Nestlé",
+        "calories": 431,
+        "protein": 6.8,
+        "carbs": 65.5,
+        "fat": 14.6,
+        "servings": [
+          "g (30g, type:WEIGHT, dispQty:30)"
+        ]
+      },
+      {
+        "id": "3bbecd7b-8f6b-4b1e-adce-faa8490a6098",
+        "name": "Organic Bananas",
+        "brand": "Del Monte",
+        "calories": 90.5,
+        "protein": 1.1,
+        "carbs": 19.7,
+        "fat": 0.3,
+        "servings": [
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      },
+      {
+        "id": "45b44744-de4f-4129-a8c3-d6b907da5682",
+        "name": "Instant Oatmeal Protein+ Banana Nut",
+        "brand": "Quaker",
+        "calories": 393.4,
+        "protein": 19.7,
+        "carbs": 62.3,
+        "fat": 8.2,
+        "servings": [
+          "g (61g, type:WEIGHT, dispQty:61)"
+        ]
+      },
+      {
+        "id": "4f5902c8-a731-460d-9388-80f77e142515",
+        "name": "Protein Instant Oatmeal Banana Nut Flavor",
+        "brand": "Quaker",
+        "calories": 284,
+        "protein": 19.7,
+        "carbs": 62.3,
+        "fat": 8.2,
+        "servings": [
+          "g (61g, type:WEIGHT, dispQty:61)"
+        ]
+      },
+      {
+        "id": "57974359-3037-4b21-99c7-b9b50468d7a8",
+        "name": "PROTEIN INSTANT OATMEAL Maple & Brown Sugar Banana Nut",
+        "brand": "QUAKER",
+        "calories": 366.7,
+        "protein": 19.7,
+        "carbs": 62.3,
+        "fat": 8.2,
+        "servings": [
+          "g (61g, type:WEIGHT, dispQty:61)"
+        ]
+      }
+    ],
+    "idli": [
+      {
+        "id": "59a2fc6a-a44e-4dba-8815-b938df71e00a",
+        "name": "Rava idli",
+        "brand": "Gits",
+        "calories": 360,
+        "protein": 12,
+        "carbs": 64,
+        "fat": 6,
+        "servings": [
+          "g (50g, type:WEIGHT, dispQty:50)"
+        ]
+      },
+      {
+        "id": "a397f817-1bc3-4f53-abc7-f83341fa16a4",
+        "name": "Rice Idli",
+        "brand": "Gits",
+        "calories": 330,
+        "protein": 11,
+        "carbs": 67,
+        "fat": 0.7,
+        "servings": [
+          "g (50g, type:WEIGHT, dispQty:50)"
+        ]
+      },
+      {
+        "id": "cmudpt2aw000x82c8kqipxpkk",
+        "name": "Idli",
+        "brand": null,
+        "calories": 147.5,
+        "protein": 5,
+        "carbs": 30,
+        "fat": 0.8,
+        "servings": [
+          "1 piece (40g, type:HOUSEHOLD, dispQty:1)",
+          "g (100g, type:WEIGHT, dispQty:100)"
+        ]
+      },
+      {
+        "id": "cmudpugwp008h82c8n0aowtsz",
+        "name": "Idli",
+        "brand": null,
+        "calories": 137.5,
+        "protein": 4.64,
+        "carbs": 28.18,
+        "fat": 0.33,
+        "servings": [
+          "idli (25g, type:COUNT, dispQty:1)"
+        ]
+      },
+      {
+        "id": "cmudpy7h700t382c8xyx1b0ir",
+        "name": "Instant idli (with semolina)",
+        "brand": null,
+        "calories": 247.3,
+        "protein": 9.16,
+        "carbs": 43.4,
+        "fat": 3.61,
+        "servings": [
+          "idli (35g, type:COUNT, dispQty:1)"
+        ]
+      },
+      {
+        "id": "cmudq0x91018f82c808tmi3xg",
+        "name": "Semolina idli (Suji/Rava idli)",
+        "brand": null,
+        "calories": 206.4,
+        "protein": 9.34,
+        "carbs": 33.67,
+        "fat": 3.47,
+        "servings": [
+          "idli (30g, type:COUNT, dispQty:1)"
+        ]
+      }
+    ]
+  }
+}
