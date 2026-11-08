@@ -80,16 +80,36 @@ async function collectRawData(userId, { windowDays = EVALUATION_DAYS } = {}) {
 }
 
 /**
+ * Formats a Date object into YYYY-MM-DD string within the user's local timezone.
+ */
+function formatLocalDate(date, timezone = 'UTC') {
+  if (!date) return '';
+  const d = date instanceof Date ? date : new Date(date);
+  try {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: timezone || 'UTC',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(d);
+  } catch {
+    return d.toISOString().split('T')[0];
+  }
+}
+
+/**
  * Phase 2: Validate - Filter and validate raw data.
  *
  * @param {Object} data - Collected raw data
  * @returns {Object} Validated data
  */
-function validateData({ mealLogs, weightLogs }) {
-  // Aggregate meal logs by date
+function validateData({ mealLogs, weightLogs, profile }) {
+  const tz = profile?.timezone || 'UTC';
+
+  // Aggregate meal logs by date in user's timezone
   const dailyIntakeMap = new Map();
   for (const log of mealLogs) {
-    const dStr = log.date.toISOString().split('T')[0];
+    const dStr = formatLocalDate(log.date, tz);
     const curr = dailyIntakeMap.get(dStr) || 0;
     dailyIntakeMap.set(dStr, curr + (log.calories || 0));
   }
@@ -99,7 +119,7 @@ function validateData({ mealLogs, weightLogs }) {
     calories: Math.round(calories),
   }));
 
-  const validDays = filterValidIntakeDays(rawDailyIntakes);
+  const validDays = filterValidIntakeDays(rawDailyIntakes, { bmr: profile?.bmr });
   const validFoodDays = validDays.length;
   const validWeightDays = weightLogs.filter((w) => !w.isExcluded).length;
 
@@ -144,9 +164,14 @@ function smoothWeightData({ allWeightLogs, weightLogs, profile }) {
  * @returns {Object} Measured expenditure metrics
  */
 function measureExpenditure({ avgDailyIntake, trendResult, profile, multiWeekTrend }) {
+  // Use multi-week trend rate if available to match the observation window of avgDailyIntake
+  const velocityKgPerDay = (multiWeekTrend && typeof multiWeekTrend.observedRateKgPerWeek === 'number' && multiWeekTrend.sufficientData)
+    ? (multiWeekTrend.observedRateKgPerWeek / 7)
+    : trendResult.velocityKgPerDay;
+
   const { observedTdee, dailyEnergySurplusKcal } = solveObservedTdee({
     avgDailyIntake,
-    velocityKgPerDay: trendResult.velocityKgPerDay,
+    velocityKgPerDay,
     bmr: profile.bmr,
   });
 
@@ -300,15 +325,7 @@ async function runAdaptiveLoop(userId, { windowDays = EVALUATION_DAYS } = {}) {
     profile: rawData.profile,
   });
 
-  // Phase 4: Measure
-  const measuredData = measureExpenditure({
-    avgDailyIntake: validatedData.avgDailyIntake,
-    trendResult: smoothedData.trendResult,
-    profile: rawData.profile,
-    multiWeekTrend: smoothedData.multiWeekTrend,
-  });
-
-  // Prepare window daily intakes for adherence calculation
+  // Prepare synchronized window daily intakes (21-day observation window)
   const trendWindowCutoff = new Date(rawData.now);
   trendWindowCutoff.setDate(trendWindowCutoff.getDate() - TREND_WINDOW_DAYS);
   trendWindowCutoff.setHours(0, 0, 0, 0);
@@ -317,6 +334,19 @@ async function runAdaptiveLoop(userId, { windowDays = EVALUATION_DAYS } = {}) {
     const intakeDate = new Date(d.date);
     intakeDate.setHours(0, 0, 0, 0);
     return intakeDate >= trendWindowCutoff;
+  });
+
+  const windowValidDays = filterValidIntakeDays(windowDailyIntakes, { bmr: rawData.profile?.bmr });
+  const synchronizedAvgDailyIntake = windowValidDays.length >= 7
+    ? Math.round(windowValidDays.reduce((acc, d) => acc + d.calories, 0) / windowValidDays.length)
+    : validatedData.avgDailyIntake;
+
+  // Phase 4: Measure (using synchronized 21-day observation window)
+  const measuredData = measureExpenditure({
+    avgDailyIntake: synchronizedAvgDailyIntake,
+    trendResult: smoothedData.trendResult,
+    profile: rawData.profile,
+    multiWeekTrend: smoothedData.multiWeekTrend,
   });
 
   // Phase 5: Assess Evidence

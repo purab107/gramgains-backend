@@ -152,6 +152,18 @@ async function updateProfile(input, userId = DEFAULT_USER_ID) {
     ? (input.currentTrackedProtein ? parseFloat(input.currentTrackedProtein) : null)
     : current.currentTrackedProtein;
 
+  if (input.age !== undefined && parseInt(input.age, 10) < 18) {
+    throw new Error('GramGains is intended for adults aged 18 and older.');
+  }
+
+  // Underweight target weight check
+  if (targetWeightKg && heightCm > 0) {
+    const targetBmi = targetWeightKg / ((heightCm / 100) * (heightCm / 100));
+    if (targetBmi < 18.5) {
+      throw new Error('Target weight must not fall below a healthy BMI of 18.5.');
+    }
+  }
+
   const calculated = calculateMetrics({
     age,
     gender,

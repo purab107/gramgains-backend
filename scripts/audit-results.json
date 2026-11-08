@@ -1,0 +1,2872 @@
+{
+  "totalFoods": 14109,
+  "deletedFoods": 0,
+  "totalServings": 14320,
+  "foodsByServingCount": {
+    "0": 0,
+    "1": 13898,
+    "2": 211,
+    "3": 0,
+    "4+": 0
+  },
+  "brandVsGenericStats": {
+    "branded": 13020,
+    "generic": 1089
+  },
+  "sourceStats": {
+    "OPEN_FOOD_FACTS": {
+      "count": 13008,
+      "withServings": 13008,
+      "multiServing": 134,
+      "totalServings": 13142
+    },
+    "INDB": {
+      "count": 1064,
+      "withServings": 1064,
+      "multiServing": 48,
+      "totalServings": 1112
+    },
+    "IFCT_2017": {
+      "count": 37,
+      "withServings": 37,
+      "multiServing": 29,
+      "totalServings": 66
+    }
+  },
+  "preparationStateStats": {
+    "raw": 106,
+    "cooked": 22,
+    "fried": 25,
+    "boiled": 5,
+    "roasted": 26,
+    "baked": 47,
+    "unspecified": 13878
+  },
+  "unitFrequencyTop50": [
+    [
+      "g",
+      9785
+    ],
+    [
+      "ml",
+      3435
+    ],
+    [
+      "bowl",
+      269
+    ],
+    [
+      "100g",
+      97
+    ],
+    [
+      "plate",
+      72
+    ],
+    [
+      "piece",
+      56
+    ],
+    [
+      "biscuit",
+      29
+    ],
+    [
+      "1 katori",
+      24
+    ],
+    [
+      "tall glass",
+      21
+    ],
+    [
+      "tablespoon",
+      21
+    ],
+    [
+      "triangle",
+      21
+    ],
+    [
+      "slice",
+      19
+    ],
+    [
+      "cup",
+      19
+    ],
+    [
+      "soup bowl",
+      18
+    ],
+    [
+      "glass",
+      15
+    ],
+    [
+      "small bowl",
+      15
+    ],
+    [
+      "sandwich",
+      14
+    ],
+    [
+      "parantha",
+      13
+    ],
+    [
+      "egg",
+      12
+    ],
+    [
+      "cookie",
+      12
+    ],
+    [
+      "cutlet",
+      11
+    ],
+    [
+      "jar",
+      10
+    ],
+    [
+      "dish",
+      10
+    ],
+    [
+      "pancake",
+      9
+    ],
+    [
+      "poori",
+      9
+    ],
+    [
+      "ladoo",
+      8
+    ],
+    [
+      "souffle dish",
+      8
+    ],
+    [
+      "1 medium",
+      7
+    ],
+    [
+      "curry bowl",
+      7
+    ],
+    [
+      "cheela",
+      7
+    ],
+    [
+      "burfi",
+      7
+    ],
+    [
+      "tart",
+      7
+    ],
+    [
+      "vada",
+      7
+    ],
+    [
+      "pie",
+      6
+    ],
+    [
+      "1 cup",
+      6
+    ],
+    [
+      "tea cup",
+      6
+    ],
+    [
+      "dosa",
+      6
+    ],
+    [
+      "pastry",
+      5
+    ],
+    [
+      "large slice",
+      5
+    ],
+    [
+      "toasted triangle",
+      5
+    ],
+    [
+      "ice cream cup",
+      5
+    ],
+    [
+      "souffle cup",
+      5
+    ],
+    [
+      "small mould",
+      5
+    ],
+    [
+      "ice-cream cup",
+      4
+    ],
+    [
+      "patty",
+      4
+    ],
+    [
+      "kabab",
+      4
+    ],
+    [
+      "pakora",
+      4
+    ],
+    [
+      "roti",
+      4
+    ],
+    [
+      "samosa",
+      4
+    ],
+    [
+      "1 medium (peeled)",
+      3
+    ]
+  ],
+  "unitCategoryCounts": {
+    "GRAMS": 9898,
+    "MILLILITRES": 3435,
+    "PLATE": 76,
+    "BOWL": 313,
+    "COUNT_ITEM": 42,
+    "SLICE": 24,
+    "KATORI": 26,
+    "PARATHA": 2,
+    "CUSTOM_OTHER": 288,
+    "CUP": 55,
+    "PIECE": 64,
+    "GLASS": 44,
+    "PURI": 10,
+    "TABLESPOON": 21,
+    "SERVING": 2,
+    "ROTI": 8,
+    "IDLI": 3,
+    "DOSA": 7,
+    "TEASPOON": 2
+  },
+  "foodUnitCategorySupport": {
+    "GRAMS": 9895,
+    "MILLILITRES": 3435,
+    "PLATE": 76,
+    "BOWL": 313,
+    "COUNT_ITEM": 42,
+    "SLICE": 24,
+    "KATORI": 26,
+    "PARATHA": 2,
+    "CUSTOM_OTHER": 288,
+    "CUP": 55,
+    "PIECE": 64,
+    "GLASS": 44,
+    "PURI": 10,
+    "TABLESPOON": 21,
+    "SERVING": 2,
+    "ROTI": 8,
+    "IDLI": 3,
+    "DOSA": 7,
+    "TEASPOON": 2
+  },
+  "missingDefaultCount": 0,
+  "missingDefaultSample": [],
+  "multipleDefaultCount": 0,
+  "multipleDefaultSample": [],
+  "invalidWeightsCount": 0,
+  "invalidWeightsSample": [],
+  "missingDisplayQtyCount": 14,
+  "missingDisplayQtySample": [
+    {
+      "foodId": "4c4fb5c9-079f-4260-856e-108b0af7cf9a",
+      "foodName": "1,5 l",
+      "servingId": "75276484-225a-49b2-b169-cf001e4b6feb",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    },
+    {
+      "foodId": "b46bd02c-6b75-4c0f-bb4c-a3c779d26137",
+      "foodName": "Coca Cola",
+      "servingId": "fbadfe7b-52c9-4152-8985-a81a2804a424",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    },
+    {
+      "foodId": "d6eadb7f-dc9c-4484-b2ed-053bd5b8568a",
+      "foodName": "Coca-Cola 2,5",
+      "servingId": "7637fb83-5575-4ab7-9cf3-44b5eb51fe62",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    },
+    {
+      "foodId": "b722ad6c-95ec-44a1-86d4-23ea92524825",
+      "foodName": "Coca-Cola Zero",
+      "servingId": "645b8eb9-37f6-44bd-8f50-fb371e27cf73",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    },
+    {
+      "foodId": "05193590-df32-41cf-9777-062d36575b70",
+      "foodName": "Hühner Kraftboullion",
+      "servingId": "54cdced5-e655-4c07-ac2e-b1245ef6e296",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    },
+    {
+      "foodId": "6a8b0e8a-32a7-457f-ad2e-83a4323911fc",
+      "foodName": "Ice tea Zitrone Zero Zucker",
+      "servingId": "3ce32af2-4964-44f7-a86a-efc62a3b5c1b",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    },
+    {
+      "foodId": "ed8e62bf-2ac3-49e9-bcc7-f0d111978939",
+      "foodName": "Lemon Green Tea",
+      "servingId": "089ec139-9175-4eaf-9eee-3f42169d4b69",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    },
+    {
+      "foodId": "5035622e-45d7-4f9d-af03-cbb65b66dcdb",
+      "foodName": "Lemon Ice Tea",
+      "servingId": "123a7c6a-b55d-409f-a043-718b2eafb235",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    },
+    {
+      "foodId": "c6ac9a6d-f895-4a58-8094-a9ed1c5a82b2",
+      "foodName": "lipton",
+      "servingId": "163d79e0-cc4f-4197-920d-258b69d0d8a0",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    },
+    {
+      "foodId": "5d161560-a096-426f-aefc-c3ccb357c59e",
+      "foodName": "max cheery",
+      "servingId": "0a683c52-36d8-478e-8945-1e8f33d6e109",
+      "unitLabel": "ml",
+      "unitType": "VOLUME"
+    }
+  ],
+  "potentialLabelPrefixDupesCount": 187,
+  "potentialLabelPrefixDupesSample": [
+    {
+      "foodId": "cmuzjmft0002rj17xv7vv72x5",
+      "foodName": "Aloo bhurji (dry aloo sabzi)",
+      "servingId": "cmuzjmftn002tj17xaal4vvy9",
+      "unitLabel": "1 katori",
+      "parsedNumber": "1",
+      "remainder": "katori",
+      "displayQuantity": 1
+    },
+    {
+      "foodId": "cmuzjmfwb002wj17x8uvjuf5n",
+      "foodName": "Aloo gobi",
+      "servingId": "cmuzjmfx7002yj17x8y6d1dow",
+      "unitLabel": "1 katori",
+      "parsedNumber": "1",
+      "remainder": "katori",
+      "displayQuantity": 1
+    },
+    {
+      "foodId": "cmudpt0ic000f82c8docizudq",
+      "foodName": "Aloo paratha",
+      "servingId": "cmuzjme0i000ij17x4jrvgz5i",
+      "unitLabel": "1 medium paratha",
+      "parsedNumber": "1",
+      "remainder": "medium paratha",
+      "displayQuantity": 1
+    },
+    {
+      "foodId": "cmudq2mv501i782c8tbtdafxt",
+      "foodName": "American frosting",
+      "servingId": "cmudq2mv501i882c81tmao0t8",
+      "unitLabel": "100g",
+      "parsedNumber": "100",
+      "remainder": "g",
+      "displayQuantity": 100
+    },
+    {
+      "foodId": "cmuzjsnw3002wlu2srorso2eu",
+      "foodName": "Amla (Indian gooseberry)",
+      "servingId": "cmuzjsnwr002ylu2snypabba8",
+      "unitLabel": "2 medium",
+      "parsedNumber": "2",
+      "remainder": "medium",
+      "displayQuantity": 2
+    },
+    {
+      "foodId": "cmuzjsle50000lu2so1capfjy",
+      "foodName": "Apple (with skin)",
+      "servingId": "cmuzjslfs0002lu2sh0uqn7ub",
+      "unitLabel": "1 medium",
+      "parsedNumber": "1",
+      "remainder": "medium",
+      "displayQuantity": 1
+    },
+    {
+      "foodId": "cmudq2u5201jd82c8rpfjhcf5",
+      "foodName": "Apple jam (Seb ka murabba)",
+      "servingId": "cmudq2u5201je82c8v7whh472",
+      "unitLabel": "100g",
+      "parsedNumber": "100",
+      "remainder": "g",
+      "displayQuantity": 100
+    },
+    {
+      "foodId": "cmudq34bv01l182c8icz349kj",
+      "foodName": "Apple jelly (Seb ki jelly)",
+      "servingId": "cmudq34bv01l282c8x64sey7i",
+      "unitLabel": "100g",
+      "parsedNumber": "100",
+      "remainder": "g",
+      "displayQuantity": 100
+    },
+    {
+      "foodId": "cmuzjsogp003plu2sed5aypns",
+      "foodName": "Apricot (fresh)",
+      "servingId": "cmuzjsohd003rlu2sdgo7km08",
+      "unitLabel": "3 medium",
+      "parsedNumber": "3",
+      "remainder": "medium",
+      "displayQuantity": 3
+    },
+    {
+      "foodId": "cmuzjsmuu001jlu2sfhwt2wmz",
+      "foodName": "Avocado",
+      "servingId": "cmuzjsmvk001llu2s2ppf8erp",
+      "unitLabel": "1/2 medium",
+      "parsedNumber": "1",
+      "remainder": "/2 medium",
+      "displayQuantity": 0.5
+    },
+    {
+      "foodId": "cmuzjmgcd003hj17xbzcdbjkw",
+      "foodName": "Baingan bharta",
+      "servingId": "cmuzjmgd1003jj17xxn1nhcxa",
+      "unitLabel": "1 katori",
+      "parsedNumber": "1",
+      "remainder": "katori",
+      "displayQuantity": 1
+    },
+    {
+      "foodId": "cmuzjslkw0005lu2s59oomuqr",
+      "foodName": "Banana",
+      "servingId": "cmuzjsllo0007lu2swnqp4qcx",
+      "unitLabel": "1 medium (peeled)",
+      "parsedNumber": "1",
+      "remainder": "medium (peeled)",
+      "displayQuantity": 1
+    },
+    {
+      "foodId": "cmudq0ow7017582c8t1en8i30",
+      "foodName": "Banana groundnut paste/puree",
+      "servingId": "cmudq0ow7017682c85l03b0f4",
+      "unitLabel": "100g",
+      "parsedNumber": "100",
+      "remainder": "g",
+      "displayQuantity": 100
+    },
+    {
+      "foodId": "cmudq31hl01kj82c850a5euiq",
+      "foodName": "Barbeque sauce",
+      "servingId": "cmudq31hl01kk82c85f62dj8a",
+      "unitLabel": "100g",
+      "parsedNumber": "100",
+      "remainder": "g",
+      "displayQuantity": 100
+    },
+    {
+      "foodId": "cmudq377u01lj82c8zlrhuunq",
+      "foodName": "Bengal 5 Spice Blend (Panch Phoran)",
+      "servingId": "cmudq377v01lk82c8l6kw4ek9",
+      "unitLabel": "100g",
+      "parsedNumber": "100",
+      "remainder": "g",
+      "displayQuantity": 100
+    }
+  ],
+  "macroSumViolationsCount": 88,
+  "macroSumViolationsSample": [
+    {
+      "foodId": "57f86243-a164-4e4a-b3a4-b25587d6542a",
+      "name": "70% Dark Cocoa KitKat",
+      "macroSum": 107.3,
+      "protein": 7.3,
+      "fat": 34.1,
+      "carbs": 56.1,
+      "fiber": 9.8,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "23e08f6c-7a1e-4037-a0ae-89e6b9324f5f",
+      "name": "70% Dark Cocoa KitKat",
+      "macroSum": 107.3,
+      "protein": 7.3,
+      "fat": 34.1,
+      "carbs": 56.1,
+      "fiber": 9.8,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "82b73f9b-73c7-4d5b-9f3c-7ccddc6d9ca3",
+      "name": "Achocolatado com aveia",
+      "macroSum": 135.5,
+      "protein": 9,
+      "fat": 42,
+      "carbs": 75,
+      "fiber": 9.5,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "b2979f76-9d0e-4fde-ad4d-e6bd5f06035b",
+      "name": "Aveia Em Flocos Finos Quaker 200G",
+      "macroSum": 133,
+      "protein": 24,
+      "fat": 9,
+      "carbs": 85,
+      "fiber": 15,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "6f9a7da6-e679-4ec2-ad94-98f00097a07c",
+      "name": "Avena molida precocida",
+      "macroSum": 114.4,
+      "protein": 14.3,
+      "fat": 8.6,
+      "carbs": 68.6,
+      "fiber": 22.9,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "c960f27d-d82f-4cf9-acaa-67098cb41ad3",
+      "name": "Banana Wafers",
+      "macroSum": 106.2,
+      "protein": 3.6,
+      "fat": 33.6,
+      "carbs": 57.3,
+      "fiber": 11.7,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "c9c7a289-0963-4a7c-8943-56bcb974b1bd",
+      "name": "Batata Ruffles Churrasco",
+      "macroSum": 114,
+      "protein": 9,
+      "fat": 50,
+      "carbs": 55,
+      "fiber": 0,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "9355aa7d-61e5-414d-a4fe-1a93c15ff238",
+      "name": "Beef Ularthu Masala",
+      "macroSum": 120,
+      "protein": 10,
+      "fat": 20,
+      "carbs": 60,
+      "fiber": 30,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "d30d3775-30dd-47de-be72-5bff7852bc2d",
+      "name": "Big cup peanut butter cup",
+      "macroSum": 105.1,
+      "protein": 12.8,
+      "fat": 30.8,
+      "carbs": 56.4,
+      "fiber": 5.1,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "82d204c1-355f-4beb-8148-4688d495b335",
+      "name": "Bitsa Wispa",
+      "macroSum": 107.6,
+      "protein": 6.6,
+      "fat": 32,
+      "carbs": 56,
+      "fiber": 13,
+      "source": "OPEN_FOOD_FACTS"
+    }
+  ],
+  "atwaterViolationsCount": 304,
+  "atwaterViolationsSample": [
+    {
+      "foodId": "a034c294-ec96-453e-a4fd-dcf4a21f26db",
+      "name": "2 Minute Noodles Beef Flavour",
+      "calories": 86.2,
+      "atwaterCalculated": 322,
+      "diff": 235,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "6b73e2e8-1cb9-475c-9d2c-2871e028db19",
+      "name": "2 Minute Noodles Vegemite",
+      "calories": 401.7,
+      "atwaterCalculated": 199,
+      "diff": 203,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "82b73f9b-73c7-4d5b-9f3c-7ccddc6d9ca3",
+      "name": "Achocolatado com aveia",
+      "calories": 380,
+      "atwaterCalculated": 714,
+      "diff": 334,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "cmudpxynd00rn82c82zlgq53a",
+      "name": "Almond soup (Badam ka soup)",
+      "calories": 78.7,
+      "atwaterCalculated": 179,
+      "diff": 101,
+      "source": "INDB"
+    },
+    {
+      "foodId": "043103f2-b9b2-4230-82a7-4bbb812339b5",
+      "name": "Amendoim Frito Salgado Sem Pele Elma Chips Pacote 40g",
+      "calories": 573.3,
+      "atwaterCalculated": 182,
+      "diff": 392,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "1ea6eb9f-f912-4706-912a-33a9ab0cb64f",
+      "name": "Avena integral",
+      "calories": 385.7,
+      "atwaterCalculated": 160,
+      "diff": 226,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "f91b0a75-b782-4672-89cf-5b7e67633ef2",
+      "name": "avena molida",
+      "calories": 400,
+      "atwaterCalculated": 113,
+      "diff": 287,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "75fd8c24-8e6e-47f8-82c6-340fd7165d3f",
+      "name": "Baked Barbecue",
+      "calories": 443.5,
+      "atwaterCalculated": 112,
+      "diff": 332,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "0f9897f5-95c1-4c92-9809-02cc9999485c",
+      "name": "Bala Fanta Laranja Mentos Pacote 37,5g",
+      "calories": 395,
+      "atwaterCalculated": 0,
+      "diff": 395,
+      "source": "OPEN_FOOD_FACTS"
+    },
+    {
+      "foodId": "33e101ef-965f-4b38-b05e-673e55054756",
+      "name": "Banana Nut Flavor Instant Oatmeal",
+      "calories": 377,
+      "atwaterCalculated": 245,
+      "diff": 132,
+      "source": "OPEN_FOOD_FACTS"
+    }
+  ],
+  "extremeCaloriesCount": 91,
+  "duplicateGroupsCount": 929,
+  "duplicateGroupsSample": [
+    {
+      "normalizedKey": "more roasted macadamia:::Other",
+      "count": 2,
+      "items": [
+        {
+          "id": "2d11bd79-b7d1-4572-aadf-e23a08b802ae",
+          "rawName": "& More Roasted Macadamia",
+          "brand": "Cadbury",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 575.8,
+          "protein": 7.7,
+          "carbs": 44.5,
+          "fat": 40.5,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 22,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "a281dd63-2f14-4a9e-aed9-a65dd72fc8ba",
+          "rawName": "& More Roasted Macadamia",
+          "brand": "Cadbury",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 576,
+          "protein": 7.8,
+          "carbs": 44.4,
+          "fat": 40.5,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 22,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "100 orange juice:::Beverages",
+      "count": 4,
+      "items": [
+        {
+          "id": "341ae762-130a-419f-bdf6-93c0e4139253",
+          "rawName": "100% orange juice",
+          "brand": "Tropicana",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 46,
+          "protein": 0.8,
+          "carbs": 10.8,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 240,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "055f2e4b-23ee-46c6-b65b-9f61b44d2a65",
+          "rawName": "100% Orange Juice",
+          "brand": "Tropicana",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 46,
+          "protein": 0.8,
+          "carbs": 10.8,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 240,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "727d777c-43c8-4929-ae4b-ab0b861d32f8",
+          "rawName": "100% Orange Juice",
+          "brand": "Tropicana",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 45.8,
+          "protein": 0.8,
+          "carbs": 10.8,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 240,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "0d2ee849-8f81-4105-b45e-b0b957cd02cf",
+          "rawName": "100% Orange Juice",
+          "brand": "Tropicana",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 45.8,
+          "protein": 0.8,
+          "carbs": 10.8,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 240,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "100 orange juice from concentrate orange:::Beverages",
+      "count": 2,
+      "items": [
+        {
+          "id": "8b804992-6043-462c-98f0-1701dc5199d8",
+          "rawName": "100% orange juice from concentrate, orange",
+          "brand": "Tropicana",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 46,
+          "protein": 0.8,
+          "carbs": 11.3,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 240,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "d5596f4d-8b1c-4e1c-89e2-3f486c19f6d1",
+          "rawName": "100% orange juice from concentrate, orange",
+          "brand": "Tropicana",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 46,
+          "protein": 0.8,
+          "carbs": 11.3,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 240,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "3d bugles:::Snacks",
+      "count": 2,
+      "items": [
+        {
+          "id": "c3920958-ffb5-40a1-8960-9ba4b78d8144",
+          "rawName": "3D Bugles",
+          "brand": "Lay's",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 535,
+          "protein": 5.5,
+          "carbs": 56,
+          "fat": 32,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 30,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "938fe19f-e739-45cc-bcf2-bddfb8ec6d19",
+          "rawName": "3D Bugles",
+          "brand": "Lay's",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 522,
+          "protein": 5.9,
+          "carbs": 61,
+          "fat": 28,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 28,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "3ds bugles:::Snacks",
+      "count": 4,
+      "items": [
+        {
+          "id": "c764abfa-738d-48c6-a1f5-2e44e1dd535f",
+          "rawName": "3D's bugles",
+          "brand": "Lay's",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 512,
+          "protein": 6.3,
+          "carbs": 57.3,
+          "fat": 28,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 30,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "80b95840-3208-4c54-8b45-924147b4f302",
+          "rawName": "3D's bugles",
+          "brand": "Lay's",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 516,
+          "protein": 5.9,
+          "carbs": 60.9,
+          "fat": 27.5,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 30,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "955aacf2-49d9-41fd-9ec2-21db61ffd503",
+          "rawName": "3D's Bugles",
+          "brand": "Lay's",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 522,
+          "protein": 5.9,
+          "carbs": 61,
+          "fat": 28,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 36,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "d53bff44-2508-4c65-b4f5-a1af077a5e11",
+          "rawName": "3D’s bugles",
+          "brand": "Lay's",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 570,
+          "protein": 8.5,
+          "carbs": 48,
+          "fat": 38,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 30,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "70 dark cocoa kitkat:::Chocolate & Confectionery",
+      "count": 2,
+      "items": [
+        {
+          "id": "57f86243-a164-4e4a-b3a4-b25587d6542a",
+          "rawName": "70% Dark Cocoa KitKat",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 512.2,
+          "protein": 7.3,
+          "carbs": 56.1,
+          "fat": 34.1,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 41,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "23e08f6c-7a1e-4037-a0ae-89e6b9324f5f",
+          "rawName": "70% Dark Cocoa KitKat",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 512.2,
+          "protein": 7.3,
+          "carbs": 56.1,
+          "fat": 34.1,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 41,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "7up:::Beverages",
+      "count": 9,
+      "items": [
+        {
+          "id": "b80ef01e-1e1d-43d4-9644-8bf15c152c16",
+          "rawName": "7up",
+          "brand": "7UP",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 19,
+          "protein": 0,
+          "carbs": 4.6,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "fd9cca54-4a3b-480b-9545-9310b31e3758",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 200,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "00d02b72-100c-4b48-b9d9-df0ae4a749f0",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 18.8,
+          "protein": 0,
+          "carbs": 4.5,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "c7873e88-9806-4b56-893f-4b4f8defb28e",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 29,
+          "protein": 0,
+          "carbs": 7,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 320,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "545b9e4a-b0e9-4dae-aa18-5706d54bd047",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 19.2,
+          "protein": 0,
+          "carbs": 4.8,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "7up:::Spices & Staples",
+      "count": 6,
+      "items": [
+        {
+          "id": "54f22669-d9b4-48a3-a429-65ea38f706a2",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 19,
+          "protein": 0,
+          "carbs": 4.6,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "21320bf2-0bdd-47bf-9d40-b1da35c77ea8",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 41.6,
+          "protein": 0,
+          "carbs": 10.4,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "df6abbfe-5e18-4c48-90ab-ce1899726e31",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 29,
+          "protein": 0,
+          "carbs": 7,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "35b39e21-7ca1-48cb-b4ae-3cd7262d5ffb",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 18.8,
+          "protein": 0,
+          "carbs": 4.5,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "c909106b-91ef-4edb-9af9-d83b3b49a276",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 39.4,
+          "protein": 0,
+          "carbs": 10.4,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 355,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "7up cherry:::Beverages",
+      "count": 2,
+      "items": [
+        {
+          "id": "76935574-2611-47f4-b519-6c41a77c1e65",
+          "rawName": "7up cherry",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 40.8,
+          "protein": 0,
+          "carbs": 10.2,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "1b603862-ec31-4fe5-b4f2-259b8cf77a91",
+          "rawName": "7up Cherry",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 0.2,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "7up free:::Beverages",
+      "count": 3,
+      "items": [
+        {
+          "id": "697625c3-7508-4606-ac65-2188f65b2ef5",
+          "rawName": "7up free",
+          "brand": "Coca-Cola",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 0.4,
+          "protein": 0.1,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 1000,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "0d4ac354-e097-45f5-b237-9d06801f7924",
+          "rawName": "7up free",
+          "brand": "7Up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 250,
+              "unitType": "WEIGHT"
+            },
+            {
+              "unit": "ml",
+              "weightGrams": 255,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "c9193c29-d92b-4490-9f74-843fb29c3dad",
+          "rawName": "7up free",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 100,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "7up zero pink lemonade:::Beverages",
+      "count": 3,
+      "items": [
+        {
+          "id": "cbe56af5-24cd-4835-b1c3-bae1c60a3415",
+          "rawName": "7up Zero Pink Lemonade",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 1.2,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "b84ef148-f098-489e-a5a0-ede1cbe996ff",
+          "rawName": "7up Zero Pink Lemonade",
+          "brand": "7UP",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 1.2,
+          "protein": 0.1,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "9f707456-587e-4281-abbe-0c2e10d993ab",
+          "rawName": "7UP Zero Pink Lemonade",
+          "brand": "7UP",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 1.2,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "7up zero sugar:::Spices & Staples",
+      "count": 4,
+      "items": [
+        {
+          "id": "b9cada43-0e7b-40f7-9110-9e4b79025aad",
+          "rawName": "7up Zero Sugar",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 2,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 500,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "ed7c3326-ed8e-4631-bc78-090633a80148",
+          "rawName": "7up Zero Sugar",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 2,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 100,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "06e541f8-5dd7-4a2b-88b0-5818dc99ed48",
+          "rawName": "7up Zero Sugar",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 0.9,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "f9e4263d-bc83-40a5-9cd6-aa6182c189cf",
+          "rawName": "7up Zero Sugar",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 2,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 500,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "aero:::Spices & Staples",
+      "count": 2,
+      "items": [
+        {
+          "id": "887b2b04-f347-44e0-b1d4-c113a4ffbd40",
+          "rawName": "Aero",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 453.3,
+          "protein": 6,
+          "carbs": 49,
+          "fat": 25.7,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 30,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "0d3d4437-0122-4c13-ae04-db9e9b03c5f6",
+          "rawName": "Aero",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 547.2,
+          "protein": 6.9,
+          "carbs": 59.2,
+          "fat": 31.1,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 36,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "aero chocolate:::Chocolate & Confectionery",
+      "count": 2,
+      "items": [
+        {
+          "id": "871e60b7-10e2-4289-9cf7-b020707f2442",
+          "rawName": "Aero chocolate",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 532,
+          "protein": 6.8,
+          "carbs": 57.3,
+          "fat": 30.2,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 15,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "60ad6167-07c3-4d6b-84eb-cdea73e377be",
+          "rawName": "Aero chocolate",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 529.6,
+          "protein": 6.9,
+          "carbs": 57.3,
+          "fat": 29.8,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 27,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "aero peppermint:::Chocolate & Confectionery",
+      "count": 2,
+      "items": [
+        {
+          "id": "e40a27f3-d915-42df-8202-f62c05b3f829",
+          "rawName": "Aero Peppermint",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 534,
+          "protein": 4.3,
+          "carbs": 61.9,
+          "fat": 29.6,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 25.7,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "10056e56-0b8e-4cc3-b80e-1dbbeae29ba4",
+          "rawName": "Aero Peppermint",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 534,
+          "protein": 4.3,
+          "carbs": 61.8,
+          "fat": 29.6,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 27,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "conflictingMacroGroupsCount": 191,
+  "conflictingMacroGroupsSample": [
+    {
+      "normalizedKey": "7up:::Beverages",
+      "minCal": 0,
+      "maxCal": 41.6,
+      "items": [
+        {
+          "id": "b80ef01e-1e1d-43d4-9644-8bf15c152c16",
+          "rawName": "7up",
+          "brand": "7UP",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 19,
+          "protein": 0,
+          "carbs": 4.6,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "fd9cca54-4a3b-480b-9545-9310b31e3758",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 200,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "00d02b72-100c-4b48-b9d9-df0ae4a749f0",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 18.8,
+          "protein": 0,
+          "carbs": 4.5,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "c7873e88-9806-4b56-893f-4b4f8defb28e",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 29,
+          "protein": 0,
+          "carbs": 7,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 320,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "545b9e4a-b0e9-4dae-aa18-5706d54bd047",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 19.2,
+          "protein": 0,
+          "carbs": 4.8,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "7up:::Spices & Staples",
+      "minCal": 7.6,
+      "maxCal": 41.6,
+      "items": [
+        {
+          "id": "54f22669-d9b4-48a3-a429-65ea38f706a2",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 19,
+          "protein": 0,
+          "carbs": 4.6,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "21320bf2-0bdd-47bf-9d40-b1da35c77ea8",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 41.6,
+          "protein": 0,
+          "carbs": 10.4,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "df6abbfe-5e18-4c48-90ab-ce1899726e31",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 29,
+          "protein": 0,
+          "carbs": 7,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "35b39e21-7ca1-48cb-b4ae-3cd7262d5ffb",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 18.8,
+          "protein": 0,
+          "carbs": 4.5,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "c909106b-91ef-4edb-9af9-d83b3b49a276",
+          "rawName": "7up",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 39.4,
+          "protein": 0,
+          "carbs": 10.4,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 355,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "7up cherry:::Beverages",
+      "minCal": 0.2,
+      "maxCal": 40.8,
+      "items": [
+        {
+          "id": "76935574-2611-47f4-b519-6c41a77c1e65",
+          "rawName": "7up cherry",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 40.8,
+          "protein": 0,
+          "carbs": 10.2,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 330,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "1b603862-ec31-4fe5-b4f2-259b8cf77a91",
+          "rawName": "7up Cherry",
+          "brand": "7up",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 0.2,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "after eight:::Chocolate & Confectionery",
+      "minCal": 416.7,
+      "maxCal": 600,
+      "items": [
+        {
+          "id": "36219721-cba7-4503-927e-6f256fc69045",
+          "rawName": "After Eight",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 416.7,
+          "protein": 2.4,
+          "carbs": 83.3,
+          "fat": 11.9,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 8.4,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "a8119aa4-3237-485b-baae-7c8d7b5279b7",
+          "rawName": "After Eight",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 600,
+          "protein": 5,
+          "carbs": 52.5,
+          "fat": 40,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 40,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "avena 3 minutos:::Breakfast & Cereals",
+      "minCal": 37,
+      "maxCal": 358,
+      "items": [
+        {
+          "id": "c5aab86b-503f-482d-8725-81a9304d2806",
+          "rawName": "Avena 3 minutos",
+          "brand": "Quaker",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 37,
+          "protein": 1.2,
+          "carbs": 6.2,
+          "fat": 0.8,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 267,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "3fb62e05-e8e1-48a4-9843-a6d0ac10fec3",
+          "rawName": "AVENA 3 MINUTOS",
+          "brand": "QUAKER",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 358,
+          "protein": 12.7,
+          "carbs": 61,
+          "fat": 5.3,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 30,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "avena multisemillas:::Breakfast & Cereals",
+      "minCal": 134,
+      "maxCal": 375,
+      "items": [
+        {
+          "id": "66a2d061-aa8b-4f2f-88c4-099e4efa1b8d",
+          "rawName": "Avena multisemillas",
+          "brand": "Quaker",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 134,
+          "protein": 5.2,
+          "carbs": 23,
+          "fat": 3.3,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 40,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "53dec9ad-9d0b-4360-acb8-97687dbedeec",
+          "rawName": "Avena Multisemillas",
+          "brand": "Quaker",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 375,
+          "protein": 13,
+          "carbs": 56,
+          "fat": 9.8,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 40,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "8b360a88-05df-4b7c-bd1c-8d78a74268c5",
+          "rawName": "Avena Multisemillas",
+          "brand": "Quaker",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 334,
+          "protein": 14.9,
+          "carbs": 60.9,
+          "fat": 8.4,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 40,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "0c95e767-9812-4d10-9e47-01f4afb193cf",
+          "rawName": "Avena Multisemillas",
+          "brand": "Quaker",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 375,
+          "protein": 12.8,
+          "carbs": 55,
+          "fat": 9.8,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 40,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "76e8593f-be32-4da2-9737-b36940e4ce59",
+          "rawName": "Avena Multisemillas",
+          "brand": "Quaker",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 325,
+          "protein": 11.3,
+          "carbs": 69.1,
+          "fat": 5.4,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 40,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "barre crales:::Other",
+      "minCal": 75,
+      "maxCal": 396,
+      "items": [
+        {
+          "id": "c8cd6192-2677-423e-92df-2bdeafc30943",
+          "rawName": "Barre céréales",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 396,
+          "protein": 8.4,
+          "carbs": 62,
+          "fat": 12,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 23.5,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "31b44cd7-7c4f-4340-a1b9-4d98471e8cd7",
+          "rawName": "Barre céréales",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 75,
+          "protein": 1.4,
+          "carbs": 12.3,
+          "fat": 1,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 23.5,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "basmati rice:::Spices & Staples",
+      "minCal": 146.6,
+      "maxCal": 355.6,
+      "items": [
+        {
+          "id": "b74bfa93-5ee6-4891-a070-635b200ad66c",
+          "rawName": "Basmati rice",
+          "brand": "badshah",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 146.6,
+          "protein": 3.9,
+          "carbs": 28.9,
+          "fat": 1.7,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 110,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "724d1aa4-1b8d-4430-917f-257a8f62303e",
+          "rawName": "Basmati Rice",
+          "brand": "India Gate",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 355.6,
+          "protein": 8.9,
+          "carbs": 80,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 45,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "batata pr frita tradicional congelada mccain pacote 720g:::Other",
+      "minCal": 134.1,
+      "maxCal": 204,
+      "items": [
+        {
+          "id": "db11aeeb-83bc-4d5f-a8a6-92d827672cc6",
+          "rawName": "Batata Pré Frita Tradicional Congelada Mccain Pacote 720g",
+          "brand": "MCCAIN",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 134.1,
+          "protein": 4,
+          "carbs": 21.2,
+          "fat": 3.6,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 85,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "af97d997-97ce-45de-a682-2f113d9209a6",
+          "rawName": "Batata Pré Frita Tradicional Congelada Mccain Pacote 720g",
+          "brand": "MCCAIN",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 204,
+          "protein": 3.9,
+          "carbs": 34,
+          "fat": 5,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 100,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "besos de moza:::Other",
+      "minCal": 233,
+      "maxCal": 405,
+      "items": [
+        {
+          "id": "5d832e26-b1d5-415b-ba7d-e7351321d75f",
+          "rawName": "Besos de Moza",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 233,
+          "protein": 2.7,
+          "carbs": 27.7,
+          "fat": 12.4,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 61.3,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "648e7155-575e-41fc-852c-f63fbc4d18e1",
+          "rawName": "Besos de Moza",
+          "brand": "Nestlé",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 405,
+          "protein": 2.5,
+          "carbs": 68.9,
+          "fat": 13.5,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 100,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "boost:::Other",
+      "minCal": 80.2,
+      "maxCal": 517.8,
+      "items": [
+        {
+          "id": "42c2733e-f70e-492b-8d36-16b8e2b6dcb1",
+          "rawName": "boost",
+          "brand": "Boost",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 80.2,
+          "protein": 6.8,
+          "carbs": 7.2,
+          "fat": 3,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 237,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "3d338513-c8ce-4640-a247-b00ae5d60727",
+          "rawName": "Boost",
+          "brand": "Cadbury",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 514.3,
+          "protein": 5.4,
+          "carbs": 60.3,
+          "fat": 27.9,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 31.5,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "581203cb-3661-4545-9318-2e8520fc309d",
+          "rawName": "Boost",
+          "brand": "Boost",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 97,
+          "protein": 4.2,
+          "carbs": 14.3,
+          "fat": 2.5,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 237,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "41e86605-dab9-4c38-a8ea-c621189e1f74",
+          "rawName": "Boost",
+          "brand": "Cadbury",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 505.9,
+          "protein": 3.6,
+          "carbs": 59.5,
+          "fat": 27.8,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 38.5,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "e6d99606-3052-4a17-974a-17dba6e6739e",
+          "rawName": "Boost",
+          "brand": "Cadbury",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 517.8,
+          "protein": 4.6,
+          "carbs": 59.3,
+          "fat": 26.7,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 15,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "bouillon:::Spices & Staples",
+      "minCal": 0,
+      "maxCal": 250,
+      "items": [
+        {
+          "id": "c14618a8-9a63-4a41-98ba-b5f0838c2ff5",
+          "rawName": "Bouillon",
+          "brand": "Knorr",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 0,
+          "protein": 0,
+          "carbs": 0,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 4,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "1e984806-c256-4b06-a466-5fcba361b23b",
+          "rawName": "Bouillon",
+          "brand": "Knorr",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 250,
+          "protein": 0,
+          "carbs": 16.7,
+          "fat": 16.7,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 6,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "bouillon de lgumes:::Instant & Ready-to-Eat",
+      "minCal": 3,
+      "maxCal": 222,
+      "items": [
+        {
+          "id": "d917d432-4b8c-4e5e-80d9-ee70505566e1",
+          "rawName": "Bouillon de légumes",
+          "brand": "Maggi",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 3,
+          "protein": 0.2,
+          "carbs": 0.5,
+          "fat": 0,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "832a282a-fedc-4a01-a50f-b5cfe81a6768",
+          "rawName": "Bouillon de légumes",
+          "brand": "Knorr",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 222,
+          "protein": 15,
+          "carbs": 16,
+          "fat": 10,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 11,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "bouillon de poule:::Dairy",
+      "minCal": 3,
+      "maxCal": 371.4,
+      "items": [
+        {
+          "id": "546da4df-d02e-43ce-bd69-c08b5a7d96cc",
+          "rawName": "Bouillon de poule",
+          "brand": "Knorr",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 371.4,
+          "protein": 12.4,
+          "carbs": 22.3,
+          "fat": 27.2,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 10.5,
+              "unitType": "WEIGHT"
+            }
+          ]
+        },
+        {
+          "id": "d169da46-f390-45fc-8ef9-60d51d91bfc0",
+          "rawName": "Bouillon de poule",
+          "brand": "Knorr",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 8,
+          "protein": 0.4,
+          "carbs": 0,
+          "fat": 0.7,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "9923fc83-df2f-419a-968e-d3c357c3774d",
+          "rawName": "Bouillon de Poule",
+          "brand": "Maggi",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 3,
+          "protein": 0.2,
+          "carbs": 0.3,
+          "fat": 0.1,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 250,
+              "unitType": "VOLUME"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "normalizedKey": "bratensauce:::Dairy",
+      "minCal": 387,
+      "maxCal": 550,
+      "items": [
+        {
+          "id": "9fca6263-07b6-41c4-bf54-7fdb5d74e2c4",
+          "rawName": "Bratensauce",
+          "brand": "Maggi",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 387,
+          "protein": 11,
+          "carbs": 49,
+          "fat": 16,
+          "servings": [
+            {
+              "unit": "ml",
+              "weightGrams": 100,
+              "unitType": "VOLUME"
+            }
+          ]
+        },
+        {
+          "id": "0fd35993-8448-48a4-a34d-34e3432d806b",
+          "rawName": "Bratensauce",
+          "brand": "Knorr",
+          "source": "OPEN_FOOD_FACTS",
+          "calories": 550,
+          "protein": 12.5,
+          "carbs": 30.1,
+          "fat": 41.1,
+          "servings": [
+            {
+              "unit": "g",
+              "weightGrams": 13.63,
+              "unitType": "WEIGHT"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "countableStaples": {
+    "withCountServingCount": 37,
+    "withCountServingSample": [
+      {
+        "id": "cmudpt0ic000f82c8docizudq",
+        "name": "Aloo paratha",
+        "keyword": "paratha",
+        "servings": [
+          "1 medium paratha (110g)",
+          "g (100g)"
+        ]
+      },
+      {
+        "id": "cmudpx38v00mr82c823b75ai7",
+        "name": "Banana cake (Kele ka cake)",
+        "keyword": "banana",
+        "servings": [
+          "slice (66g)"
+        ]
+      },
+      {
+        "id": "cmudpy0zy00s182c87p2fzx57",
+        "name": "Bathua poori",
+        "keyword": "poori",
+        "servings": [
+          "poori (91g)"
+        ]
+      },
+      {
+        "id": "cmudpy1no00s582c810fa79la",
+        "name": "Beetroot poori (Chukandar ki poori)",
+        "keyword": "poori",
+        "servings": [
+          "poori (103g)"
+        ]
+      },
+      {
+        "id": "cmudpu06z005z82c88heg20pm",
+        "name": "Chapati/Roti",
+        "keyword": "roti",
+        "servings": [
+          "chapati (36g)"
+        ]
+      },
+      {
+        "id": "cmudq0az8014x82c8lnj4w3nl",
+        "name": "Chocolate eggless cake",
+        "keyword": "egg",
+        "servings": [
+          "piece (114g)"
+        ]
+      },
+      {
+        "id": "cmudpu53u006r82c8hre1a88a",
+        "name": "Dal stuffed poori",
+        "keyword": "poori",
+        "servings": [
+          "poori (119g)"
+        ]
+      },
+      {
+        "id": "cmudpx4r700mz82c8kzh5s8ux",
+        "name": "Eggless cake",
+        "keyword": "egg",
+        "servings": [
+          "slice (61g)"
+        ]
+      },
+      {
+        "id": "cmudpy1bp00s382c842po4i3c",
+        "name": "Gram flour poori (Besan poori)",
+        "keyword": "poori",
+        "servings": [
+          "poori (75g)"
+        ]
+      },
+      {
+        "id": "cmudpt2aw000x82c8kqipxpkk",
+        "name": "Idli",
+        "keyword": "idli",
+        "servings": [
+          "1 piece (40g)",
+          "g (100g)"
+        ]
+      }
+    ],
+    "withoutCountServingCount": 354,
+    "withoutCountServingSample": [
+      {
+        "id": "d666743b-5c45-4ffd-8120-e3b8c01533a1",
+        "name": "4 Original bun's poulet roti et thym",
+        "keyword": "roti",
+        "servings": [
+          "g (100g)"
+        ]
+      },
+      {
+        "id": "d28d5f41-3f31-4200-801d-8b7f7411120f",
+        "name": "5 PACK Cadbury creme egg COCO LIFE White SUPPORTIN",
+        "keyword": "egg",
+        "servings": [
+          "g (40g)"
+        ]
+      },
+      {
+        "id": "573e8053-5f3c-4e8c-b6e4-117ce486c532",
+        "name": "Aashirvaad Paratha",
+        "keyword": "paratha",
+        "servings": [
+          "g (60g)"
+        ]
+      },
+      {
+        "id": "38ea6905-35f8-4b61-b936-da8e90738d9c",
+        "name": "ABID Free F GLUTEN MILK EGG SOYA EAST Cadbury Twir",
+        "keyword": "egg",
+        "servings": [
+          "g (25g)"
+        ]
+      },
+      {
+        "id": "2cf38d3e-a8ad-4f4b-913e-37febe743aa2",
+        "name": "Ajwain Paratha",
+        "keyword": "paratha",
+        "servings": [
+          "g (60g)"
+        ]
+      },
+      {
+        "id": "db75ab4c-1f8b-4eb4-8800-000eb05c952f",
+        "name": "Aloo pyaz paratha",
+        "keyword": "paratha",
+        "servings": [
+          "g (100g)"
+        ]
+      },
+      {
+        "id": "f49b99d2-1d22-4fa6-8b15-859acc9e86e9",
+        "name": "Amul Roti",
+        "keyword": "roti",
+        "servings": [
+          "g (65g)"
+        ]
+      },
+      {
+        "id": "cmudq0j8k016782c81e3dzm7l",
+        "name": "Apple banana pie",
+        "keyword": "banana",
+        "servings": [
+          "pie (389g)"
+        ]
+      },
+      {
+        "id": "f8b76177-4087-40af-bb4a-81744539e4a7",
+        "name": "Aquafina Purified Drinking Water",
+        "keyword": "puri",
+        "servings": [
+          "ml (1000g)"
+        ]
+      },
+      {
+        "id": "da03279a-91e4-4ed9-8194-714ab976f053",
+        "name": "Assortment Mini Cream Eggs",
+        "keyword": "egg",
+        "servings": [
+          "g (36g)"
+        ]
+      },
+      {
+        "id": "cmudptq22004f82c84zseuokq",
+        "name": "Baked egg",
+        "keyword": "egg",
+        "servings": [
+          "egg (101g)"
+        ]
+      },
+      {
+        "id": "cmudq1nuw01cj82c81cx2y2xc",
+        "name": "Baked eggs in tomato sauce",
+        "keyword": "egg",
+        "servings": [
+          "plate (497g)"
+        ]
+      },
+      {
+        "id": "cmuzjslkw0005lu2s59oomuqr",
+        "name": "Banana",
+        "keyword": "banana",
+        "servings": [
+          "1 medium (peeled) (118g)",
+          "g (100g)"
+        ]
+      },
+      {
+        "id": "cmudq211001en82c83mzcar06",
+        "name": "Banana appam",
+        "keyword": "banana",
+        "servings": [
+          "appam (290g)"
+        ]
+      },
+      {
+        "id": "b884ac9b-4b5f-4dbb-9fef-67f7b3a4af4d",
+        "name": "Banana Bread Powder",
+        "keyword": "banana",
+        "servings": [
+          "g (50g)"
+        ]
+      }
+    ]
+  },
+  "liquidUnitBreakdown": {
+    "total": 1214,
+    "hasKatori": 16,
+    "hasBowl": 119,
+    "hasCup": 2,
+    "hasMl": 305,
+    "gramsOnly": 723,
+    "examplesGramsOnly": [
+      {
+        "id": "e45cd160-dad7-436c-92be-587c266a0f4c",
+        "name": "14 Cadbury DAIRY MILK 08 ADVENT CALENDAR DAY 24 24",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "5aed4350-0e59-44e2-ba8a-5c6b6554a455",
+        "name": "24 NOV 21:56 MADE TO SHARE Сабвичу CARAMILK GOLDEN",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "e8d13577-4299-4bbf-add0-e90171350f8b",
+        "name": "3 Minute Instant Curry Flavour Noodles",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "38ea6905-35f8-4b61-b936-da8e90738d9c",
+        "name": "ABID Free F GLUTEN MILK EGG SOYA EAST Cadbury Twir",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "651f247c-cab5-408e-9678-ed4139c53bdb",
+        "name": "Aero Milk Chocolate Bar",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "4e3511e8-dd23-492b-959f-c08374fcdfda",
+        "name": "Aero Milk Chocolate bubbly mousse",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "5155f096-6910-4632-8f8a-57ee1117a1ef",
+        "name": "Almond Dairy Milk",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "df35b835-83ac-44b4-b928-6cb2353835c8",
+        "name": "am E1.85 Cadbury DAIRY MILK Caramel nibbles MILK B",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "b9d47db8-de3c-4eb0-94a5-48c5e7518027",
+        "name": "APPLE CINNAMON RICE CAKES",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "a62b796e-d483-4547-a269-5f03c210e1c8",
+        "name": "Apple Cinnamon Rice Crisps",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "e7b96f66-91db-41b6-9e80-332e4e539664",
+        "name": "Apple Cinnamon Rice Crisps",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "8edf0d54-23c7-44e6-87dc-3e2b46d1cdb0",
+        "name": "APPLE CINNAMON RICE CRISPS",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "142dcc49-1737-4d7d-bdeb-323a0ff3fac0",
+        "name": "Asia Noodles Curry",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "42da39ee-8ff6-4743-9f05-2ebafd6e8a0d",
+        "name": "Asian Indian Rice",
+        "servings": [
+          "g"
+        ]
+      },
+      {
+        "id": "7a639e4c-d448-432d-acf8-aae86be2b67e",
+        "name": "B Cadbury DAIRY MILK MINT CREAMY MINT ICE CREAM SW",
+        "servings": [
+          "g"
+        ]
+      }
+    ],
+    "examplesWithHousehold": [
+      {
+        "id": "015cdc2a-2eaf-447a-99e2-ef546f4cae84",
+        "name": "3 in 1 milk",
+        "servings": [
+          "ml (206g)",
+          "g (20g)"
+        ]
+      },
+      {
+        "id": "cmudpxynd00rn82c82zlgq53a",
+        "name": "Almond soup (Badam ka soup)",
+        "servings": [
+          "bowl (477g)"
+        ]
+      },
+      {
+        "id": "cmuzjmft0002rj17xv7vv72x5",
+        "name": "Aloo bhurji (dry aloo sabzi)",
+        "servings": [
+          "1 katori (150g)",
+          "g (100g)"
+        ]
+      },
+      {
+        "id": "e4c3c606-7f52-4ab1-b812-c1f3521d2169",
+        "name": "Amul Masti Spiced Buttermilk 200ml",
+        "servings": [
+          "ml (200g)"
+        ]
+      },
+      {
+        "id": "2293e5ac-e166-49b1-8a63-9dc428b69056",
+        "name": "Amul Spiced Buttermilk",
+        "servings": [
+          "ml (200g)"
+        ]
+      },
+      {
+        "id": "d39609a8-3132-46ff-be9d-71ad3ada880d",
+        "name": "Amul Taaza Milk",
+        "servings": [
+          "ml (180g)"
+        ]
+      },
+      {
+        "id": "cmudpyd5200tz82c8ewcbev9o",
+        "name": "Arhar with spinach (Arhar dal aur palak)",
+        "servings": [
+          "curry bowl (403g)"
+        ]
+      },
+      {
+        "id": "cmudq27qb01fr82c8hd67yzmi",
+        "name": "Baked potato soup",
+        "servings": [
+          "bowl (500g)"
+        ]
+      },
+      {
+        "id": "35e40957-a628-444b-8da8-9f8dfd296168",
+        "name": "Bear Brand milk susu steril",
+        "servings": [
+          "ml (189g)"
+        ]
+      },
+      {
+        "id": "a1d7a4b4-589a-4b18-a349-b37e5383ae61",
+        "name": "Beef & Vegetable Soup",
+        "servings": [
+          "ml (250g)"
+        ]
+      },
+      {
+        "id": "cmudpynz400vn82c8cldga9x0",
+        "name": "Bengal fish curry (Bengali machli curry)",
+        "servings": [
+          "bowl (310g)"
+        ]
+      },
+      {
+        "id": "cmudpyfqx00ud82c8ycvvpf9x",
+        "name": "Besan gatte curry",
+        "servings": [
+          "bowl (256g)"
+        ]
+      },
+      {
+        "id": "cmuzjmfzo0031j17xzukm04id",
+        "name": "Bhindi sabzi",
+        "servings": [
+          "1 katori (100g)"
+        ]
+      },
+      {
+        "id": "0a3be1e5-5abd-45fd-978b-5f544055bf2f",
+        "name": "Biscoff Dairy Milk",
+        "servings": [
+          "ml (206g)",
+          "g (23.75g)"
+        ]
+      },
+      {
+        "id": "cmudpun08009d82c8djtivlma",
+        "name": "Black channa curry/Bengal gram curry (Kale chane ki curry)",
+        "servings": [
+          "bowl (120g)"
+        ]
+      }
+    ]
+  },
+  "testResults": [
+    {
+      "testName": "Piece Scaling (1.5 Roti)",
+      "inputQuantity": 1.5,
+      "unit": "roti",
+      "resolvedWeight": 52.5,
+      "expectedWeight": 52.5,
+      "pass": true,
+      "calculatedMacros": {
+        "calories": 155.9,
+        "protein": 5,
+        "carbs": 29.3,
+        "fat": 1.8
+      }
+    },
+    {
+      "testName": "Katori Scaling (0.75 Medium Katori Dal)",
+      "inputQuantity": 0.75,
+      "unit": "katori",
+      "resolvedWeight": 112.5,
+      "expectedWeight": 112.5,
+      "pass": true,
+      "calculatedMacros": {
+        "calories": 117,
+        "protein": 7.7,
+        "carbs": 17.1,
+        "fat": 1.3
+      }
+    },
+    {
+      "testName": "Volume Scaling (250 ml Milk from 200 ml serving of 206g)",
+      "inputQuantity": 250,
+      "unit": "ml",
+      "resolvedWeight": 257.5,
+      "expectedWeight": 257.5,
+      "pass": true,
+      "calculatedMacros": {
+        "calories": 167.4,
+        "protein": 8.2,
+        "carbs": 12.4,
+        "fat": 9.5
+      }
+    },
+    {
+      "testName": "Gram Direct Input (75 g)",
+      "inputQuantity": 75,
+      "unit": "g",
+      "resolvedWeight": 75,
+      "expectedWeight": 75,
+      "pass": true,
+      "calculatedMacros": {
+        "calories": 187.5,
+        "protein": 7.5,
+        "carbs": 30,
+        "fat": 3.8
+      }
+    }
+  ]
+}

@@ -26,14 +26,21 @@ const MAINTENANCE_TOLERANCE_KG_PER_WEEK = 0.1; // Maintenance band tolerance (kg
  * Filters out incomplete/untracked days from meal log records.
  *
  * @param {Array<{ date: string, calories: number, isFastingDay?: boolean }>} dailyIntakes
+ * @param {Object} [options]
+ * @param {number} [options.minCalories] - Minimum calorie floor
+ * @param {number} [options.bmr] - User BMR for relative completeness check
  * @returns {Array<{ date: string, calories: number }>}
  */
-function filterValidIntakeDays(dailyIntakes = []) {
+function filterValidIntakeDays(dailyIntakes = [], options = {}) {
   if (!Array.isArray(dailyIntakes)) return [];
+  const minThreshold = options.minCalories !== undefined
+    ? options.minCalories
+    : (options.bmr && options.bmr > 500 ? Math.max(MIN_VALID_DAY_INTAKE, Math.round(options.bmr * 0.45)) : MIN_VALID_DAY_INTAKE);
+
   return dailyIntakes.filter((d) => {
     if (!d || typeof d.calories !== 'number' || isNaN(d.calories)) return false;
     if (d.isFastingDay) return true;
-    return d.calories >= MIN_VALID_DAY_INTAKE;
+    return d.calories >= minThreshold;
   });
 }
 

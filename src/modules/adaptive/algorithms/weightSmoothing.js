@@ -70,18 +70,10 @@ function calculateWeightTrend(logs, options = {}) {
   // Initialize level and trend with first valid non-excluded point (or first point)
   const firstLog = sorted.find((l) => !l.isExcluded) || sorted[0];
   let level = firstLog.weightKg;
-  let trend = 0; // Initial velocity (kg/day)
+  // Initialize trend velocity to 0 to prevent 1-2 day scale noise from infecting long-term trend
+  let trend = 0;
 
-  // If we have at least 2 points early on, give a sensible initial trend
-  if (sorted.length > 1) {
-    const secondLog = sorted.find((l, idx) => idx > 0 && !l.isExcluded);
-    if (secondLog) {
-      const dayDiff = Math.max(1, Math.round((secondLog.dateObj.getTime() - firstLog.dateObj.getTime()) / (1000 * 60 * 60 * 24)));
-      trend = (secondLog.weightKg - firstLog.weightKg) / dayDiff;
-      // Clamp initial trend velocity to prevent extreme starts
-      trend = Math.max(-0.3, Math.min(0.3, trend));
-    }
-  }
+  const MAX_PHYSIOLOGICAL_VELOCITY_KG_PER_DAY = 0.25; // ~1.75 kg/week
 
   let prevDateObj = sorted[0].dateObj;
   const smoothedLogs = [];
@@ -113,13 +105,14 @@ function calculateWeightTrend(logs, options = {}) {
       continue;
     }
 
-    // Outlier check: If scale deviates by more than OUTLIER_THRESHOLD_KG from expected level, dampen its weight
+    // Dynamic outlier check: scale outlier sensitivity to user's body mass (2.0% of body weight, bounded [1.5, 2.5] kg)
     let effectiveWeight = item.weightKg;
     const expectedWeight = level + trend * dayDiff;
     const delta = Math.abs(item.weightKg - expectedWeight);
+    const dynamicOutlierThreshold = Math.max(1.5, Math.min(OUTLIER_THRESHOLD_KG, level * 0.02));
 
     let effectiveAlpha = alpha;
-    if (delta > OUTLIER_THRESHOLD_KG && i > 0) {
+    if (delta > dynamicOutlierThreshold && i > 0) {
       // Scale down alpha for sudden spikes to prevent skewing the true trend
       effectiveAlpha = alpha * 0.4;
     }
@@ -130,7 +123,7 @@ function calculateWeightTrend(logs, options = {}) {
     trend = beta * (level - prevLevel) / dayDiff + (1 - beta) * trend;
 
     // Safety clamp on trend velocity: Max reasonable physiological rate is ~0.25 kg/day (1.75 kg/week)
-    trend = Math.max(-0.25, Math.min(0.25, trend));
+    trend = Math.max(-MAX_PHYSIOLOGICAL_VELOCITY_KG_PER_DAY, Math.min(MAX_PHYSIOLOGICAL_VELOCITY_KG_PER_DAY, trend));
 
     smoothedLogs.push({
       id: item.id,
