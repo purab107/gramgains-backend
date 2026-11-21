@@ -226,6 +226,13 @@ async function getPatterns(days = 14, userId = DEFAULT_USER_ID) {
     SNACK: 0,
   };
 
+  const mealProteinTotals = {
+    BREAKFAST: 0,
+    LUNCH: 0,
+    DINNER: 0,
+    SNACK: 0,
+  };
+
   let totalCalories = 0;
   let totalProtein = 0;
   let totalCarbs = 0;
@@ -235,12 +242,15 @@ async function getPatterns(days = 14, userId = DEFAULT_USER_ID) {
 
   const weekendCalories = [];
   const weekdayCalories = [];
+  const weekendProtein = [];
+  const weekdayProtein = [];
   const dailyMap = new Map();
 
   for (const log of mealLogs) {
     const cal = log.calories || 0;
+    const prot = log.protein || 0;
     totalCalories += cal;
-    totalProtein += log.protein || 0;
+    totalProtein += prot;
     totalCarbs += log.carbohydrates || 0;
     totalFat += log.fat || 0;
     totalFiber += log.fiber || 0;
@@ -248,9 +258,10 @@ async function getPatterns(days = 14, userId = DEFAULT_USER_ID) {
     const mType = String(log.mealType || 'BREAKFAST').toUpperCase();
     if (mealTypeTotals[mType] !== undefined) {
       mealTypeTotals[mType] += cal;
+      mealProteinTotals[mType] += prot;
     }
 
-    // Check late night (logged after 20:30 UTC / local if createdAt available)
+    // Check late night (logged after 21:00 or before 04:00)
     if (log.createdAt) {
       const hour = log.createdAt.getHours();
       if (hour >= 21 || hour < 4) {
@@ -258,25 +269,83 @@ async function getPatterns(days = 14, userId = DEFAULT_USER_ID) {
       }
     }
 
-    // Weekend vs Weekday analysis
+    // Daily breakdown for stacked charts
     const dStr = log.date.toISOString().split('T')[0];
     const dDay = log.date.getDay(); // 0 = Sunday, 6 = Saturday
-    dailyMap.set(dStr, {
-      calories: (dailyMap.get(dStr)?.calories || 0) + cal,
-      isWeekend: dDay === 0 || dDay === 6,
-    });
+    const isWeekend = dDay === 0 || dDay === 6;
+
+    const existingDay = dailyMap.get(dStr) || {
+      date: dStr,
+      displayDate: new Date(log.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      calories: 0,
+      protein: 0,
+      breakfast: 0,
+      lunch: 0,
+      dinner: 0,
+      snack: 0,
+      breakfastProtein: 0,
+      lunchProtein: 0,
+      dinnerProtein: 0,
+      snackProtein: 0,
+      isWeekend,
+    };
+
+    existingDay.calories += cal;
+    existingDay.protein += prot;
+
+    if (mType === 'BREAKFAST') {
+      existingDay.breakfast += cal;
+      existingDay.breakfastProtein += prot;
+    } else if (mType === 'LUNCH') {
+      existingDay.lunch += cal;
+      existingDay.lunchProtein += prot;
+    } else if (mType === 'DINNER') {
+      existingDay.dinner += cal;
+      existingDay.dinnerProtein += prot;
+    } else if (mType === 'SNACK') {
+      existingDay.snack += cal;
+      existingDay.snackProtein += prot;
+    }
+
+    dailyMap.set(dStr, existingDay);
   }
 
+  // Sort daily series chronologically
+  const dailyMealSeries = Array.from(dailyMap.values())
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .map((d) => ({
+      ...d,
+      calories: Math.round(d.calories),
+      protein: Math.round(d.protein),
+      breakfast: Math.round(d.breakfast),
+      lunch: Math.round(d.lunch),
+      dinner: Math.round(d.dinner),
+      snack: Math.round(d.snack),
+      breakfastProtein: Math.round(d.breakfastProtein),
+      lunchProtein: Math.round(d.lunchProtein),
+      dinnerProtein: Math.round(d.dinnerProtein),
+      snackProtein: Math.round(d.snackProtein),
+    }));
+
   for (const [, val] of dailyMap.entries()) {
-    if (val.isWeekend) weekendCalories.push(val.calories);
-    else weekdayCalories.push(val.calories);
+    if (val.isWeekend) {
+      weekendCalories.push(val.calories);
+      weekendProtein.push(val.protein);
+    } else {
+      weekdayCalories.push(val.calories);
+      weekdayProtein.push(val.protein);
+    }
   }
 
   const avgWeekend = weekendCalories.length > 0 ? Math.round(weekendCalories.reduce((a, b) => a + b, 0) / weekendCalories.length) : null;
   const avgWeekday = weekdayCalories.length > 0 ? Math.round(weekdayCalories.reduce((a, b) => a + b, 0) / weekdayCalories.length) : null;
+  const avgWeekendProt = weekendProtein.length > 0 ? Math.round(weekendProtein.reduce((a, b) => a + b, 0) / weekendProtein.length) : null;
+  const avgWeekdayProt = weekdayProtein.length > 0 ? Math.round(weekdayProtein.reduce((a, b) => a + b, 0) / weekdayProtein.length) : null;
   const weekendDeltaKcal = (avgWeekend && avgWeekday) ? avgWeekend - avgWeekday : 0;
 
   const totalSafe = Math.max(1, totalCalories);
+  const loggedDays = Math.max(1, dailyMap.size);
+
   const mealDistribution = {
     breakfastPercent: Math.round((mealTypeTotals.BREAKFAST / totalSafe) * 100),
     lunchPercent: Math.round((mealTypeTotals.LUNCH / totalSafe) * 100),
@@ -284,7 +353,13 @@ async function getPatterns(days = 14, userId = DEFAULT_USER_ID) {
     snackPercent: Math.round((mealTypeTotals.SNACK / totalSafe) * 100),
   };
 
-  const loggedDays = Math.max(1, dailyMap.size);
+  const proteinDistribution = {
+    breakfastGrams: Math.round(mealProteinTotals.BREAKFAST / loggedDays),
+    lunchGrams: Math.round(mealProteinTotals.LUNCH / loggedDays),
+    dinnerGrams: Math.round(mealProteinTotals.DINNER / loggedDays),
+    snackGrams: Math.round(mealProteinTotals.SNACK / loggedDays),
+    totalGrams: Math.round(totalProtein / loggedDays),
+  };
 
   // Generate actionable insights
   const activeInsights = [];
@@ -331,6 +406,8 @@ async function getPatterns(days = 14, userId = DEFAULT_USER_ID) {
   return {
     windowDays,
     mealDistribution,
+    proteinDistribution,
+    dailyMealSeries,
     macroAverages: {
       proteinGrams: avgDailyProtein,
       carbsGrams: Math.round(totalCarbs / loggedDays),
@@ -342,6 +419,13 @@ async function getPatterns(days = 14, userId = DEFAULT_USER_ID) {
       avgWeekdayCalories: avgWeekday,
       avgWeekendCalories: avgWeekend,
       weekendDeltaKcal,
+    },
+    weekdayVsWeekend: {
+      weekdayAvgCalories: avgWeekday,
+      weekendAvgCalories: avgWeekend,
+      deltaCalories: weekendDeltaKcal,
+      weekdayAvgProtein: avgWeekdayProt,
+      weekendAvgProtein: avgWeekendProt,
     },
     activeInsights,
   };
