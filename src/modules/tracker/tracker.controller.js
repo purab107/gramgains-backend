@@ -41,7 +41,7 @@ async function logMeal(req, res) {
 async function updateLog(req, res) {
   try {
     const { id } = req.params;
-    const { servings, customWeightGrams, mealType, unitLabel } = req.body;
+    const { servings, customWeightGrams, mealType, unitLabel, displayQuantity, displayUnit } = req.body;
     const updated = await TrackerService.updateLog(
       id,
       {
@@ -49,6 +49,8 @@ async function updateLog(req, res) {
         customWeightGrams: customWeightGrams !== undefined && customWeightGrams !== null ? Number(customWeightGrams) : undefined,
         mealType,
         unitLabel: unitLabel !== undefined ? String(unitLabel) : undefined,
+        displayQuantity: displayQuantity !== undefined && displayQuantity !== null ? Number(displayQuantity) : undefined,
+        displayUnit: displayUnit !== undefined ? String(displayUnit) : undefined,
       },
       req.userId
     );
